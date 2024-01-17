@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Clinic Sarmaye OpenApi",
+    "description": "Clinic Sarmaye OpenApi description",
+    "contact": {
+      "email": "fa.saeedi26@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/get-symbols": {
+      "post": {
+        "tags": ["symbols"],
+        "summary": "GetSymbols",
+        "description": "GetSymbols",
+        "operationId": "GetSymbols",
+        "requestBody": {
+          "description": "create course",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SymbolsListBodyApi"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SymbolsListResultApi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DefaultResultApi": {
+        "title": "DefaultResultApi",
+        "properties": {
+          "data": {
+            "type": "object",
+            "example": []
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "SymbolsListResultApi": {
+        "title": "SymbolsListResultApi",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SymbolsListResult"
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "SymbolsListBodyApi": {
+        "title": "SymbolsListBodyApi",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": "50"
+          },
+          "skip": {
+            "type": "integer",
+            "example": "0"
+          },
+          "filter": {
+            "type": "string",
+            "example": "btc"
+          },
+          "tag": {
+            "type": "string",
+            "example": "web3"
+          }
+        },
+        "type": "object"
+      },
+      "GetSymbolListItem": {
+        "title": "GetSymbolListItem",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Bitcoin"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "BTC"
+          },
+          "slug": {
+            "type": "string",
+            "example": "bitcoin"
+          },
+          "icon": {
+            "type": "string",
+            "example": "http://localhost:9665/api/svg-coins/btc.svg"
+          },
+          "weekly_price": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetSymbolWeeklyPriceItem"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "SymbolsListResult": {
+        "title": "SymbolsListResult",
+        "properties": {
+          "usdt_irt": {
+            "type": "integer",
+            "example": "2"
+          },
+          "page_count": {
+            "type": "integer",
+            "example": "2"
+          },
+          "total_count": {
+            "type": "integer",
+            "example": "2"
+          },
+          "records": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetSymbolListItem"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "GetSymbolWeeklyPriceItem": {
+        "title": "GetSymbolWeeklyPriceItem",
+        "properties": {
+          "price": {
+            "type": "integer",
+            "example": "26700"
+          },
+          "time": {
+            "type": "string",
+            "example": "2024-01-01 10:00:00"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

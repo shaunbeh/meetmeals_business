@@ -12,6 +12,7 @@ export type WsMsgT = {
     as: number;
     mc: number;
     fmc24hpc: number;
+    v: number | undefined;
   };
   t: string;
   c: string;
