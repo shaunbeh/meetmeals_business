@@ -42,6 +42,8 @@ export interface SymbolsListBodyApi {
 
 /** GetSymbolListItem */
 export interface GetSymbolListItem {
+  /** @example "1" */
+  row_num?: number;
   /** @example "2" */
   id?: number;
   /** @example "Bitcoin" */

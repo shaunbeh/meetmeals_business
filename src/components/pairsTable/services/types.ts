@@ -20,6 +20,7 @@ export type WsMsgT = {
 
 export type TableRowT = {
   id: number;
+  idx: number | undefined;
   symbol: string;
   icon: string;
   name: string;

@@ -31,6 +31,7 @@ export default function Home() {
           {
             icon: row.icon ?? '',
             id: row.id ?? 0,
+            idx: row.row_num,
             marketCap: '',
             name: row.name ?? '',
             price: (row.weekly_price?.[0].price ?? 0).toLocaleString(),
@@ -51,7 +52,7 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (readyState == ReadyState.OPEN && rows) {
+    if (readyState == ReadyState.OPEN && rows.size) {
       const pairs = Array.from(rows.keys()).join(',');
       const subDataFive = {
         method: 'RSUBSCRIPTION',

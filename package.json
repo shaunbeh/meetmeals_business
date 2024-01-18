@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "codegen:clinic": "npx swagger-typescript-api -p ./src/schema/clinic.json -o ./src/schema -n ApiTypes.ts"
+    "codegen:clinic": "npx swagger-typescript-api -p ./src/utils/schema/clinic.json -o ./src/utils/schema -n ApiTypes.ts"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.0",

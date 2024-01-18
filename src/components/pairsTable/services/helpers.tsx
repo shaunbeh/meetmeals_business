@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { TableRowT } from './types';
 import Image from 'next/image';
 import clsx from 'clsx';
+import { TableRowT } from './types';
 
 const columnHelper = createColumnHelper<TableRowT>();
 export const pairsColumns = [
@@ -92,6 +92,6 @@ export const pairsColumns = [
   }),
   columnHelper.display({
     header: '#',
-    cell: (info) => info.row.index + 1,
+    cell: (info) => info.row.original.idx ?? info.row.index + 1,
   }),
 ];
