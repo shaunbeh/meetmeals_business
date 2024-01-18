@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
+import { BASIC_URL } from '@/utils/config';
 import {
   HydrationBoundary,
   QueryClient,
@@ -20,13 +21,14 @@ export default function App({ Component, pageProps }: AppProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            refetchOnWindowFocus: false,
             queryFn: async ({ queryKey }) => {
               const [url, { method = 'get', ...params }] = queryKey as [
                 string,
                 ParamsT,
               ];
 
-              const fullUrl = `http://64.21.191.118:8000/api${url.toLowerCase()}`;
+              const fullUrl = `${BASIC_URL}${url.toLowerCase()}`;
               let response;
 
               if (method.toLowerCase() === 'post') {

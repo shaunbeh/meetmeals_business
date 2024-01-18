@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import PairsTable from '@/components/pairsTable';
+import PairsTable from '@/components/PairsTable';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { WsMsgT } from '@/components/pairsTable/types';
+import { WsMsgT } from '@/components/PairsTable/services/types';
 import { useQuery } from '@tanstack/react-query';
-import { SymbolsListResultApi } from '@/schema/ApiTypes';
+import { SymbolsListResultApi } from '@/utils/schema/ApiTypes';
+import { TablePagingation } from '@/components/TablePagination';
+import { TABLE_LIMIT, WS_URL } from '@/utils/config';
+
+const limit = TABLE_LIMIT;
 
 export default function Home() {
   const [currPage, setCurrPage] = useState(1);
 
   const { sendJsonMessage, readyState, lastJsonMessage } =
-    useWebSocket<WsMsgT>(wsUrl);
+    useWebSocket<WsMsgT>(WS_URL);
 
-  const limit = 50;
   const { data: coinList } = useQuery<SymbolsListResultApi>({
     queryKey: [
       '/v1/get-symbols',
@@ -30,12 +33,13 @@ export default function Home() {
             id: row.id ?? 0,
             marketCap: '',
             name: row.name ?? '',
-            price: (row.weekly_price?.[0].price ?? 0).toFixed(2),
+            price: (row.weekly_price?.[0].price ?? 0).toLocaleString(),
             priceChange24h: '',
             priceChange7d: '',
             priceTmn: (
-              (row.weekly_price?.[0].price ?? 0) * coinList.data.usdt_irt
-            ).toFixed(2),
+              ((row.weekly_price?.[0].price ?? 0) * coinList?.data?.usdt_irt) /
+              10
+            ).toLocaleString(),
             symbol: row.symbol ?? '',
             volume: '',
             usdtIrt: coinList.data.usdt_irt,
@@ -62,23 +66,6 @@ export default function Home() {
     }
   }, [readyState, sendJsonMessage, rows]);
 
-  // 5
-  // {
-  //   "p3m": 44.229572597188,
-  //   "p1y": 2.734976938119,
-  //   "pytd": -1.229690729302,
-  //   "pall": 267726.82831268857,
-  //   "as": 151689320.42,
-  //   "fmc24hpc": -2.237814274217
-  // }
-
-  //15
-  // {
-  //   "v": 106501203.68,
-  //   "p1h": 0.04456655451,
-  //   "d": 0.046,
-  //   "vd": 0.091313
-  // }
   useEffect(() => {
     const msg = lastJsonMessage?.d;
     if (rows && msg) {
@@ -86,12 +73,12 @@ export default function Home() {
       if (row) {
         rows.set(msg?.id, {
           ...row,
-          volume: msg?.v?.toFixed(2) ?? row.volume,
-          price: msg?.p?.toFixed(2),
-          priceTmn: (msg?.p * row.usdtIrt).toFixed(2),
-          priceChange24h: msg?.p24h?.toFixed(2),
-          priceChange7d: msg?.p7d?.toFixed(2),
-          marketCap: msg?.mc?.toFixed(2),
+          volume: msg?.v?.toLocaleString() ?? row.volume,
+          price: msg?.p?.toLocaleString(),
+          priceTmn: ((msg?.p * row?.usdtIrt) / 10).toLocaleString(),
+          priceChange24h: msg?.p24h?.toLocaleString(),
+          priceChange7d: msg?.p7d?.toLocaleString(),
+          marketCap: msg?.mc?.toLocaleString(),
         });
       }
     }
@@ -104,18 +91,16 @@ export default function Home() {
       </div>
     );
 
-  const handleCurrPage = (p: number) => {
-    setCurrPage(p);
-  };
+  const pageCount = coinList.data.page_count;
+
   return (
     <MaxWidthWrapper className=''>
-      <PairsTable
+      <PairsTable data={Array.from(rows.values())} />
+      <TablePagingation
         currPage={currPage}
-        handleCurrPage={handleCurrPage}
-        data={Array.from(rows.values())}
+        setCurrPage={setCurrPage}
+        pageCount={pageCount}
       />
     </MaxWidthWrapper>
   );
 }
-
-export const wsUrl = 'wss://push.coinmarketcap.com/ws';

@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'coinicons-api.vercel.app',
+        hostname: 'bprice.clinicsarmayeh.com',
       },
     ],
   },
