@@ -3,7 +3,7 @@ import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
-} from '../ui/pagination';
+} from '../../ui/pagination';
 import PaginationBtn from './PaginationBtn';
 import { paginate } from './services/pagination';
 
@@ -24,7 +24,7 @@ export const TablePagingation = memo(function memoizedPagination({
   });
 
   return (
-    <Pagination className='absolute left-0 right-0 bottom-1'>
+    <Pagination className='bottom-1'>
       <PaginationContent>
         <PaginationBtn
           setCurrPage={setCurrPage}

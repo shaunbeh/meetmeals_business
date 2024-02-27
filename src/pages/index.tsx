@@ -1,32 +1,55 @@
 import { useEffect, useMemo, useState } from 'react';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import PairsTable from '@/components/PairsTable';
+import PairsTable from '@/components/Table/PairsTable';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { WsMsgT } from '@/components/PairsTable/services/types';
+import { WsMsgT } from '@/components/Table/PairsTable/services/types';
 import { useQuery } from '@tanstack/react-query';
-import { SymbolsListResultApi } from '@/utils/schema/ApiTypes';
-import { TablePagingation } from '@/components/TablePagination';
-import { TABLE_LIMIT, WS_URL } from '@/utils/config';
+import { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
+import { TablePagingation } from '@/components/Table/TablePagination';
+import { TABLE_LIMIT, WS_URL } from '@/lib/config';
+import TableHeader from '@/components/Table/TableHeader';
+import endpoints from '@/lib/endpoints';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { Skeleton } from '@/components/ui/skeleton';
+import LoadingSkeleton from '@/components/Table/LoadingSkeleton';
+import _ from 'lodash';
+import useDebounce from '@/lib/hooks/useDebounce';
 
 const limit = TABLE_LIMIT;
 
 export default function Home() {
-  const [currPage, setCurrPage] = useState(1);
+  const router = useRouter();
+
+  const { searchText, debouncedText, setSearchText } = useDebounce('');
+  const [currPage, setCurrPage] = useState(() => {
+    const page = router.query.page;
+    return page ? parseInt(page as string) : 1;
+  });
+
+  // useEffect(() => {
+  //   const page = currPage.toString();
+  //   router.push({ query: { page } }, undefined, { shallow: true });
+  // }, [currPage, router]);
 
   const { sendJsonMessage, readyState, lastJsonMessage } =
     useWebSocket<WsMsgT>(WS_URL);
 
   const { data: coinList } = useQuery<SymbolsListResultApi>({
     queryKey: [
-      '/v1/get-symbols',
-      { method: 'post', limit, skip: limit * (currPage - 1) },
+      endpoints.symbols.url,
+      {
+        method: endpoints.symbols.method,
+        filter: debouncedText,
+        limit,
+        skip: limit * (currPage - 1),
+      },
     ],
   });
-
   const rows = useMemo(
     () =>
       new Map(
-        coinList?.data.records.map((row) => [
+        coinList?.data?.records?.map((row) => [
           row.id,
           {
             icon: row.icon ?? '',
@@ -38,12 +61,13 @@ export default function Home() {
             priceChange24h: '',
             priceChange7d: '',
             priceTmn: (
-              ((row.weekly_price?.[0].price ?? 0) * coinList?.data?.usdt_irt) /
+              ((row.weekly_price?.[0].price ?? 0) *
+                (coinList?.data?.usdt_irt ?? 1)) /
               10
             ).toLocaleString(),
             symbol: row.symbol ?? '',
             volume: '',
-            usdtIrt: coinList.data.usdt_irt,
+            usdtIrt: coinList?.data?.usdt_irt,
             last7: row.weekly_price,
           },
         ])
@@ -76,7 +100,7 @@ export default function Home() {
           ...row,
           volume: msg?.v?.toLocaleString() ?? row.volume,
           price: msg?.p?.toLocaleString(),
-          priceTmn: ((msg?.p * row?.usdtIrt) / 10).toLocaleString(),
+          priceTmn: ((msg?.p * (row?.usdtIrt ?? 1)) / 10).toLocaleString(),
           priceChange24h: msg?.p24h?.toLocaleString(),
           priceChange7d: msg?.p7d?.toLocaleString(),
           marketCap: msg?.mc?.toLocaleString(),
@@ -85,23 +109,31 @@ export default function Home() {
     }
   }, [lastJsonMessage, rows]);
 
-  if (!coinList)
-    return (
-      <div className='absolute inset-0 flex items-center justify-center z-50 bg-black/10'>
-        Loading...
-      </div>
-    );
-
-  const pageCount = coinList.data.page_count;
+  const pageCount = coinList?.data?.page_count ?? 1;
 
   return (
-    <MaxWidthWrapper className=''>
-      <PairsTable data={Array.from(rows.values())} />
-      <TablePagingation
-        currPage={currPage}
-        setCurrPage={setCurrPage}
-        pageCount={pageCount}
-      />
-    </MaxWidthWrapper>
+    <>
+      <Head>
+        {currPage !== 1 && <link rel='prev' href={`/?page=${currPage - 1}`} />}
+        {currPage !== pageCount && (
+          <link rel='next' href={`/?page=${currPage + 1}`} />
+        )}
+      </Head>
+      <MaxWidthWrapper className='py-4'>
+        <TableHeader search={searchText} setSearchText={setSearchText} />
+        {!coinList ? (
+          <LoadingSkeleton />
+        ) : (
+          <>
+            <PairsTable data={Array.from(rows.values())} />
+            <TablePagingation
+              currPage={currPage}
+              setCurrPage={setCurrPage}
+              pageCount={pageCount}
+            />
+          </>
+        )}
+      </MaxWidthWrapper>
+    </>
   );
 }

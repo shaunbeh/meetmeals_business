@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 import CustomFont from 'next/font/local';
+import DOMPurify from 'dompurify';
+import { useEffect, useState } from 'react';
+import { Skeleton } from './ui/skeleton';
 
 const YekanBakh = CustomFont({
   src: [
@@ -12,8 +15,25 @@ const YekanBakh = CustomFont({
     { path: '../../public/fonts/YekanBakh-Light.woff', weight: '300' },
   ],
 });
+const fetchHeader = async () => {
+  const res = await fetch('/clinic/custom-section/v1/header');
+  return res.text();
+};
+
+const fetchFooter = async () => {
+  const res = await fetch('/clinic/custom-section/v1/footer');
+  return res.text();
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const [headerHtml, setHeaderHtml] = useState('');
+  const [footerHtml, setFooterHtml] = useState('');
+
+  useEffect(() => {
+    fetchHeader().then(setHeaderHtml);
+    fetchFooter().then(setFooterHtml);
+  }, []);
+
   return (
     <main
       className={clsx(
@@ -21,7 +41,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         YekanBakh.className
       )}
     >
-      <div className='flex-grow flex-1'>{children}</div>
+      {headerHtml ? (
+        // {false ? (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(headerHtml),
+          }}
+        />
+      ) : (
+        <Skeleton className='w-full h-20 xl:h-[105px]'></Skeleton>
+      )}
+      <div className='flex flex-grow flex-col flex-1'> {children}</div>
+      {footerHtml ? (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(footerHtml),
+          }}
+        />
+      ) : (
+        <Skeleton className='w-full mt-16 h-[700px]'></Skeleton>
+      )}
     </main>
   );
 }

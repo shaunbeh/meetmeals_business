@@ -1,22 +1,51 @@
-import { createColumnHelper } from '@tanstack/react-table';
+import { Getter, Row, createColumnHelper } from '@tanstack/react-table';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { TableRowT } from './types';
+import Link from 'next/link';
+import { memo } from 'react';
+import { useRouter } from 'next/router';
 
 const columnHelper = createColumnHelper<TableRowT>();
+const MemoizedCell = memo(function MC({
+  value,
+  icon,
+  symbol,
+}: {
+  value: string;
+  icon: string;
+  symbol: string;
+}) {
+  console.log(symbol);
+  return (
+    <Link href={`/${symbol}`} className='flex justify-end gap-2 items-center'>
+      <div className='flex flex-col items-end'>
+        <span className='font-bold'>{value}</span>
+        <span className='text-gray-500'>{symbol}</span>
+      </div>
+      <span>
+        {icon ? (
+          <Image src={icon} width={24} height={24} alt={`${symbol} icon`} />
+        ) : null}
+      </span>
+    </Link>
+  );
+});
 export const pairsColumns = [
   columnHelper.accessor('priceChange7d', {
     header: 'هفتگی',
-    cell: ({ getValue }) => (
-      <div
-        className={clsx(
-          'w-20 gap-1 flex items-center justify-center',
-          +getValue() > 0 ? 'text-green-500' : 'text-red-400'
-        )}
-      >
-        {getValue()}
-        <span>%</span>
-      </div>
+    cell: ({ getValue, row }) => (
+      <Link href={`/${row.original.symbol.toLowerCase()}`}>
+        <div
+          className={clsx(
+            'w-20 gap-1 flex items-center justify-center',
+            +getValue() > 0 ? 'text-green-500' : 'text-red-400'
+          )}
+        >
+          {getValue()}
+          <span>%</span>
+        </div>
+      </Link>
     ),
   }),
   columnHelper.accessor('priceChange24h', {
@@ -72,22 +101,11 @@ export const pairsColumns = [
   columnHelper.accessor('name', {
     header: 'ارز دیجیتال',
     cell: ({ row, getValue }) => (
-      <div className='flex justify-end gap-2 items-center'>
-        <div className='flex flex-col items-end'>
-          <span className='font-bold'>{getValue()}</span>
-          <span className='text-gray-500'>{row.original.symbol}</span>
-        </div>
-        <span>
-          {row.original.icon ? (
-            <Image
-              src={row.original.icon}
-              width={24}
-              height={24}
-              alt={`${row.original.symbol} icon`}
-            />
-          ) : null}
-        </span>
-      </div>
+      <MemoizedCell
+        value={getValue()}
+        symbol={row.original.symbol}
+        icon={row.original.icon}
+      />
     ),
   }),
   columnHelper.display({

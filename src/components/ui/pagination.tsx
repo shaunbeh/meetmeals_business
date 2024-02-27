@@ -5,7 +5,7 @@ import {
   DotsHorizontalIcon,
 } from '@radix-ui/react-icons';
 
-import { cn } from '@/utils/utils';
+import { cn } from '@/lib/utils';
 import { ButtonProps, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -24,7 +24,7 @@ const PaginationContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ul
     ref={ref}
-    className={cn('flex flex-row items-center gap-1', className)}
+    className={cn('flex flex-row items-center gap-2', className)}
     {...props}
   />
 ));

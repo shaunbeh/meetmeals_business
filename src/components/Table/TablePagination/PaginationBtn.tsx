@@ -1,7 +1,7 @@
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { PaginationItem } from '../ui/pagination';
-import { cn } from '@/utils/utils';
+import { PaginationItem } from '../../ui/pagination';
+import { cn } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
 
 type PropsT = {

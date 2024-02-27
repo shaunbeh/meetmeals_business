@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
-import { BASIC_URL } from '@/utils/config';
+import { BASIC_URL } from '@/lib/config';
 import {
   HydrationBoundary,
   QueryClient,
