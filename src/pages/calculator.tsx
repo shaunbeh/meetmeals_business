@@ -259,7 +259,7 @@ export default function Calculator() {
             >
               <div className='flex items-center text-primary'>
                 <Image
-                  src='/images/svg/IRT.svg'
+                  src='/images/svg/irt.svg'
                   width={24}
                   height={24}
                   alt={`${el.symbol} icon`}
