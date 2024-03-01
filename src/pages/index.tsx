@@ -1,48 +1,66 @@
 import { useEffect, useMemo, useState } from 'react';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import PairsTable from '@/components/Table/PairsTable';
+import PairsTable from '@/components/ui/Table';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { WsMsgT } from '@/components/Table/PairsTable/services/types';
+import { WsMsgT } from '@/components/pages/homepage/services/types';
 import { useQuery } from '@tanstack/react-query';
 import { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
-import { TablePagingation } from '@/components/Table/TablePagination';
+import { TablePagingation } from '@/components/ui/Table/TablePagination';
 import { TABLE_LIMIT, WS_URL } from '@/lib/config';
-import TableHeader from '@/components/Table/TableHeader';
+import HomepageTableHeader from '@/components/pages/homepage/HomepageTableHeader';
 import endpoints from '@/lib/endpoints';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Skeleton } from '@/components/ui/skeleton';
-import LoadingSkeleton from '@/components/Table/LoadingSkeleton';
+import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
 import _ from 'lodash';
 import useDebounce from '@/lib/hooks/useDebounce';
+import { pairsColumns } from '@/components/pages/homepage/services/HomeColumns';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const limit = TABLE_LIMIT;
 
 export default function Home() {
-  const router = useRouter();
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const { searchText, debouncedText, setSearchText } = useDebounce('');
-  const [currPage, setCurrPage] = useState(() => {
-    const page = router.query.page;
-    return page ? parseInt(page as string) : 1;
-  });
+  const page = searchParams.get('page');
+  const tag = searchParams.get('tag');
+  const currPage = page ? +page : 1;
 
-  // useEffect(() => {
-  //   const page = currPage.toString();
-  //   router.push({ query: { page } }, undefined, { shallow: true });
-  // }, [currPage, router]);
+  const handleCurrPage = (term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('page', term);
+    } else {
+      params.delete('page');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+  const handleSearchTag = (term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('tag', term);
+    } else {
+      params.delete('tag');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   const { sendJsonMessage, readyState, lastJsonMessage } =
     useWebSocket<WsMsgT>(WS_URL);
 
   const { data: coinList } = useQuery<SymbolsListResultApi>({
     queryKey: [
-      endpoints.symbols.url,
+      endpoints.symbols.getSymbols.url,
       {
-        method: endpoints.symbols.method,
+        method: endpoints.symbols.getSymbols.method,
         filter: debouncedText,
         limit,
         skip: limit * (currPage - 1),
+        tag,
       },
     ],
   });
@@ -57,11 +75,11 @@ export default function Home() {
             idx: row.row_num,
             marketCap: '',
             name: row.name ?? '',
-            price: (row.weekly_price?.[0].price ?? 0).toLocaleString(),
+            price: (row.weekly_price?.[0]?.price ?? 0).toLocaleString(),
             priceChange24h: '',
             priceChange7d: '',
             priceTmn: (
-              ((row.weekly_price?.[0].price ?? 0) *
+              ((row.weekly_price?.[0]?.price ?? 0) *
                 (coinList?.data?.usdt_irt ?? 1)) /
               10
             ).toLocaleString(),
@@ -119,16 +137,24 @@ export default function Home() {
           <link rel='next' href={`/?page=${currPage + 1}`} />
         )}
       </Head>
-      <MaxWidthWrapper className='py-4'>
-        <TableHeader search={searchText} setSearchText={setSearchText} />
+      <MaxWidthWrapper className='mt-10 grow w-full px-32'>
+        <HomepageTableHeader
+          tag={tag}
+          search={searchText}
+          setSearchText={setSearchText}
+          handleSearchTag={handleSearchTag}
+        />
         {!coinList ? (
           <LoadingSkeleton />
         ) : (
           <>
-            <PairsTable data={Array.from(rows.values())} />
+            <PairsTable
+              columns={pairsColumns}
+              data={Array.from(rows.values())}
+            />
             <TablePagingation
               currPage={currPage}
-              setCurrPage={setCurrPage}
+              handleCurrPage={handleCurrPage}
               pageCount={pageCount}
             />
           </>

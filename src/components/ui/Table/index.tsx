@@ -1,25 +1,26 @@
 import {
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { TableRowT } from './services/types';
-import { pairsColumns } from './services/helpers';
 
-type PropsT = {
-  data: TableRowT[];
-};
-
-export default function PairsTable({ data }: PropsT) {
+export default function PairsTable<T>({
+  data,
+  columns,
+}: {
+  data: T[];
+  columns: ColumnDef<T, any>[];
+}) {
   const table = useReactTable({
-    columns: pairsColumns,
+    columns,
     data,
     getCoreRowModel: getCoreRowModel(),
   });
   return (
     <div className='my-4 flex flex-col pb-10'>
       <div className='py-2 align-middle inline-block min-w-full'>
-        <div className='shadow overflow-x-auto border border-gray-200 sm:rounded-lg'>
+        <div className='shadow overflow-x-auto custom-scroll border border-gray-200 sm:rounded-lg'>
           <table className='min-w-full divide-y divide-gray-200'>
             <thead className='bg-gray-50'>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -62,7 +63,7 @@ export default function PairsTable({ data }: PropsT) {
                       return (
                         <td
                           key={cell.id}
-                          className='px-4 py-2 text-center whitespace-nowrap'
+                          className='px-4 py-3 text-center whitespace-nowrap'
                         >
                           {flexRender(
                             cell.column.columnDef.cell,

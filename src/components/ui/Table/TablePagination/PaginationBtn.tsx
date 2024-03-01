@@ -1,8 +1,7 @@
-import { Button } from '../../ui/button';
+import { Button } from '../../button';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { PaginationItem } from '../../ui/pagination';
+import { PaginationItem } from '../../pagination';
 import { cn } from '@/lib/utils';
-import { Dispatch, SetStateAction } from 'react';
 
 type PropsT = {
   page: number;
@@ -10,7 +9,7 @@ type PropsT = {
   isNext?: boolean;
   isCurr?: boolean;
   disabled?: boolean;
-  setCurrPage: Dispatch<SetStateAction<number>>;
+  handleCurrPage: (term: string) => void;
 };
 
 const PaginationBtn = ({
@@ -19,13 +18,13 @@ const PaginationBtn = ({
   isNext,
   isCurr,
   disabled = false,
-  setCurrPage,
+  handleCurrPage,
 }: PropsT) => {
   return (
     <PaginationItem>
       <Button
         disabled={disabled}
-        onClick={() => setCurrPage(page)}
+        onClick={() => handleCurrPage(page.toString())}
         variant='secondary'
         className={cn(
           isCurr ? 'bg-primary' : 'hover:bg-primary',

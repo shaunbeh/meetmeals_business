@@ -3,19 +3,19 @@ import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
-} from '../../ui/pagination';
+} from '../../pagination';
 import PaginationBtn from './PaginationBtn';
 import { paginate } from './services/pagination';
 
 type PropsT = {
   currPage: number;
-  setCurrPage: Dispatch<SetStateAction<number>>;
+  handleCurrPage: (term: string) => void;
   pageCount: number;
 };
 
 export const TablePagingation = memo(function memoizedPagination({
   currPage,
-  setCurrPage,
+  handleCurrPage,
   pageCount,
 }: PropsT) {
   const { items } = paginate({
@@ -27,7 +27,7 @@ export const TablePagingation = memo(function memoizedPagination({
     <Pagination className='bottom-1'>
       <PaginationContent>
         <PaginationBtn
-          setCurrPage={setCurrPage}
+          handleCurrPage={handleCurrPage}
           isPrev
           page={currPage - 1}
           disabled={currPage == 1}
@@ -40,13 +40,13 @@ export const TablePagingation = memo(function memoizedPagination({
               page={i}
               isCurr={i == currPage}
               disabled={i == currPage}
-              setCurrPage={setCurrPage}
+              handleCurrPage={handleCurrPage}
               key={i}
             />
           )
         )}
         <PaginationBtn
-          setCurrPage={setCurrPage}
+          handleCurrPage={handleCurrPage}
           isNext
           page={currPage + 1}
           disabled={currPage == pageCount}

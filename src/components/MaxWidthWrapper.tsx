@@ -8,7 +8,7 @@ export default function MaxWidthWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn('mx-auto w-full max-w-screen-2xl', className)}>
+    <div className={cn('mx-auto grow max-w-screen-2xl', className)}>
       {children}
     </div>
   );

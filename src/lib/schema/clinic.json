@@ -9,19 +9,68 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/v1/exchange-prices": {
-      "get": {
+    "/api/v1/exchanges-symbols": {
+      "post": {
         "tags": ["exchanges"],
-        "summary": "getExchangePrices",
-        "description": "getExchangePrices",
-        "operationId": "getExchangePrices",
+        "summary": "Get Exchanges With Symbols Info",
+        "description": "Get Exchanges With Symbols Info",
+        "operationId": "getExchangesSymbols",
+        "requestBody": {
+          "description": "create course",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetExchangesSymbolsBodyApi"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getExchangePricesResultApi"
+                  "$ref": "#/components/schemas/getExchangesSymbolsResultApi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/symbols-exchanges": {
+      "post": {
+        "tags": ["symbols"],
+        "summary": "Get Symbols With Exchanges Info",
+        "description": "Get Symbols With Exchanges Info",
+        "operationId": "getSymbolsExchanges",
+        "requestBody": {
+          "description": "create course",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetSymbolsExchangesBodyApi"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSymbolsExchangesResultApi"
                 }
               }
             }
@@ -98,13 +147,33 @@
         },
         "type": "object"
       },
-      "getExchangePricesResultApi": {
-        "title": "getExchangePricesResultApi",
+      "getExchangesSymbolsResultApi": {
+        "title": "getExchangesSymbolsResultApi",
         "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GetExchangesPriceListResult"
+              "$ref": "#/components/schemas/GetExchangesSymbolsListResult"
+            }
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "GetSymbolsExchangesResultApi": {
+        "title": "GetSymbolsExchangesResultApi",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetSymbolsExchangesListResult"
             }
           },
           "status": {
@@ -135,6 +204,16 @@
         },
         "type": "object"
       },
+      "GetExchangesSymbolsBodyApi": {
+        "title": "GetExchangesSymbolsBodyApi",
+        "properties": {
+          "exchange_id": {
+            "type": "integer",
+            "example": "1"
+          }
+        },
+        "type": "object"
+      },
       "SymbolsListBodyApi": {
         "title": "SymbolsListBodyApi",
         "properties": {
@@ -157,12 +236,26 @@
         },
         "type": "object"
       },
-      "GetExchangePriceItemResult": {
-        "title": "GetExchangePriceItemResult",
+      "GetSymbolsExchangesBodyApi": {
+        "title": "GetSymbolsExchangesBodyApi",
+        "properties": {
+          "symbol_id": {
+            "type": "integer",
+            "example": "1"
+          }
+        },
+        "type": "object"
+      },
+      "GetExchangesSymbolItemResult": {
+        "title": "GetExchangesSymbolItemResult",
         "properties": {
           "symbol": {
             "type": "string",
             "example": "BTC"
+          },
+          "icon": {
+            "type": "string",
+            "example": "./png"
           },
           "pair": {
             "type": "string",
@@ -179,8 +272,8 @@
         },
         "type": "object"
       },
-      "GetExchangesPriceListResult": {
-        "title": "GetExchangesPriceListResult",
+      "GetExchangesSymbolsListResult": {
+        "title": "GetExchangesSymbolsListResult",
         "properties": {
           "name": {
             "type": "string",
@@ -217,7 +310,7 @@
           "symbols": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GetExchangePriceItemResult"
+              "$ref": "#/components/schemas/GetExchangesSymbolItemResult"
             }
           }
         },
@@ -293,6 +386,88 @@
           "time": {
             "type": "string",
             "example": "2024-01-01 10:00:00"
+          }
+        },
+        "type": "object"
+      },
+      "GetSymbolsExchangeItemResult": {
+        "title": "GetSymbolsExchangeItemResult",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "nobitex"
+          },
+          "title": {
+            "type": "string",
+            "example": "نوبیتکس"
+          },
+          "type": {
+            "type": "string",
+            "example": "معاملاتی"
+          },
+          "commission": {
+            "type": "string",
+            "example": "0.3"
+          },
+          "symbols_count": {
+            "type": "integer",
+            "example": "3"
+          },
+          "buy_link": {
+            "type": "string",
+            "example": "https://..."
+          },
+          "sell_link": {
+            "type": "string",
+            "example": "https://..."
+          },
+          "logo": {
+            "type": "string",
+            "example": "../png"
+          },
+          "bid_price": {
+            "type": "integer",
+            "example": "2"
+          },
+          "ask_price": {
+            "type": "integer",
+            "example": "2"
+          }
+        },
+        "type": "object"
+      },
+      "GetSymbolsExchangesListResult": {
+        "title": "GetSymbolsExchangesListResult",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Bitcoin"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "BTC"
+          },
+          "slug": {
+            "type": "string",
+            "example": "bitcoin"
+          },
+          "icon": {
+            "type": "string",
+            "example": "http://localhost:9665/api/svg-coins/btc.svg"
+          },
+          "exchanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetSymbolsExchangeItemResult"
+            }
           }
         },
         "type": "object"
