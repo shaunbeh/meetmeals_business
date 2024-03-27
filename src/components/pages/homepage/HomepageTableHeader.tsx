@@ -18,7 +18,7 @@ export default function HomepageTableHeader({
 }) {
   return (
     <div className='flex flex-col gap-4 px-4'>
-      <div className='flex justify-between items-center'>
+      <div className='flex justify-between outline items-center'>
         <div className='relative'>
           <Input
             value={search}

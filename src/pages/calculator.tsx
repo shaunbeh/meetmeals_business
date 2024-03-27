@@ -14,8 +14,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { roundDecimalDigits } from '@/lib/utils';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import { google } from 'googleapis';
 
-export default function Calculator() {
+type CalcContentT = {};
+
+export default function Calculator({ htmlTags }) {
   const [firstSymbol, setFirstSymbol] = useState('');
   const [firstSymbolCount, setFirstSymbolCount] = useState<string | number>(1);
   const [secondSymbol, setSecondSymbol] = useState('');
@@ -278,12 +281,46 @@ export default function Calculator() {
           ))}
         </div>
       </div>
-      <div className='flex flex-col gap-2'>
-        <h3 className='font-extrabold text-lg'>
-          {texts.calculator.firstTitle}
-        </h3>
-        <p>{texts.calculator.firstDesc}</p>
-      </div>
+      {/* <div className='flex flex-col gap-2'>{htmlTags}</div> */}
+      <div dangerouslySetInnerHTML={{ __html: htmlTags }} />
     </MaxWidthWrapper>
   );
+}
+
+export async function getStaticProps() {
+  let htmlTags;
+  try {
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    });
+
+    const sheets = google.sheets({ auth, version: 'v4' });
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: 'A:B',
+    });
+    htmlTags = response?.data?.values
+      ?.map((row) => {
+        const tagName = row[1];
+        const tagContent = row[0];
+        return `<${tagName}>${tagContent}</${tagName}>`;
+      })
+      .join(' ');
+    console.log(htmlTags);
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
+  }
+
+  return {
+    props: {
+      htmlTags,
+    },
+  };
 }

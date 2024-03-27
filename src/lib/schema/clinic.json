@@ -9,6 +9,35 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/v1/calculator": {
+      "post": {
+        "tags": ["calculator"],
+        "summary": "Get Symbols With Price Info for calculator",
+        "description": "Get Symbols With Price Info for calculator page",
+        "operationId": "getSymbolsPriceForCalculator",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getCalculatorApi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/exchanges-symbols": {
       "post": {
         "tags": ["exchanges"],
@@ -39,11 +68,11 @@
           "400": {
             "description": "Bad request"
           },
-          "404": {
-            "description": "Resource Not Found"
-          },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource Not Found"
           }
         }
       }
@@ -78,11 +107,11 @@
           "400": {
             "description": "Bad request"
           },
-          "404": {
-            "description": "Resource Not Found"
-          },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource Not Found"
           }
         }
       }
@@ -117,11 +146,40 @@
           "400": {
             "description": "Bad request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Resource Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/tags": {
+      "get": {
+        "tags": ["tags"],
+        "summary": "GetTags",
+        "description": "GetTags",
+        "operationId": "GetTags",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTagsResultApi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource Not Found"
           }
         }
       }
@@ -135,6 +193,26 @@
           "data": {
             "type": "object",
             "example": []
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "getCalculatorApi": {
+        "title": "getCalculatorApi",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CalculatorItem"
+            }
           },
           "status": {
             "type": "integer",
@@ -187,6 +265,23 @@
         },
         "type": "object"
       },
+      "CoinResultApi": {
+        "title": "CoinResultApi",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CoinDetailsResult"
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
       "SymbolsListResultApi": {
         "title": "SymbolsListResultApi",
         "properties": {
@@ -200,6 +295,36 @@
           "message": {
             "type": "string",
             "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "GetTagsResultApi": {
+        "title": "GetTagsResultApi",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagItem"
+            }
+          },
+          "status": {
+            "type": "integer",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome."
+          }
+        },
+        "type": "object"
+      },
+      "CoinsBodyApi": {
+        "title": "CoinsBodyApi",
+        "properties": {
+          "coin": {
+            "type": "string",
+            "example": "bitcoin"
           }
         },
         "type": "object"
@@ -246,9 +371,153 @@
         },
         "type": "object"
       },
+      "CoinDetailsResult": {
+        "title": "CoinDetailsResult",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Bitcoin"
+          },
+          "fa_name": {
+            "type": "string",
+            "example": "بیت کوین"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "BTC"
+          },
+          "slug": {
+            "type": "string",
+            "example": "bitcoin"
+          },
+          "icon": {
+            "type": "string",
+            "example": "http://localhost:9665/api/svg-coins/btc.svg"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetGetCoinsPriceItem"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "GetGetCoinsPriceItem": {
+        "title": "GetGetCoinsPriceItem",
+        "properties": {
+          "coin_market_cap_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Bitcoin"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "BTC"
+          },
+          "price": {
+            "type": "INT",
+            "example": 2300
+          },
+          "volume_24h": {
+            "type": "string",
+            "example": "65.5789168"
+          },
+          "volume_change_24h": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_1h": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_24h": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_7d": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_30d": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_60d": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "percent_change_90d": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "market_cap": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "market_cap_dominance": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "fully_diluted_market_cap": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "last_updated": {
+            "type": "string",
+            "example": "65.57891688"
+          },
+          "tvl": {
+            "type": "string",
+            "example": "2024-01-01 10:00:00"
+          }
+        },
+        "type": "object"
+      },
+      "CalculatorItem": {
+        "title": "CalculatorItem",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Bitcoin"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "BTC"
+          },
+          "icon": {
+            "type": "string",
+            "example": "./png"
+          },
+          "pair": {
+            "type": "string",
+            "example": "BTCIRT"
+          },
+          "bid_price": {
+            "type": "integer",
+            "example": "2"
+          },
+          "ask_price": {
+            "type": "integer",
+            "example": "2"
+          }
+        },
+        "type": "object"
+      },
       "GetExchangesSymbolItemResult": {
         "title": "GetExchangesSymbolItemResult",
         "properties": {
+          "name": {
+            "type": "string",
+            "example": "BTC"
+          },
           "symbol": {
             "type": "string",
             "example": "BTC"
@@ -471,6 +740,58 @@
           }
         },
         "type": "object"
+      },
+      "TagItem": {
+        "title": "TagItem",
+        "required": ["id", "name", "key"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "name": {
+            "type": "string",
+            "example": "web3"
+          },
+          "key": {
+            "type": "string",
+            "example": "web3"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "successful operation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CoinResultApi"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "404": {
+        "description": "Resource Not Found"
+      }
+    },
+    "parameters": {
+      "coin": {
+        "name": "coin",
+        "in": "path",
+        "description": "slug of coin",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "bitcoin"
       }
     }
   }

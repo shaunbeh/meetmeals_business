@@ -12,11 +12,13 @@ export default function PairsTable<T>({
   data: T[];
   columns: ColumnDef<T, any>[];
 }) {
+
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <div className='my-4 flex flex-col pb-10'>
       <div className='py-2 align-middle inline-block min-w-full'>

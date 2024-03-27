@@ -15,7 +15,9 @@ interface ParamsT {
   method?: 'get' | 'post';
   [key: string]: unknown;
 }
-export default function App({ Component, pageProps }: AppProps) {
+// type AppOwnProps = { headerHtml: string; footerHtml: string };
+
+export default function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -56,3 +58,26 @@ export default function App({ Component, pageProps }: AppProps) {
     </QueryClientProvider>
   );
 }
+
+// MyApp.getInitialProps = async (
+//   context: AppContext
+// ): Promise<AppOwnProps & AppInitialProps> => {
+//   const ctx = await App.getInitialProps(context);
+//   const headerHtml = await fetchHeader();
+//   const footerHtml = await fetchFooter();
+//   return { ...ctx, headerHtml, footerHtml };
+// };
+
+// const fetchHeader = async () => {
+//   const res = await fetch(
+//     'https://clinicsarmayeh.com/wp-json/custom-section/v1/header/'
+//   );
+//   return res.text();
+// };
+
+// const fetchFooter = async () => {
+//   const res = await fetch(
+//     'https://clinicsarmayeh.com/wp-json/custom-section/v1/footer/'
+//   );
+//   return res.text();
+// };
