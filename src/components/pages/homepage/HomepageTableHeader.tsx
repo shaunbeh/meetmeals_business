@@ -2,8 +2,8 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import { Dispatch, SetStateAction } from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
+import Link from 'next/link';
 
 export default function HomepageTableHeader({
   search,
@@ -17,8 +17,8 @@ export default function HomepageTableHeader({
   tag: string | null;
 }) {
   return (
-    <div className='flex flex-col gap-4 px-4'>
-      <div className='flex justify-between outline items-center'>
+    <div className='flex flex-col gap-4 w-full mx-auto'>
+      <div className='flex justify-between items-center'>
         <div className='relative'>
           <Input
             value={search}

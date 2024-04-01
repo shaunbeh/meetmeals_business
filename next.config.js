@@ -28,6 +28,10 @@ const nextConfig = {
         source: '/clinic/:path*',
         destination: 'https://clinicsarmayeh.com/wp-json/:path*',
       },
+      {
+        source: '/api/:path*',
+        destination: 'https://bprice.clinicsarmayeh.com/api/:path*',
+      },
     ];
   },
   reactStrictMode: true,

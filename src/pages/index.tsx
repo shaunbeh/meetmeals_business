@@ -137,7 +137,7 @@ export default function Home() {
           <link rel='next' href={`/?page=${currPage + 1}`} />
         )}
       </Head>
-      <MaxWidthWrapper className='mt-10 grow w-full px-4 md:px-8 lg:px-32'>
+      <MaxWidthWrapper className='mt-10 p-6 rounded-lg bg-background grow w-full'>
         <HomepageTableHeader
           tag={tag}
           search={searchText}

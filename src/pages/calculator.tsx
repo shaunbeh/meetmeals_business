@@ -6,6 +6,7 @@ import { ArrowLeft2 } from 'iconsax-react';
 import endpoints from '@/lib/endpoints';
 import { useQuery } from '@tanstack/react-query';
 import {
+  GetCalculatorApi,
   GetExchangesSymbolItemResult,
   GetExchangesSymbolsResultApi,
 } from '@/lib/schema/ApiTypes';
@@ -15,22 +16,24 @@ import Image from 'next/image';
 import { roundDecimalDigits } from '@/lib/utils';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { google } from 'googleapis';
+import {
+  generateHtmlContentFromSheetData,
+  getGoogleSheetsData,
+} from '@/utils/gsheets';
 
-type CalcContentT = {};
-
-export default function Calculator({ htmlTags }) {
-  const [firstSymbol, setFirstSymbol] = useState('');
+export default function Calculator({ htmlTags }: { htmlTags: string }) {
+  const [firstSymbol, setFirstSymbol] = useState('btc');
   const [firstSymbolCount, setFirstSymbolCount] = useState<string | number>(1);
   const [secondSymbol, setSecondSymbol] = useState('');
   const [secondSymbolCount, setSecondSymbolCount] = useState<string | number>(
     ''
   );
 
-  const { data: exchangeData } = useQuery<GetExchangesSymbolsResultApi>({
+  const { data: exchangeData } = useQuery<GetCalculatorApi>({
     queryKey: [
-      endpoints.exchanges.getExchangesWithSymbols.url,
+      endpoints.calculator.url,
       {
-        method: endpoints.exchanges.getExchangesWithSymbols.method,
+        method: endpoints.calculator.method,
         exchange_id: 1,
       },
     ],
@@ -48,21 +51,20 @@ export default function Calculator({ htmlTags }) {
     []
   );
 
-  const firstPair = exchangeData?.data?.[0]?.symbols?.find(
-    (el) => el.symbol == firstSymbol
+  const firstPair = exchangeData?.data?.find(
+    (el) => el.symbol?.toLowerCase() == firstSymbol
   );
+  console.log(firstPair);
   const secondPair =
     secondSymbol == 'IRT'
       ? IrtPair
-      : exchangeData?.data?.[0]?.symbols?.find(
-          (el) => el.symbol == secondSymbol
+      : exchangeData?.data?.find(
+          (el) => el.symbol?.toLowerCase() == secondSymbol
         );
 
   const handleFirstPairChange = (val: string) => {
     setFirstSymbol(val);
-    const first = exchangeData?.data?.[0]?.symbols?.find(
-      (el) => el.symbol == val
-    );
+    const first = exchangeData?.data?.find((el) => el.symbol == val);
     if (secondPair && first && firstSymbolCount) {
       setSecondSymbolCount(
         +firstSymbolCount * (first.bid_price / secondPair.bid_price)
@@ -190,6 +192,7 @@ export default function Calculator({ htmlTags }) {
             value={secondSymbolCount.toLocaleString()}
           />
         </div>
+        <h1>hi</h1>
         {firstSymbolCount && firstPair?.bid_price && secondPair?.bid_price && (
           <div className='flex items-center text-muted-foreground mx-auto gap-2 dir-rtl'>
             {texts.calculator.each}
@@ -282,45 +285,20 @@ export default function Calculator({ htmlTags }) {
         </div>
       </div>
       {/* <div className='flex flex-col gap-2'>{htmlTags}</div> */}
-      <div dangerouslySetInnerHTML={{ __html: htmlTags }} />
+      <div
+        className='prose max-w-none'
+        dangerouslySetInnerHTML={{ __html: htmlTags }}
+      />
     </MaxWidthWrapper>
   );
 }
 
 export async function getStaticProps() {
-  let htmlTags;
-  try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
-    const sheets = google.sheets({ auth, version: 'v4' });
-
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'A:B',
-    });
-    htmlTags = response?.data?.values
-      ?.map((row) => {
-        const tagName = row[1];
-        const tagContent = row[0];
-        return `<${tagName}>${tagContent}</${tagName}>`;
-      })
-      .join(' ');
-    console.log(htmlTags);
-  } catch (e) {
-    if (e instanceof Error) {
-      console.error(e.message);
-    }
-  }
-
+  const htmlTags = await getGoogleSheetsData('A2:C');
   return {
     props: {
       htmlTags,
     },
+    revalidate: 60,
   };
 }

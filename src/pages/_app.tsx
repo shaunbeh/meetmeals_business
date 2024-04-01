@@ -1,6 +1,5 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
-import { BASIC_URL } from '@/lib/config';
 import {
   HydrationBoundary,
   QueryClient,
@@ -30,7 +29,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 ParamsT,
               ];
 
-              const fullUrl = `${BASIC_URL}${url.toLowerCase()}`;
+              const fullUrl = `/api/${url.toLowerCase()}`;
               let response;
 
               if (method.toLowerCase() === 'post') {
