@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import CustomFont from 'next/font/local';
 import DOMPurify from 'dompurify';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
 import Head from 'next/head';
+import Script from 'next/script';
 
 const YekanBakh = CustomFont({
   src: [
@@ -16,23 +17,35 @@ const YekanBakh = CustomFont({
     { path: '../../public/fonts/YekanBakh-Light.woff', weight: '300' },
   ],
 });
-const fetchHeader = async () => {
-  const res = await fetch('/clinic/custom-section/v1/header/');
-  return res.text();
+const fetchContent = async (url) => {
+  try {
+    const res = await fetch(url);
+    return res.text();
+  } catch (error) {
+    console.error('Error fetching content:', error);
+    return ''; // Return an empty string in case of an error
+  }
 };
 
-const fetchFooter = async () => {
-  const res = await fetch('/clinic/custom-section/v1/footer/');
-  return res.text();
-};
-
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }) {
   const [headerHtml, setHeaderHtml] = useState('');
+  const [headHtml, setHeadHtml] = useState('');
   const [footerHtml, setFooterHtml] = useState('');
 
   useEffect(() => {
-    fetchHeader().then(setHeaderHtml);
-    fetchFooter().then(setFooterHtml);
+    const fetchContentData = async () => {
+      const [headContent, headerContent, footerContent] = await Promise.all([
+        fetchContent('/clinic/custom-section/v1/head/'),
+        fetchContent('/clinic/custom-section/v1/header/'),
+        fetchContent('/clinic/custom-section/v1/footer/'),
+      ]);
+
+      setHeadHtml(headContent);
+      setHeaderHtml(headerContent);
+      setFooterHtml(footerContent);
+    };
+
+    fetchContentData();
   }, []);
 
   return (
@@ -43,12 +56,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           global
         >{`:root { --font-sans: ${YekanBakh.style.fontFamily};}}`}</style>
       </Head>
+      <Script src='https://code.jquery.com/jquery-3.6.0.js'></Script>
       <main
         className={clsx(
           'relative flex flex-col min-h-screen',
           YekanBakh.className
         )}
       >
+        {headHtml && (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: headHtml,
+            }}
+          />
+        )}
         {headerHtml ? (
           // {false ? (
           <div

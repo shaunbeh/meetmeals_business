@@ -62,6 +62,7 @@ export default function Calculator({ htmlTags }: { htmlTags: string }) {
           (el) => el.symbol?.toLowerCase() == secondSymbol
         );
 
+  console.log(exchangeData);
   const handleFirstPairChange = (val: string) => {
     setFirstSymbol(val);
     const first = exchangeData?.data?.find((el) => el.symbol == val);
