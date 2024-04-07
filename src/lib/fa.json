@@ -21,7 +21,7 @@
     }
   },
   "calculator": {
-    "name": "ماشین حساب ارزهای دیجیتال",
+    "title": "ماشین حساب ارزهای دیجیتال",
     "basePairTitle": "کوین اول",
     "targetPairTitle": "کوین دوم",
     "each": "هر",

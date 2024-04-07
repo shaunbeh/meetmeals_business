@@ -7,9 +7,9 @@ const endpoints = {
     getSymbols: { url: '/v1/get-symbols/', method: 'POST' },
     getSymbolsWithExchanges: { url: '/v1/symbols-exchanges/', method: 'POST' },
   },
-  calculator: { url: '/v1/calculator', method: 'POST' },
+  calculator: { url: '/v1/calculator/', method: 'POST' },
   content: {
-    calculator: { url: '/calculator-content', method: 'GET' },
+    calculator: { url: '/calculator-content/', method: 'GET' },
   },
 };
 

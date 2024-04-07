@@ -1,10 +1,9 @@
+import useLoadScripts from '@/lib/hooks/useLoadScripts';
+import { ServerSideProps } from '@/types/commonTypes';
 import clsx from 'clsx';
 import CustomFont from 'next/font/local';
-import DOMPurify from 'dompurify';
-import { Fragment, useEffect, useState } from 'react';
-import { Skeleton } from './ui/skeleton';
 import Head from 'next/head';
-import Script from 'next/script';
+import { useEffect } from 'react';
 
 const YekanBakh = CustomFont({
   src: [
@@ -17,37 +16,23 @@ const YekanBakh = CustomFont({
     { path: '../../public/fonts/YekanBakh-Light.woff', weight: '300' },
   ],
 });
-const fetchContent = async (url) => {
-  try {
-    const res = await fetch(url);
-    return res.text();
-  } catch (error) {
-    console.error('Error fetching content:', error);
-    return ''; // Return an empty string in case of an error
-  }
-};
 
-export default function Layout({ children }) {
-  const [headerHtml, setHeaderHtml] = useState('');
-  const [headHtml, setHeadHtml] = useState('');
-  const [footerHtml, setFooterHtml] = useState('');
-
+export default function Layout({
+  children,
+  headerContent,
+  footerContent,
+}: ServerSideProps['layoutProps'] & { children: JSX.Element }) {
   useEffect(() => {
-    const fetchContentData = async () => {
-      const [headContent, headerContent, footerContent] = await Promise.all([
-        fetchContent('/clinic/custom-section/v1/head/'),
-        fetchContent('/clinic/custom-section/v1/header/'),
-        fetchContent('/clinic/custom-section/v1/footer/'),
-      ]);
-
-      setHeadHtml(headContent);
-      setHeaderHtml(headerContent);
-      setFooterHtml(footerContent);
+    const id = setTimeout(function () {
+      document
+        .querySelector('#menumobile')
+        ?.classList.remove('come-menumobile');
+    }, 500);
+    return () => {
+      clearTimeout(id);
     };
-
-    fetchContentData();
   }, []);
-
+  useLoadScripts();
   return (
     <>
       <Head>
@@ -56,42 +41,29 @@ export default function Layout({ children }) {
           global
         >{`:root { --font-sans: ${YekanBakh.style.fontFamily};}}`}</style>
       </Head>
-      <Script src='https://code.jquery.com/jquery-3.6.0.js'></Script>
       <main
         className={clsx(
           'relative flex flex-col min-h-screen',
           YekanBakh.className
         )}
       >
-        {headHtml && (
+        {headerContent && (
           <div
             dangerouslySetInnerHTML={{
-              __html: headHtml,
+              __html: headerContent,
             }}
           />
-        )}
-        {headerHtml ? (
-          // {false ? (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(headerHtml),
-            }}
-          />
-        ) : (
-          <Skeleton className='w-full h-20 xl:h-[105px]'></Skeleton>
         )}
         <div className='flex flex-grow flex-col flex-1 bg-white'>
           {' '}
           {children}
         </div>
-        {footerHtml ? (
+        {footerContent && (
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(footerHtml),
+              __html: footerContent,
             }}
           />
-        ) : (
-          <Skeleton className='w-full mt-16 h-[700px]'></Skeleton>
         )}
       </main>
     </>

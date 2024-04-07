@@ -6,7 +6,6 @@ type PropsT = {
 };
 function TradingViewWidget({ symbol }: PropsT) {
   const container = useRef<HTMLDivElement>(null);
-  console.log(symbol);
 
   useEffect(() => {
     const current = container.current;

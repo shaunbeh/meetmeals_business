@@ -1,4 +1,3 @@
-import Layout from '@/components/Layout';
 import '@/styles/globals.css';
 import {
   HydrationBoundary,
@@ -29,7 +28,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 ParamsT,
               ];
 
-              const fullUrl = `/api/${url.toLowerCase()}`;
+              const fullUrl = `/api${url.toLowerCase()}`;
               let response;
 
               if (method.toLowerCase() === 'post') {
@@ -49,9 +48,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
       </HydrationBoundary>
       <ReactQueryDevtools />
     </QueryClientProvider>

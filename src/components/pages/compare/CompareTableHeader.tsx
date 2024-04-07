@@ -44,8 +44,8 @@ export default function CompareTableHeader({
           {texts.comparison.secondsMore}
         </div>
       </div>
-      <div className='flex justify-between'>
-        <div className='flex items-center gap-4'>
+      <div className='flex flex-col md:flex-row gap-4 items-center'>
+        <div className='flex items-center overflow-x-auto custom-scroll-thin py-2 gap-4'>
           {coinList?.slice(0, 5).map((el) => (
             <Button
               key={el.symbol}
@@ -55,7 +55,7 @@ export default function CompareTableHeader({
                 selectedCoin == el.symbol
                   ? 'bg-popover-foreground hover:bg-inherit hover:cursor-default text-popover'
                   : 'hover:bg-primary/30',
-                'flex items-center gap-2 disabled:!opacity-100 rounded-3xl px-3 py-0.5'
+                'flex items-center gap-2 disabled:!opacity-100 rounded-3xl px-6 md:px-3 py-0.5'
               )}
               onClick={() => handleChange(el?.symbol ?? 'BTC')}
             >

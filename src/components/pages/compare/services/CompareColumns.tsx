@@ -25,8 +25,8 @@ export const CompareColumns = [
     header: texts.comparison.table.askPrice,
     cell: ({ getValue }) => (
       <div className='gap-1 flex items-center justify-center'>
-        <span className='text-[0.5rem]'>IRT</span>
-        <span className='text-sm'>{getValue()?.toLocaleString()}</span>
+        <span className='text-xs'>IRT</span>
+        <span className='text-sm'>{Number(getValue()).toLocaleString()}</span>
       </div>
     ),
   }),
@@ -34,8 +34,8 @@ export const CompareColumns = [
     header: texts.comparison.table.bidPrice,
     cell: ({ getValue }) => (
       <div className=' gap-1 flex items-center justify-center'>
-        <span className='text-[0.5rem]'>IRT</span>
-        <span className='text-sm'>{getValue()?.toLocaleString()}</span>
+        <span className='text-xs'>IRT</span>
+        <span className='text-sm'>{Number(getValue()).toLocaleString()}</span>
       </div>
     ),
   }),
@@ -43,14 +43,7 @@ export const CompareColumns = [
     header: texts.comparison.table.commission,
     cell: ({ getValue }) => (
       <div className='text-sm gap-1 flex items-center justify-center'>
-        {getValue() ? (
-          <>
-            <span>%</span>
-            {getValue()}
-          </>
-        ) : (
-          ''
-        )}
+        {getValue() ? <>{getValue()}</> : ''}
       </div>
     ),
   }),
@@ -64,7 +57,7 @@ export const CompareColumns = [
   }),
   columnHelper.accessor('sell_link', {
     header: texts.comparison.table.affiliateLink,
-    cell: ({ getValue, row }) => (
+    cell: ({ getValue }) => (
       <Link href={getValue() ?? ''} target='_blank'>
         <div className='ring-1 ring-primary text-primary rounded-lg px-6 py-1 text-sm w-fit mx-auto py'>
           {texts.comparison.table.linkButton}

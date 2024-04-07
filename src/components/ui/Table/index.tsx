@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-export default function PairsTable<T>({
+export default function BasicTable<T>({
   data,
   columns,
 }: {
@@ -21,7 +21,7 @@ export default function PairsTable<T>({
   return (
     <div className='my-4 flex flex-col pb-10'>
       <div className='inline-block'>
-        <div className='overflow-x-auto w-full custom-scroll'>
+        <div className='overflow-x-auto w-full custom-scroll-thin'>
           <table className='min-w-full divide-y divide-gray-200 border-none outline-none'>
             <thead className='rounded-lg overflow-hidden'>
               {table.getHeaderGroups().map((headerGroup) => (

@@ -4,17 +4,20 @@ import { Input } from '../../ui/input';
 import { Dispatch, SetStateAction } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { TagItem } from '@/lib/schema/ApiTypes';
 
 export default function HomepageTableHeader({
   search,
   setSearchText,
   handleSearchTag,
   tag,
+  tagsList,
 }: {
   search: string;
   setSearchText: Dispatch<SetStateAction<string>>;
   handleSearchTag: (tag: string) => void;
   tag: string | null;
+  tagsList: TagItem[];
 }) {
   return (
     <div className='flex flex-col gap-4 w-full mx-auto'>
@@ -45,106 +48,23 @@ export default function HomepageTableHeader({
         </div>
       </div>
       <div className='flex items-center gap-4'>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'all' ? handleSearchTag('') : handleSearchTag('all')
-          }
-          className={clsx(
-            tag == 'all'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-           همه
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'defi' ? handleSearchTag('') : handleSearchTag('defi')
-          }
-          className={clsx(
-            tag == 'defi'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          دیفای
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'stable' ? handleSearchTag('') : handleSearchTag('stable')
-          }
-          className={clsx(
-            tag == 'stable'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          استیبل کوین
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'metaverse'
-              ? handleSearchTag('')
-              : handleSearchTag('metaverse')
-          }
-          className={clsx(
-            tag == 'metaverse'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          متاورس{' '}
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'nft' ? handleSearchTag('') : handleSearchTag('nft')
-          }
-          className={clsx(
-            tag == 'nft'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          NFT{' '}
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'web3' ? handleSearchTag('') : handleSearchTag('web3')
-          }
-          className={clsx(
-            tag == 'web3'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          وب ۳{' '}
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() =>
-            tag == 'ai' ? handleSearchTag('') : handleSearchTag('ai')
-          }
-          className={clsx(
-            tag == 'ai'
-              ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
-              : 'hover:bg-primary/30',
-            'rounded-3xl px-3 py-1 h-7'
-          )}
-        >
-          هوش مصنوعی{' '}
-        </Button>
+        {tagsList?.map((t) => (
+          <Button
+            key={t.id}
+            variant='secondary'
+            onClick={() =>
+              t.key == 'all' ? handleSearchTag('') : handleSearchTag(t.key)
+            }
+            className={clsx(
+              tag == 'all'
+                ? 'bg-popover-foreground text-popover hover:bg-popover hover:text-popover-foreground'
+                : 'hover:bg-primary/30',
+              'rounded-3xl px-3 py-1 h-7'
+            )}
+          >
+            {t.name}
+          </Button>
+        ))}
       </div>
     </div>
   );

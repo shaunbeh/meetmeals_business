@@ -6,10 +6,16 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import texts from '@/lib/fa.json';
+import { fetchHeaderFooterData } from '@/lib/utils';
+import { ServerSideProps } from '@/types/commonTypes';
+import Layout from '@/components/Layout';
 
-export default function Coin() {
+type PropsT = {} & ServerSideProps;
+
+export default function Coin({ layoutProps }: PropsT) {
   const router = useRouter();
   const { coin } = router.query;
+
   // const { data: exchangePrices } = useQuery<GetExchangePricesResultApi>({
   //   queryKey: [endpoints.exchanges.url, { method: endpoints.exchanges.method }],
   // });
@@ -66,3 +72,11 @@ export default function Coin() {
     </MaxWidthWrapper>
   );
 }
+// export async function getStaticProps() {
+//   const layoutProps = await fetchHeaderFooterData();
+
+//   return {
+//     revalidate: 3600,
+//     props: { ...layoutProps },
+//   };
+// }
