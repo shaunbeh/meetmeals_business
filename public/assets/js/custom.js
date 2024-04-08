@@ -110,21 +110,23 @@
     var activeTab = jQuery(this).find('a').attr('href');
     jQuery(activeTab).addClass('active in');
   });
-  jQuery('.accordion').click(function (e) {
-    e.preventDefault();
-    var $this = jQuery(this);
-    if ($this.next().hasClass('show')) {
-      $this.next().removeClass('show');
-      $this.next().slideUp(350);
-      $this.parent().removeClass('active');
-    } else {
-      $this.parent().addClass('active');
-      $this.parent().parent().find('li .inner').removeClass('show');
-      $this.parent().parent().find('li .inner').slideUp(350);
-      $this.next().toggleClass('show');
-      $this.next().slideToggle(350);
-    }
-  });
+  jQuery('.accordion')
+    .off('click')
+    .on('click', function (e) {
+      e.preventDefault();
+      var $this = jQuery(this);
+      if ($this.next().hasClass('show')) {
+        $this.next().removeClass('show');
+        $this.next().slideUp(350);
+        $this.parent().removeClass('active');
+      } else {
+        $this.parent().addClass('active');
+        $this.parent().parent().find('li .inner').removeClass('show');
+        $this.parent().parent().find('li .inner').slideUp(350);
+        $this.next().toggleClass('show');
+        $this.next().slideToggle(350);
+      }
+    });
   jQuery('.cat-item .children').slideUp();
   jQuery('.cat-item ')
     .children('.children')

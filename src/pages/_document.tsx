@@ -52,7 +52,7 @@ export default function Document() {
           type='text/javascript'
           strategy='beforeInteractive'
         ></Script>
-        <Script
+        {/* <Script
           data-cfasync='false'
           src='/assets/js/misc.js'
           type='text/javascript'
@@ -65,16 +65,7 @@ export default function Document() {
           type='text/javascript'
           strategy='beforeInteractive'
           defer
-        ></Script>
-        <Script
-          src='/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js'
-          data-cf-settings='d0dfe75f40e6ba04541646e0-|49'
-        ></Script>
-        <Script
-          data-cfasync='false'
-          id='customjs-js-extra'
-          type='text/javascript'
-        ></Script>
+        ></Script> */}
       </Head>
       <body className='relative h-full font-sans antialiased'>
         <Main />

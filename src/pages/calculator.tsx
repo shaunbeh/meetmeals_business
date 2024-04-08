@@ -145,7 +145,7 @@ export default function Calculator({ content, faqs, layoutProps }: PropsT) {
       <MaxWidthWrapper>
         <div className='flex flex-col-reverse md:flex-row gap-6 justify-between items-center'>
           <div className='flex justify-between items-center font-extrabold md:text-lg lg:text-2xl'>
-            {texts.comparison.title}
+            {texts.calculator.title}
           </div>
           <div className='flex items-center gap-2'>
             <Link

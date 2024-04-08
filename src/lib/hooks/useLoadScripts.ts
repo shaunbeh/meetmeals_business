@@ -5,31 +5,32 @@ const useLoadScripts = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const scripts = [
-      // '/assets/js/jquery.min.js',
-      // '/assets/js/jquery-migrate.min.js',
-      '/assets/js/misc.js',
-      '/assets/js/custom.js',
-    ];
+    let loadedScripts = [];
 
     const loadScript = (src: string) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      document.body.appendChild(script);
-      return script;
+      // Check if the script is already loaded
+      if (!document.querySelector(`script[src="${src}"]`)) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        document.body.appendChild(script);
+        return script;
+      }
     };
 
-    const loadedScripts = scripts.map(loadScript);
+    // Load scripts only if they are not already in the body
+    const scripts = ['/assets/js/misc.js', '/assets/js/custom.js'];
+    loadedScripts = scripts.map(loadScript).filter(Boolean);
 
     return () => {
+      // Remove the scripts that were added by this hook
       loadedScripts.forEach((script) => {
-        if (document.body.contains(script)) {
+        if (script && document.body.contains(script)) {
           document.body.removeChild(script);
         }
       });
     };
-  }, [router.asPath]);
+  }, [router.asPath]); // Re-run the effect only when the route changes
 };
 
 export default useLoadScripts;
