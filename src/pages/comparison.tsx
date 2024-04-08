@@ -79,12 +79,12 @@ export default function Comparison({ layoutProps, content, faqs }: PropsT) {
             </>
           )}
           <div className='flex flex-col gap-2'>
-            {/* {content && (
+            {content && (
               <div
                 className='prose max-w-none'
                 dangerouslySetInnerHTML={{ __html: content }}
               />
-            )} */}
+            )}
             {faqs && <Faqs data={faqs} />}
           </div>
         </div>
