@@ -46,24 +46,3 @@ export const fetchJson = async (url: string) => {
     return ''; // Return an empty string in case of an error
   }
 };
-
-export async function fetchHeaderFooterData() {
-  const [header, footer] = await Promise.all([
-    fetchContent(
-      'https://clinicsarmayeh.com/wp-json/custom-section/v1/header/'
-    ),
-    fetchContent(
-      'https://clinicsarmayeh.com/wp-json/custom-section/v1/footer/'
-    ),
-  ]);
-
-  const headerContent = DOMPurify.sanitize(header);
-  const footerContent = DOMPurify.sanitize(footer);
-
-  return {
-    layoutProps: {
-      headerContent,
-      footerContent,
-    },
-  };
-}

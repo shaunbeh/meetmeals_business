@@ -1,6 +1,6 @@
 import { GetSymbolsExchangesListResult } from '@/lib/schema/ApiTypes';
 import { Button } from '../../ui/button';
-import texts from '@/lib/fa.json';
+import texts from 'public/locales/fa/fa.json';
 import Image from 'next/image';
 import PairsDropdown from '@/components/PairsDropdown';
 import clsx from 'clsx';

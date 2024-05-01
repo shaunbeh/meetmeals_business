@@ -1,7 +1,6 @@
 import PairsDropdown from '@/components/PairsDropdown';
 import { Input } from '@/components/ui/input';
 import ChangeIcon from 'public/images/svg/change.svg';
-import texts from '@/lib/fa.json';
 import { ArrowLeft2 } from 'iconsax-react';
 import endpoints from '@/lib/endpoints';
 import { useQuery } from '@tanstack/react-query';
@@ -12,15 +11,12 @@ import {
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  fetchHeaderFooterData,
-  fetchJson,
-  roundDecimalDigits,
-} from '@/lib/utils';
+import { fetchJson, roundDecimalDigits } from '@/lib/utils';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Layout from '@/components/Layout';
 import { ServerSideProps } from '@/types/commonTypes';
 import Faqs from '@/components/ui/Faq';
+import texts from 'public/locales/fa/fa.json';
 
 type PropsT = ServerSideProps;
 
@@ -33,7 +29,7 @@ const IrtPair = {
   ask_price: 10,
 };
 
-export default function Calculator({ content, faqs, layoutProps }: PropsT) {
+export default function Calculator({ content, faqs }: PropsT) {
   const [firstSymbol, setFirstSymbol] = useState('BTC');
   const [firstSymbolCount, setFirstSymbolCount] = useState<string | number>(1);
   const [secondSymbol, setSecondSymbol] = useState('IRT');
@@ -141,7 +137,7 @@ export default function Calculator({ content, faqs, layoutProps }: PropsT) {
   }, [exchangeData, firstPair?.bid_price]);
 
   return (
-    <Layout {...layoutProps}>
+    <Layout>
       <MaxWidthWrapper>
         <div className='flex flex-col-reverse md:flex-row gap-6 justify-between items-center'>
           <div className='flex justify-between items-center font-extrabold md:text-lg lg:text-2xl'>
@@ -301,8 +297,6 @@ export default function Calculator({ content, faqs, layoutProps }: PropsT) {
 }
 
 export async function getStaticProps() {
-  // const content = await getGoogleSheetsData('A2:C');
-  const layoutProps = await fetchHeaderFooterData();
   const calcData = await fetchJson(
     'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-calculator'
   );
@@ -311,7 +305,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      ...layoutProps,
       content,
       faqs,
     },

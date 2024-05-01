@@ -1,9 +1,7 @@
-import useLoadScripts from '@/lib/hooks/useLoadScripts';
 import { ServerSideProps } from '@/types/commonTypes';
 import clsx from 'clsx';
 import CustomFont from 'next/font/local';
 import Head from 'next/head';
-import { useEffect } from 'react';
 
 const YekanBakh = CustomFont({
   src: [
@@ -19,23 +17,12 @@ const YekanBakh = CustomFont({
 
 export default function Layout({
   children,
-  headerContent,
-  footerContent,
-}: ServerSideProps['layoutProps'] & { children: JSX.Element }) {
-  useEffect(() => {
-    const id = setTimeout(function () {
-      document
-        .querySelector('#menumobile')
-        ?.classList.remove('come-menumobile');
-    }, 500);
-    return () => {
-      clearTimeout(id);
-    };
-  }, []);
-  useLoadScripts();
+}: { children: JSX.Element }) {
+
   return (
     <>
       <Head>
+        {/* //todo move this to another location */}
         <style
           jsx
           global
@@ -47,24 +34,9 @@ export default function Layout({
           YekanBakh.className
         )}
       >
-        {headerContent && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: headerContent,
-            }}
-          />
-        )}
         <div className='flex flex-grow flex-col flex-1 bg-white'>
-          {' '}
           {children}
         </div>
-        {footerContent && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: footerContent,
-            }}
-          />
-        )}
       </main>
     </>
   );

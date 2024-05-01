@@ -13,7 +13,6 @@ interface ParamsT {
   method?: 'get' | 'post';
   [key: string]: unknown;
 }
-// type AppOwnProps = { headerHtml: string; footerHtml: string };
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -25,7 +24,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             queryFn: async ({ queryKey }) => {
               const [url, { method = 'get', ...params }] = queryKey as [
                 string,
-                ParamsT,
+                ParamsT
               ];
 
               const fullUrl = `/api${url.toLowerCase()}`;
@@ -54,26 +53,3 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     </QueryClientProvider>
   );
 }
-
-// MyApp.getInitialProps = async (
-//   context: AppContext
-// ): Promise<AppOwnProps & AppInitialProps> => {
-//   const ctx = await App.getInitialProps(context);
-//   const headerHtml = await fetchHeader();
-//   const footerHtml = await fetchFooter();
-//   return { ...ctx, headerHtml, footerHtml };
-// };
-
-// const fetchHeader = async () => {
-//   const res = await fetch(
-//     'https://clinicsarmayeh.com/wp-json/custom-section/v1/header/'
-//   );
-//   return res.text();
-// };
-
-// const fetchFooter = async () => {
-//   const res = await fetch(
-//     'https://clinicsarmayeh.com/wp-json/custom-section/v1/footer/'
-//   );
-//   return res.text();
-// };

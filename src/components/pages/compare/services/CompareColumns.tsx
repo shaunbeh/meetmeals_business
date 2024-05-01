@@ -1,8 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import clsx from 'clsx';
 import Link from 'next/link';
 import { GetSymbolsExchangeItemResult } from '@/lib/schema/ApiTypes';
-import texts from '@/lib/fa.json';
+import texts from 'public/locales/fa/fa.json';
 import Image from 'next/image';
 
 const columnHelper = createColumnHelper<GetSymbolsExchangeItemResult>();

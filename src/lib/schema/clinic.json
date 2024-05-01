@@ -155,6 +155,47 @@
         }
       }
     },
+    "/api/v1/get-symbols/{slug}": {
+      "get": {
+        "tags": ["symbols"],
+        "summary": "GetSymbolInfo",
+        "description": "GetSymbolInfo",
+        "operationId": "GetSymbolInfo",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "bitcoin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SymbolPageInfoResultApi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/tags": {
       "get": {
         "tags": ["tags"],
@@ -265,11 +306,11 @@
         },
         "type": "object"
       },
-      "CoinResultApi": {
-        "title": "CoinResultApi",
+      "SymbolsListResultApi": {
+        "title": "SymbolsListResultApi",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/CoinDetailsResult"
+            "$ref": "#/components/schemas/SymbolsListResult"
           },
           "status": {
             "type": "integer",
@@ -282,11 +323,11 @@
         },
         "type": "object"
       },
-      "SymbolsListResultApi": {
-        "title": "SymbolsListResultApi",
+      "SymbolPageInfoResultApi": {
+        "title": "SymbolPageInfoResultApi",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/SymbolsListResult"
+            "$ref": "#/components/schemas/SymbolPageInfoResult"
           },
           "status": {
             "type": "integer",
@@ -371,8 +412,8 @@
         },
         "type": "object"
       },
-      "CoinDetailsResult": {
-        "title": "CoinDetailsResult",
+      "SymbolPageInfoResult": {
+        "title": "SymbolPageInfoResult",
         "properties": {
           "id": {
             "type": "integer",
@@ -401,14 +442,14 @@
           "details": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GetGetCoinsPriceItem"
+              "$ref": "#/components/schemas/SymbolPageInfoDetailsItem"
             }
           }
         },
         "type": "object"
       },
-      "GetGetCoinsPriceItem": {
-        "title": "GetGetCoinsPriceItem",
+      "SymbolPageInfoDetailsItem": {
+        "title": "SymbolPageInfoDetailsItem",
         "properties": {
           "coin_market_cap_id": {
             "type": "integer",
@@ -759,39 +800,6 @@
           }
         },
         "type": "object"
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "successful operation",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CoinResultApi"
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Bad request"
-      },
-      "401": {
-        "description": "Unauthorized"
-      },
-      "404": {
-        "description": "Resource Not Found"
-      }
-    },
-    "parameters": {
-      "coin": {
-        "name": "coin",
-        "in": "path",
-        "description": "slug of coin",
-        "required": true,
-        "schema": {
-          "type": "string"
-        },
-        "example": "bitcoin"
       }
     }
   }

@@ -1,14 +1,14 @@
 import endpoints from '@/lib/endpoints';
 import { GetSymbolsExchangesResultApi } from '@/lib/schema/ApiTypes';
 import { useQuery } from '@tanstack/react-query';
-import texts from '@/lib/fa.json';
+import texts from 'public/locales/fa/fa.json';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
 import CompareTableHeader from '@/components/pages/compare/CompareTableHeader';
 import { CompareColumns } from '@/components/pages/compare/services/CompareColumns';
 import { useState } from 'react';
 import Link from 'next/link';
-import { fetchHeaderFooterData, fetchJson } from '@/lib/utils';
+import { fetchJson } from '@/lib/utils';
 import Layout from '@/components/Layout';
 import { ServerSideProps } from '@/types/commonTypes';
 import BasicTable from '@/components/ui/Table';
@@ -16,7 +16,7 @@ import Faqs from '@/components/ui/Faq';
 
 type PropsT = ServerSideProps;
 
-export default function Comparison({ layoutProps, content, faqs }: PropsT) {
+export default function Comparison({ content, faqs }: PropsT) {
   const [selectedCoin, setSelectedCoin] = useState('BTC');
   const {
     data: coinList,
@@ -40,7 +40,7 @@ export default function Comparison({ layoutProps, content, faqs }: PropsT) {
     refetch();
   };
   return (
-    <Layout {...layoutProps}>
+    <Layout>
       <MaxWidthWrapper>
         <div className='flex flex-col-reverse md:flex-row gap-6 justify-between items-center'>
           <div className='flex justify-between items-center font-extrabold md:text-lg lg:text-2xl'>
@@ -94,7 +94,6 @@ export default function Comparison({ layoutProps, content, faqs }: PropsT) {
 }
 
 export async function getStaticProps() {
-  const layoutProps = await fetchHeaderFooterData();
   const compData = await fetchJson(
     'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-compare'
   );
@@ -104,7 +103,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      ...layoutProps,
       content,
       faqs,
     },

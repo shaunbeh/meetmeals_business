@@ -5,10 +5,8 @@ import { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import texts from '@/lib/fa.json';
-import { fetchHeaderFooterData } from '@/lib/utils';
+import texts from 'public/locales/fa/fa.json';
 import { ServerSideProps } from '@/types/commonTypes';
-import Layout from '@/components/Layout';
 
 type PropsT = {} & ServerSideProps;
 

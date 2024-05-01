@@ -46,18 +46,18 @@ export interface GetSymbolsExchangesResultApi {
   message?: string;
 }
 
-/** CoinResultApi */
-export interface CoinResultApi {
-  data?: CoinDetailsResult;
+/** SymbolsListResultApi */
+export interface SymbolsListResultApi {
+  data?: SymbolsListResult;
   /** @example "200" */
   status?: number;
   /** @example "Welcome." */
   message?: string;
 }
 
-/** SymbolsListResultApi */
-export interface SymbolsListResultApi {
-  data?: SymbolsListResult;
+/** SymbolPageInfoResultApi */
+export interface SymbolPageInfoResultApi {
+  data?: SymbolPageInfoResult;
   /** @example "200" */
   status?: number;
   /** @example "Welcome." */
@@ -103,8 +103,8 @@ export interface GetSymbolsExchangesBodyApi {
   symbol_id?: number;
 }
 
-/** CoinDetailsResult */
-export interface CoinDetailsResult {
+/** SymbolPageInfoResult */
+export interface SymbolPageInfoResult {
   /** @example "2" */
   id?: number;
   /** @example "Bitcoin" */
@@ -117,11 +117,11 @@ export interface CoinDetailsResult {
   slug?: string;
   /** @example "http://localhost:9665/api/svg-coins/btc.svg" */
   icon?: string;
-  details?: GetGetCoinsPriceItem[];
+  details?: SymbolPageInfoDetailsItem[];
 }
 
-/** GetGetCoinsPriceItem */
-export interface GetGetCoinsPriceItem {
+/** SymbolPageInfoDetailsItem */
+export interface SymbolPageInfoDetailsItem {
   /** @example 1 */
   coin_market_cap_id?: number;
   /** @example "Bitcoin" */
@@ -554,7 +554,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * Clinic Sarmaye OpenApi description
  */
 export class Api<
-  SecurityDataType extends unknown,
+  SecurityDataType extends unknown
 > extends HttpClient<SecurityDataType> {
   api = {
     /**
@@ -629,6 +629,22 @@ export class Api<
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description GetSymbolInfo
+     *
+     * @tags symbols
+     * @name GetSymbolInfo
+     * @summary GetSymbolInfo
+     * @request GET:/api/v1/get-symbols/{slug}
+     */
+    getSymbolInfo: (slug: string, params: RequestParams = {}) =>
+      this.request<SymbolPageInfoResultApi, void>({
+        path: `/api/v1/get-symbols/${slug}`,
+        method: 'GET',
         format: 'json',
         ...params,
       }),
