@@ -40,7 +40,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'bprice.clinicsarmayeh.com',
-      },
+      }
     ],
   },
 };
