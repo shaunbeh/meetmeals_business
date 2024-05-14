@@ -41,6 +41,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'bprice.clinicsarmayeh.com',
       },
+      {
+        protocol: 'https',
+        hostname: '*.brokersview.com',
+      },
     ],
   },
 };
