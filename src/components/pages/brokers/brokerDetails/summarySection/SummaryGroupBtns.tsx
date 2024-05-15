@@ -1,7 +1,7 @@
 const SummaryGroupBtns = () => {
-  const buttonClasses = `border border-[#eea890] hover:bg-[#eea890] text-sm font-bold text-black w-[150px] p-2`;
+  const buttonClasses = `border border-level1-foreground hover:bg-level1-foreground text-sm font-bold text-black w-[150px] p-2`;
   const rateButtonClasses =
-    "border border-[#eea890] bg-[#eea890] text-sm font-bold text-black w-[150px] p-2";
+    "border border-level1-foreground bg-level1-foreground text-sm font-bold text-black w-[150px] p-2";
   return (
     <div className="flex flex-wrap items-center gap-4 2xl:absolute left-0 top-[14px] mt-[6px]">
       <button className={buttonClasses}>Become an IB</button>

@@ -60,6 +60,9 @@ module.exports = {
           foreground: "hsl(var(--level1-foreground))",
           card: "hsl(var(--level1-card))",
         },
+        error: {
+          DEFAULT: "hsl(var(--error-color))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

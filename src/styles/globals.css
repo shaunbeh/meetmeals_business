@@ -30,6 +30,7 @@
     --level1: 24.11deg 74.67% 70.59% / 29.02%;
     --level1-foreground:15.32deg 73.44% 74.9%;
     --level1-card:25deg 100% 97.65%;
+    --error-color:0deg 88.44% 66.08%;
   }
 
   .dark {
@@ -58,6 +59,7 @@
     --level1: 24.11deg 74.67% 70.59% / 29.02%;
     --level1-foreground:15.32deg 73.44% 74.9%;
     --level1-card:25deg 100% 97.65%;
+    --error-color:0deg 88.44% 66.08%;
   }
 }
 
