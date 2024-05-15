@@ -1,6 +1,6 @@
-import { type ClassValue, clsx } from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import DOMPurify from "isomorphic-dompurify";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,8 +32,8 @@ export const fetchContent = async (url: string) => {
     const res = await fetch(url);
     return res.text();
   } catch (error) {
-    console.error('Error fetching content:', error);
-    return ''; // Return an empty string in case of an error
+    console.error("Error fetching content:", error);
+    return ""; // Return an empty string in case of an error
   }
 };
 
@@ -42,7 +42,18 @@ export const fetchJson = async (url: string) => {
     const res = await fetch(url);
     return res.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
-    return ''; // Return an empty string in case of an error
+    console.error("Error fetching data:", error);
+    return ""; // Return an empty string in case of an error
+  }
+};
+
+export const getTextColorClass = (level: string) => {
+  switch (level) {
+    case "1":
+      return "text-level1-foreground";
+    case "2":
+      return "";
+    default:
+      return "";
   }
 };

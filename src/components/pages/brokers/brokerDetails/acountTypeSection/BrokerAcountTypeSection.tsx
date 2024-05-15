@@ -2,11 +2,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import WhiteCard from "../WhiteCard";
 import CloseIcon from "public/images/svg/close.svg";
 import CheckIcon from "public/images/svg/check.svg";
-const BrokerAcountTypeSection = () => {
+const BrokerAcountTypeSection = ({ id }: { id: string }) => {
   return (
     <WhiteCard className="pt-10">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-bold">نوع اکانت</h2>
+        <h2 className="text-2xl font-bold" id={id}>
+          نوع اکانت
+        </h2>
         <button className="border border-level1-foreground bg-level1-foreground text-sm font-bold text-black w-[150px] p-2">
           مقایسه
         </button>

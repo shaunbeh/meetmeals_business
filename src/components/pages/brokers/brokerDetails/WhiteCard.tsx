@@ -1,10 +1,14 @@
 type PropTypes = {
   children: React.ReactNode;
   className?: string;
+  forwardedRef?: React.Ref<HTMLDivElement>;
 };
-const WhiteCard = ({ children, className }: PropTypes) => {
+const WhiteCard = ({ children, className, forwardedRef }: PropTypes) => {
   return (
-    <div className={`bg-white px-10 pb-10  w-full ${className}`}>
+    <div
+      ref={forwardedRef}
+      className={`bg-white px-10 pb-10  w-full ${className}`}
+    >
       {children}
     </div>
   );
