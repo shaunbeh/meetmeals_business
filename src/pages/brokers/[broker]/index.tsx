@@ -24,7 +24,6 @@ const Broker = () => {
           setShowStickySummary(true);
         }
         if (currentEntry?.target.id) {
-          console.log("here");
           setCurrentSection(currentEntry.target.id);
         }
       },
@@ -64,7 +63,6 @@ const Broker = () => {
       });
     }
   };
-  console.log("currentSection", currentSection);
   return (
     <div className="min-w-[450px]  flex items-center justify-center flex-col gap-5 py-20 lg:p-20 bg-black">
       <div className="w-full">
