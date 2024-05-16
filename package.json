@@ -8,7 +8,7 @@
     "start": "next start",
     "codegen:clinic": "npx swagger-typescript-api -p ./src/lib/schema/clinic.json -o ./src/lib/schema -n ApiTypes.ts",
     "prepare": "husky",
-    "commit": "cz"
+    "cz": "cz"
   },
   "dependencies": {
     "@commitlint/config-conventional": "^19.2.2",
@@ -32,11 +32,13 @@
     "isomorphic-dompurify": "^2.6.0",
     "lodash": "^4.17.21",
     "next": "14.0.3",
+    "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
     "react-simple-keyboard": "^3.7.116",
     "react-use-websocket": "^4.5.0",
     "sharp": "^0.33.3",
+    "sonner": "^1.4.41",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7"
   },

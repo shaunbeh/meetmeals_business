@@ -6,11 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import texts from 'public/locales/fa/fa.json';
-import { ServerSideProps } from '@/types/commonTypes';
 
-type PropsT = {} & ServerSideProps;
-
-export default function Coin({ layoutProps }: PropsT) {
+export default function Coin() {
   const router = useRouter();
   const { coin } = router.query;
 
