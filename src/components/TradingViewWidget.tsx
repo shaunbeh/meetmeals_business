@@ -1,5 +1,6 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 // TradingViewWidget.jsx
-import React, { useEffect, useRef, memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 
 type PropsT = {
   symbol?: string;
@@ -8,13 +9,13 @@ function TradingViewWidget({ symbol }: PropsT) {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const current = container.current;
+    const { current } = container;
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src =
       'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js';
     script.async = true;
-    const sym = (symbol == 'USDT' ? 'USDTUSD' : symbol) ?? 'BTCUSDT';
+    const sym = (symbol === 'USDT' ? 'USDTUSD' : symbol) ?? 'BTCUSDT';
 
     script.innerHTML = `{
       "symbols": [
@@ -71,7 +72,7 @@ function TradingViewWidget({ symbol }: PropsT) {
       ref={container}
       style={{ height: '90%', width: '100%' }}
     >
-      <div className='tradingview-widget-container__widget'></div>
+      <div className='tradingview-widget-container__widget' />
     </div>
   );
 }

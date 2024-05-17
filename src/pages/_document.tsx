@@ -1,4 +1,4 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Head, Html, Main, NextScript } from 'next/document';
 
 export default function Document() {
   return (
@@ -7,7 +7,7 @@ export default function Document() {
       // dir='rtl'
       className='h-full'
     >
-      <Head></Head>
+      <Head />
       <body className='relative h-full font-sans antialiased'>
         <Main />
         <NextScript />

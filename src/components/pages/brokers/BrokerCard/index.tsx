@@ -1,1 +1,1 @@
-export { default } from './BrokerCard';
+export { default as BrokerCard } from './BrokerCard';

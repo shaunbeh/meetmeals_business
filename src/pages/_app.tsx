@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+
 import {
   HydrationBoundary,
   QueryClient,
@@ -24,7 +25,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             queryFn: async ({ queryKey }) => {
               const [url, { method = 'get', ...params }] = queryKey as [
                 string,
-                ParamsT
+                ParamsT,
               ];
 
               const fullUrl = `/api${url.toLowerCase()}`;
@@ -41,7 +42,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             },
           },
         },
-      })
+      }),
   );
 
   return (

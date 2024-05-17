@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useWs = ({ url }: { url: string }) => {
   const [isReady, setIsReady] = useState(false);
-  const [msg, setMsg] = useState(null);
+  const [msg] = useState(null);
 
   const ws = useRef<WebSocket | null>(null);
 

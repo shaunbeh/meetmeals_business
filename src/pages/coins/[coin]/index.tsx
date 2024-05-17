@@ -1,11 +1,12 @@
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import TradingViewWidget from '@/components/TradingViewWidget';
-import endpoints from '@/lib/endpoints';
-import { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import texts from 'public/locales/fa/fa.json';
+
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import TradingViewWidget from '@/components/TradingViewWidget';
+import endpoints from '@/lib/endpoints';
+import type { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
 
 export default function Coin() {
   const router = useRouter();
@@ -21,33 +22,33 @@ export default function Coin() {
       { method: endpoints.symbols.getSymbols.method, filter: coin },
     ],
   });
-  const found = coinList?.data?.records?.find((r) => r.symbol == coin);
+  const found = coinList?.data?.records?.find((r) => r.symbol === coin);
   return (
-    <MaxWidthWrapper className='flex flex-col gap-8 w-full p-10 justify-around h-full'>
-      <div className='flex justify-end items-center'>
+    <MaxWidthWrapper className='flex size-full flex-col justify-around gap-8 p-10'>
+      <div className='flex items-center justify-end'>
         <div className='flex items-center gap-2'>
           <Link
-            className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+            className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
             href='/'
           >
             {texts.links.homepage}
           </Link>
           <Link
-            className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+            className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
             href='/calculator'
           >
             {texts.links.calculator}
           </Link>
           <Link
-            className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+            className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
             href='/comparison'
           >
             {texts.links.comparison}
           </Link>
         </div>
       </div>
-      <div className='flex-1 flex'>
-        <p className='w-min flex items-center grow'>
+      <div className='flex flex-1'>
+        <p className='flex w-min grow items-center'>
           {`${found?.name} با نماد اختصاری ${found?.symbol} یک ارز دیجیتال یا شکلی از دارایی دیجیتال
         است که با ارزش بازار حدود ۹۲۴.۷ میلیارد دلار، در رتبه ۱ بازار قرار داشته
         و دامیننس بیت کوین در حال حاضر ۵۱.۹۴ درصد است. هر واحد از بیت کوین در
@@ -60,7 +61,7 @@ export default function Coin() {
         ۹۸۹,۵۴۶,۶۳۸,۵۶۸.۷۰ دلار است.
         `}
         </p>
-        <div className='h-96 mb-8 grow'>
+        <div className='mb-8 h-96 grow'>
           <TradingViewWidget symbol={found?.symbol} />
         </div>
       </div>

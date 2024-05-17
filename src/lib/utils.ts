@@ -1,5 +1,4 @@
 import { type ClassValue, clsx } from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -9,19 +8,19 @@ export const roundDecimalDigits = (num: number | string, precision: number) => {
   // if(num!=0 && num!='0'){
   const pre = 10 ** precision;
   let res = Math.round((+num + Number.EPSILON) * pre) / pre;
-  if (res == 0) {
+  if (res === 0) {
     res = Math.abs(res);
   }
   return res;
 };
 export const roundDecimalDigitsExact = (
   num: number | string,
-  precision: number
+  precision: number,
 ) => {
   // if(num!=0 && num!='0'){
   const pre = 10 ** precision;
   let res = Math.round((+num + Number.EPSILON) * pre) / pre;
-  if (res == 0) {
+  if (res === 0) {
     res = Math.abs(res);
   }
   return res.toLocaleString(undefined, { minimumFractionDigits: precision });
@@ -30,9 +29,8 @@ export const roundDecimalDigitsExact = (
 export const fetchContent = async (url: string) => {
   try {
     const res = await fetch(url);
-    return res.text();
+    return await res.text();
   } catch (error) {
-    console.error('Error fetching content:', error);
     return ''; // Return an empty string in case of an error
   }
 };
@@ -40,9 +38,8 @@ export const fetchContent = async (url: string) => {
 export const fetchJson = async (url: string) => {
   try {
     const res = await fetch(url);
-    return res.json();
+    return await res.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
     return ''; // Return an empty string in case of an error
   }
 };

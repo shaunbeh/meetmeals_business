@@ -1,5 +1,5 @@
+import type { ColumnDef } from '@tanstack/react-table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -21,16 +21,16 @@ export default function BasicTable<T>({
   return (
     <div className='my-4 flex flex-col pb-10'>
       <div className='inline-block'>
-        <div className='overflow-x-auto w-full custom-scroll-thin'>
+        <div className='custom-scroll-thin w-full overflow-x-auto'>
           <table className='min-w-full divide-y divide-gray-200 border-none outline-none'>
-            <thead className='rounded-lg overflow-hidden'>
+            <thead className='overflow-hidden rounded-lg'>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr className='overflow-hidden rounded-xl' key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
-                      className='px-4 border-none py-3 text-center text-xs font-medium text-black uppercase tracking-wider first:rounded-s-lg last:rounded-e-lg bg-popover ropunded-lg'
+                      className='rounded-lg border-none bg-popover px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-black first:rounded-s-lg last:rounded-e-lg'
                     >
                       <div
                         {...{
@@ -42,7 +42,7 @@ export default function BasicTable<T>({
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {{
                           asc: ' ▼',
@@ -60,19 +60,17 @@ export default function BasicTable<T>({
                 .rows.slice(0, 50)
                 .map((row) => (
                   <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <td
-                          key={cell.id}
-                          className='px-4 py-3 text-center whitespace-nowrap'
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      );
-                    })}
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className='whitespace-nowrap px-4 py-3 text-center'
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </td>
+                    ))}
                   </tr>
                 ))}
             </tbody>

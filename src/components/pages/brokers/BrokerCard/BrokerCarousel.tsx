@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +10,7 @@ import {
 
 export default function CarouselDemo() {
   return (
-    <div className='relative w-full bg-orange-500 max-w-screen-sm mx-auto overflow-hidden'>
+    <div className='relative mx-auto w-full max-w-screen-sm overflow-hidden bg-orange-500'>
       <Carousel>
         <CarouselContent>
           {/* Your carousel items go here */}

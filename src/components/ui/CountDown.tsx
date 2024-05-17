@@ -9,7 +9,7 @@ export default function CountDown({
 }) {
   const [seconds, setSeconds] = useState(interval);
   useEffect(() => {
-    const interval = setInterval(() => {
+    const localInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
       }
@@ -18,7 +18,7 @@ export default function CountDown({
         setSeconds(59);
       }
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(localInterval);
   }, [callback, seconds]);
 
   return <div className='w-5 text-end'>{seconds}</div>;

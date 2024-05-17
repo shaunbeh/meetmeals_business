@@ -1,20 +1,20 @@
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { useQuery } from '@tanstack/react-query';
-import { SymbolsListResultApi, TagItem } from '@/lib/schema/ApiTypes';
+import Head from 'next/head';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+
+import Layout from '@/components/Layout';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import HomepageTableHeader from '@/components/pages/homepage/HomepageTableHeader';
+import PairsTable from '@/components/pages/homepage/PairsTable';
+import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
 import { TablePagingation } from '@/components/ui/Table/TablePagination';
 import { TABLE_LIMIT } from '@/lib/config';
-import HomepageTableHeader from '@/components/pages/homepage/HomepageTableHeader';
 import endpoints from '@/lib/endpoints';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
-import _ from 'lodash';
 import useDebounce from '@/lib/hooks/useDebounce';
-import { usePathname, useSearchParams } from 'next/navigation';
-import Layout from '@/components/Layout';
+import type { SymbolsListResultApi, TagItem } from '@/lib/schema/ApiTypes';
 import { fetchJson } from '@/lib/utils';
-import PairsTable from '@/components/pages/homepage/PairsTable';
-import { ServerSideProps } from '@/types/commonTypes';
+import type { ServerSideProps } from '@/types/commonTypes';
 
 const limit = TABLE_LIMIT;
 
@@ -74,7 +74,7 @@ export default function Home({ tagsList }: PropsT) {
       </Head>
 
       <Layout>
-        <MaxWidthWrapper className='mt-10 p-6 rounded-lg bg-background grow w-full'>
+        <MaxWidthWrapper className='mt-10 w-full grow rounded-lg bg-background p-6'>
           <HomepageTableHeader
             tagsList={tagsList}
             tag={tag}
@@ -102,7 +102,7 @@ export default function Home({ tagsList }: PropsT) {
 
 export async function getStaticProps() {
   const tagsList = await fetchJson(
-    process.env.NEXT_PUBLIC_BASE_API_URL + '/api/v1/tags'
+    `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tags`,
   );
 
   return {

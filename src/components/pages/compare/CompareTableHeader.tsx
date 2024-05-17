@@ -1,10 +1,12 @@
-import { GetSymbolsExchangesListResult } from '@/lib/schema/ApiTypes';
-import { Button } from '../../ui/button';
-import texts from 'public/locales/fa/fa.json';
-import Image from 'next/image';
-import PairsDropdown from '@/components/PairsDropdown';
 import clsx from 'clsx';
+import Image from 'next/image';
+import texts from 'public/locales/fa/fa.json';
+
+import PairsDropdown from '@/components/PairsDropdown';
 import CountDown from '@/components/ui/CountDown';
+import type { GetSymbolsExchangesListResult } from '@/lib/schema/ApiTypes';
+
+import { Button } from '../../ui/button';
 
 export default function CompareTableHeader({
   coinList,
@@ -19,43 +21,43 @@ export default function CompareTableHeader({
   selectedCoin: string;
   handleChange: (coin: string) => void;
 }) {
-  const foundSelected = coinList?.find((el) => el.symbol == selectedCoin);
+  const foundSelected = coinList?.find((el) => el.symbol === selectedCoin);
   return (
     <div className='flex flex-col gap-4'>
-      <div className='flex justify-between items-center'>
-        <div className='flex pb-6 gap-2'>
-          <div className='w-12 h-12'>
+      <div className='flex items-center justify-between'>
+        <div className='flex gap-2 pb-6'>
+          <div className='size-12'>
             <Image
               src={foundSelected?.icon ?? ''}
               width={48}
               height={48}
-              alt={foundSelected?.symbol + 'icon'}
+              alt={`${foundSelected?.symbol}icon`}
               className='rounded-full'
             />
           </div>
-          <div className='flex flex-col font-bold text-sm justify-center'>
+          <div className='flex flex-col justify-center text-sm font-bold'>
             <span>{foundSelected?.name}</span>
             <span>{foundSelected?.symbol}</span>
           </div>
         </div>
-        <div className='flex items-center text-muted-foreground gap-2'>
+        <div className='flex items-center gap-2 text-muted-foreground'>
           {texts.comparison.updateIn}
           <CountDown interval={60} callback={refetchList} />
           {texts.comparison.secondsMore}
         </div>
       </div>
-      <div className='flex flex-col md:flex-row gap-4 items-center'>
-        <div className='flex items-center overflow-x-auto custom-scroll-thin py-2 gap-4'>
+      <div className='flex flex-col items-center gap-4 md:flex-row'>
+        <div className='custom-scroll-thin flex items-center gap-4 overflow-x-auto py-2'>
           {coinList?.slice(0, 5).map((el) => (
             <Button
               key={el.symbol}
               variant='secondary'
-              disabled={selectedCoin == el.symbol || loading}
+              disabled={selectedCoin === el.symbol || loading}
               className={clsx(
-                selectedCoin == el.symbol
-                  ? 'bg-popover-foreground hover:bg-inherit hover:cursor-default text-popover'
+                selectedCoin === el.symbol
+                  ? 'bg-popover-foreground text-popover hover:cursor-default hover:bg-inherit'
                   : 'hover:bg-primary/30',
-                'flex items-center gap-2 disabled:!opacity-100 rounded-3xl px-6 md:px-3 py-0.5'
+                'flex items-center gap-2 rounded-3xl px-6 py-0.5 disabled:!opacity-100 md:px-3',
               )}
               onClick={() => handleChange(el?.symbol ?? 'BTC')}
             >
@@ -69,12 +71,12 @@ export default function CompareTableHeader({
             </Button>
           ))}
         </div>
-        <div className='px-2 w-44 relative'>
+        <div className='relative w-44 px-2'>
           <PairsDropdown
             title={texts.comparison.MoreCoins}
             symbols={coinList?.slice(5)}
             value={
-              coinList?.slice(5).find((el) => el.symbol == selectedCoin)
+              coinList?.slice(5).find((el) => el.symbol === selectedCoin)
                 ? selectedCoin
                 : ''
             }
