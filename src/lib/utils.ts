@@ -43,3 +43,14 @@ export const fetchJson = async (url: string) => {
     return ''; // Return an empty string in case of an error
   }
 };
+
+export const getTextColorClass = (level: string) => {
+  switch (level) {
+    case '1':
+      return 'text-level1-foreground';
+    case '2':
+      return '';
+    default:
+      return '';
+  }
+};

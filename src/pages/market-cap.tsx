@@ -12,17 +12,17 @@ import { TablePagingation } from '@/components/ui/Table/TablePagination';
 import { TABLE_LIMIT } from '@/lib/config';
 import endpoints from '@/lib/endpoints';
 import useDebounce from '@/lib/hooks/useDebounce';
-import type { SymbolsListResultApi, TagItem } from '@/lib/schema/ApiTypes';
-import { fetchJson } from '@/lib/utils';
-import type { ServerSideProps } from '@/types/commonTypes';
+import type { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
+// import { fetchJson } from '@/lib/utils';
+// import type { ServerSideProps } from '@/types/commonTypes';
 
 const limit = TABLE_LIMIT;
 
-type PropsT = {
-  tagsList: TagItem[];
-} & ServerSideProps;
+// type PropsT = {
+//   tagsList: TagItem[];
+// } & ServerSideProps;
 
-export default function Home({ tagsList }: PropsT) {
+export default function Home() {
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -76,7 +76,7 @@ export default function Home({ tagsList }: PropsT) {
       <Layout>
         <MaxWidthWrapper className='mt-10 w-full grow rounded-lg bg-background p-6'>
           <HomepageTableHeader
-            tagsList={tagsList}
+            tagsList={[]}
             tag={tag}
             search={searchText}
             setSearchText={setSearchText}
@@ -100,13 +100,13 @@ export default function Home({ tagsList }: PropsT) {
   );
 }
 
-export async function getStaticProps() {
-  const tagsList = await fetchJson(
-    `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tags`,
-  );
+// export async function getStaticProps() {
+//   const tagsList = await fetchJson(
+//     `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/v1/tags`,
+//   );
 
-  return {
-    revalidate: 3600,
-    props: { tagsList: tagsList?.data },
-  };
-}
+//   return {
+//     revalidate: 3600,
+//     props: { tagsList: tagsList?.data },
+//   };
+// }

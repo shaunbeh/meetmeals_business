@@ -24,6 +24,13 @@
     --input: 240 5.9% 90%;
     --ring: 177 100% 35%;
     --radius: 0.5rem;
+    --progress:0deg 0% 0% / 6%;
+    --blue-text:221.54deg 61.9% 95.88%;
+    --blue-text-foreground:222.82deg 88% 50.98%;
+    --level1: 24.11deg 74.67% 70.59% / 29.02%;
+    --level1-foreground:15.32deg 73.44% 74.9%;
+    --level1-card:25deg 100% 97.65%;
+    --error-color:0deg 88.44% 66.08%;
   }
 
   .dark {
@@ -46,6 +53,13 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 177.4 93.8% 29.2%;
+    --progress:0deg 0% 0% / 6%;
+    --blue-text:221.54deg 61.9% 95.88%;
+    --blue-text-foreground:222.82deg 88% 50.98%;
+    --level1: 24.11deg 74.67% 70.59% / 29.02%;
+    --level1-foreground:15.32deg 73.44% 74.9%;
+    --level1-card:25deg 100% 97.65%;
+    --error-color:0deg 88.44% 66.08%;
   }
 }
 
