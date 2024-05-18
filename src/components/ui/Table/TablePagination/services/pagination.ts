@@ -9,16 +9,16 @@ export const paginate = ({
   next: number | null;
   items: (number | string)[];
 } => {
-  let prev = current === 1 ? null : current - 1,
-    next = current === max ? null : current + 1,
-    items: (string | number)[] = [1];
+  const prev = current === 1 ? null : current - 1;
+  const next = current === max ? null : current + 1;
+  const items: (string | number)[] = [1];
 
   if (current === 1 && max === 1) return { prev, next, items };
   if (current > 4) items.push('…');
 
-  let r = 2,
-    r1 = current - r,
-    r2 = current + r;
+  const r = 2;
+  const r1 = current - r;
+  const r2 = current + r;
 
   for (let i = r1 > 2 ? r1 : 2; i <= Math.min(max, r2); i++) items.push(i);
 

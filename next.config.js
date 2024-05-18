@@ -2,7 +2,7 @@
 const nextConfig = {
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg')
+      rule.test?.test?.(".svg"),
     );
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
@@ -16,8 +16,8 @@ const nextConfig = {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
-        use: ['@svgr/webpack'],
-      }
+        use: ["@svgr/webpack"],
+      },
     );
     return config;
   },
@@ -25,12 +25,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/clinic/:path*',
-        destination: 'https://clinicsarmayeh.com/wp-json/:path*',
+        source: "/clinic/:path*",
+        destination: "https://clinicsarmayeh.com/wp-json/:path*",
       },
       {
-        source: '/api/:path*',
-        destination: 'https://bprice.clinicsarmayeh.com/api/:path*',
+        source: "/api/:path*",
+        destination: "https://bprice.clinicsarmayeh.com/api/:path*",
       },
     ];
   },
@@ -38,9 +38,13 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'bprice.clinicsarmayeh.com',
-      }
+        protocol: "https",
+        hostname: "bprice.clinicsarmayeh.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.brokersview.com",
+      },
     ],
   },
 };

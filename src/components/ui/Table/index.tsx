@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  type ColumnDef,
 } from "@tanstack/react-table";
 
 export default function BasicTable<T>({
@@ -57,7 +57,7 @@ export default function BasicTable<T>({
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {{
                           asc: " ▼",

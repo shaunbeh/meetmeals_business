@@ -1,12 +1,15 @@
-import { Progress } from "@/components/ui/Progress";
-import CardLayout from "./CardLayout";
-import text from "public/locales/fa/brokerDetails.json";
+import text from 'public/locales/fa/brokerDetails.json';
+
+import { Progress } from '@/components/ui/Progress';
+
+import CardLayout from './CardLayout';
+
 const ScoreCard = () => {
-  const containerClasses = "flex items-center gap-2 w-full";
-  const textClasses = "w-[200px] text-sm";
-  const scoreClasses = "mr-7 text-sm";
+  const containerClasses = 'flex items-center gap-2 w-full';
+  const textClasses = 'w-[200px] text-sm';
+  const scoreClasses = 'mr-7 text-sm';
   return (
-    <CardLayout title={text.summarySection.score} bgColor="#fff8f3">
+    <CardLayout title={text.summarySection.score} bgColor='#fff8f3'>
       <div className={containerClasses}>
         <span className={textClasses}>{text.summarySection.businessScope}</span>
         <div className={containerClasses}>

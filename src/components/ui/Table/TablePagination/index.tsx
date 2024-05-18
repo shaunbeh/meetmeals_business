@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, memo } from 'react';
+import { memo } from 'react';
+
 import {
   Pagination,
   PaginationContent,
@@ -13,14 +14,28 @@ type PropsT = {
   pageCount: number;
 };
 
-export const TablePagingation = memo(function memoizedPagination({
+export const TablePagingationComponent = ({
   currPage,
   handleCurrPage,
   pageCount,
-}: PropsT) {
+}: PropsT) => {
   const { items } = paginate({
     current: currPage,
     max: pageCount,
+  });
+  const content = items.map((i) => {
+    if (typeof i === 'string') {
+      return <PaginationEllipsis key={i} />;
+    }
+    return (
+      <PaginationBtn
+        page={i}
+        isCurr={i === currPage}
+        disabled={i === currPage}
+        handleCurrPage={handleCurrPage}
+        key={i}
+      />
+    );
   });
 
   return (
@@ -30,28 +45,20 @@ export const TablePagingation = memo(function memoizedPagination({
           handleCurrPage={handleCurrPage}
           isPrev
           page={currPage - 1}
-          disabled={currPage == 1}
+          disabled={currPage === 1}
         />
-        {items.map((i) =>
-          typeof i == 'string' ? (
-            <PaginationEllipsis key={i} />
-          ) : (
-            <PaginationBtn
-              page={i}
-              isCurr={i == currPage}
-              disabled={i == currPage}
-              handleCurrPage={handleCurrPage}
-              key={i}
-            />
-          )
-        )}
+        {content}
         <PaginationBtn
           handleCurrPage={handleCurrPage}
           isNext
           page={currPage + 1}
-          disabled={currPage == pageCount}
+          disabled={currPage === pageCount}
         />
       </PaginationContent>
     </Pagination>
   );
-});
+};
+
+TablePagingationComponent.displayName = 'TablePagingation';
+
+export const TablePagingation = memo(TablePagingationComponent);

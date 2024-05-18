@@ -1,4 +1,3 @@
-import { ServerSideProps } from '@/types/commonTypes';
 import clsx from 'clsx';
 import CustomFont from 'next/font/local';
 import Head from 'next/head';
@@ -15,28 +14,22 @@ const YekanBakh = CustomFont({
   ],
 });
 
-export default function Layout({
-  children,
-}: { children: JSX.Element }) {
-
+export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
       <Head>
         {/* //todo move this to another location */}
-        <style
-          jsx
-          global
-        >{`:root { --font-sans: ${YekanBakh.style.fontFamily};}}`}</style>
+        <style jsx global>
+          {`:root { --font-sans: ${YekanBakh.style.fontFamily};}}`}
+        </style>
       </Head>
       <main
         className={clsx(
-          'relative flex flex-col min-h-screen',
-          YekanBakh.className
+          'relative flex min-h-screen flex-col',
+          YekanBakh.className,
         )}
       >
-        <div className='flex flex-grow flex-col flex-1 bg-white'>
-          {children}
-        </div>
+        <div className='flex flex-1 grow flex-col bg-white'>{children}</div>
       </main>
     </>
   );

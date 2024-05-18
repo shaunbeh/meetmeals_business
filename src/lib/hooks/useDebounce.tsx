@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 const useDebounce = (initial: string) => {
   const [searchText, setSearchText] = useState(initial);
   const [debouncedText, setDebouncedInputValue] = useState(initial);

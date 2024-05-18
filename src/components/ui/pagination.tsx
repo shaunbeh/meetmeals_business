@@ -1,13 +1,14 @@
-import * as React from 'react';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   DotsHorizontalIcon,
 } from '@radix-ui/react-icons';
-
-import { cn } from '@/lib/utils';
-import { ButtonProps, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
+import * as React from 'react';
+
+import type { ButtonProps } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
@@ -57,7 +58,7 @@ const PaginationLink = ({
           variant: isActive ? 'outline' : 'ghost',
           size,
         }),
-        className
+        className,
       )}
       {...props}
     />
@@ -75,7 +76,7 @@ const PaginationPrevious = ({
     className={cn('gap-1 pl-2.5', className)}
     {...props}
   >
-    <ChevronLeftIcon className='h-4 w-4' />
+    <ChevronLeftIcon className='size-4' />
     <span>Previous</span>
   </PaginationLink>
 );
@@ -92,7 +93,7 @@ const PaginationNext = ({
     {...props}
   >
     <span>Next</span>
-    <ChevronRightIcon className='h-4 w-4' />
+    <ChevronRightIcon className='size-4' />
   </PaginationLink>
 );
 
@@ -105,7 +106,7 @@ const PaginationEllipsis = ({
     className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
-    <DotsHorizontalIcon className='h-4 w-4' />
+    <DotsHorizontalIcon className='size-4' />
     <span className='sr-only'>More pages</span>
   </span>
 );
@@ -113,9 +114,9 @@ const PaginationEllipsis = ({
 export {
   Pagination,
   PaginationContent,
-  PaginationLink,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
   PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 };

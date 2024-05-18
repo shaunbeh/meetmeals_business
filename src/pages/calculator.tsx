@@ -1,22 +1,24 @@
-import PairsDropdown from '@/components/PairsDropdown';
-import { Input } from '@/components/ui/input';
-import ChangeIcon from 'public/images/svg/change.svg';
-import { ArrowLeft2 } from 'iconsax-react';
-import endpoints from '@/lib/endpoints';
 import { useQuery } from '@tanstack/react-query';
-import {
+import { ArrowLeft2 } from 'iconsax-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import ChangeIcon from 'public/images/svg/change.svg';
+import texts from 'public/locales/fa/fa.json';
+import type { ChangeEvent } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+import Layout from '@/components/Layout';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import PairsDropdown from '@/components/PairsDropdown';
+import Faqs from '@/components/ui/Faq';
+import { Input } from '@/components/ui/input';
+import endpoints from '@/lib/endpoints';
+import type {
   GetCalculatorApi,
   GetExchangesSymbolItemResult,
 } from '@/lib/schema/ApiTypes';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { fetchJson, roundDecimalDigits } from '@/lib/utils';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import Layout from '@/components/Layout';
-import { ServerSideProps } from '@/types/commonTypes';
-import Faqs from '@/components/ui/Faq';
-import texts from 'public/locales/fa/fa.json';
+import type { ServerSideProps } from '@/types/commonTypes';
 
 type PropsT = ServerSideProps;
 
@@ -34,7 +36,7 @@ export default function Calculator({ content, faqs }: PropsT) {
   const [firstSymbolCount, setFirstSymbolCount] = useState<string | number>(1);
   const [secondSymbol, setSecondSymbol] = useState('IRT');
   const [secondSymbolCount, setSecondSymbolCount] = useState<string | number>(
-    ''
+    '',
   );
 
   const { data: exchangeData } = useQuery<GetCalculatorApi>({
@@ -47,28 +49,28 @@ export default function Calculator({ content, faqs }: PropsT) {
     ],
   });
 
-  const firstPair = exchangeData?.data?.find((el) => el.symbol == firstSymbol);
+  const firstPair = exchangeData?.data?.find((el) => el.symbol === firstSymbol);
 
   const secondPair =
-    secondSymbol == 'IRT'
+    secondSymbol === 'IRT'
       ? IrtPair
-      : exchangeData?.data?.find((el) => el.symbol == secondSymbol);
+      : exchangeData?.data?.find((el) => el.symbol === secondSymbol);
 
   const handleFirstPairChange = (val: string) => {
     setFirstSymbol(val);
-    const first = exchangeData?.data?.find((el) => el.symbol == val);
+    const first = exchangeData?.data?.find((el) => el.symbol === val);
     if (secondPair?.bid_price && first?.bid_price && firstSymbolCount) {
       setSecondSymbolCount(
-        +firstSymbolCount * (first?.bid_price / secondPair?.bid_price)
+        +firstSymbolCount * (first.bid_price / secondPair.bid_price),
       );
     }
   };
 
   const handleSecondPairChange = (val: string) => {
-    const second = exchangeData?.data?.find((el) => el.symbol == val);
+    const second = exchangeData?.data?.find((el) => el.symbol === val);
     if (second?.bid_price && firstPair?.bid_price && +firstSymbolCount) {
       setSecondSymbolCount(
-        +firstSymbolCount * (firstPair?.bid_price / second?.bid_price)
+        +firstSymbolCount * (firstPair.bid_price / second.bid_price),
       );
     }
     setSecondSymbol(val);
@@ -87,14 +89,12 @@ export default function Calculator({ content, faqs }: PropsT) {
     if (!+e.target.value) return;
     setFirstSymbolCount(e.target.value);
     if (firstPair?.bid_price && secondPair?.bid_price) {
-      {
-        setSecondSymbolCount(
-          roundDecimalDigits(
-            +e.target.value * (firstPair?.bid_price / secondPair?.bid_price),
-            4
-          )
-        );
-      }
+      setSecondSymbolCount(
+        roundDecimalDigits(
+          +e.target.value * (firstPair.bid_price / secondPair.bid_price),
+          4,
+        ),
+      );
     }
   };
 
@@ -102,63 +102,61 @@ export default function Calculator({ content, faqs }: PropsT) {
     if (!+e.target.value) return;
     setSecondSymbolCount(e.target.value);
     if (firstPair?.bid_price && secondPair?.bid_price) {
-      {
-        setFirstSymbolCount(
-          roundDecimalDigits(
-            +e.target.value * (secondPair?.bid_price / firstPair?.bid_price),
-            4
-          )
-        );
-      }
+      setFirstSymbolCount(
+        roundDecimalDigits(
+          +e.target.value * (secondPair.bid_price / firstPair.bid_price),
+          4,
+        ),
+      );
     }
   };
 
   const firstSelectBoxSymbols = useMemo(() => {
     const syms = exchangeData?.data;
-    if (!syms) return;
+    if (!syms) return [];
     return syms.filter((el) =>
-      secondSymbol ? el.symbol !== secondSymbol : true
+      secondSymbol ? el.symbol !== secondSymbol : true,
     );
   }, [exchangeData?.data, secondSymbol]);
 
   const secondSelecBoxSymbols = useMemo(() => {
     let syms = exchangeData?.data;
-    if (!syms) return;
+    if (!syms) return [];
     syms = [IrtPair, ...syms];
     return syms.filter((el) =>
-      firstSymbol ? el.symbol !== firstSymbol : true
+      firstSymbol ? el.symbol !== firstSymbol : true,
     );
   }, [exchangeData?.data, firstSymbol]);
 
   useEffect(() => {
-    if (firstPair?.bid_price) {
-      setSecondSymbolCount(firstPair?.bid_price / IrtPair.bid_price);
+    if (firstPair?.bid_price && IrtPair?.bid_price) {
+      setSecondSymbolCount(firstPair.bid_price / IrtPair.bid_price);
     }
   }, [exchangeData, firstPair?.bid_price]);
 
   return (
     <Layout>
       <MaxWidthWrapper>
-        <div className='flex flex-col-reverse md:flex-row gap-6 justify-between items-center'>
-          <div className='flex justify-between items-center font-extrabold md:text-lg lg:text-2xl'>
+        <div className='flex flex-col-reverse items-center justify-between gap-6 md:flex-row'>
+          <div className='flex items-center justify-between font-extrabold md:text-lg lg:text-2xl'>
             {texts.calculator.title}
           </div>
           <div className='flex items-center gap-2'>
             <Link
-              className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+              className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
               href='/'
             >
               {texts.links.homepage}
             </Link>
             <Link
-              className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+              className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
               href='/comparison'
             >
               {texts.links.comparison}
             </Link>
           </div>
         </div>
-        <div className='flex flex-col gap-8 px-4 lg:px-10 w-full lg:max-w-lg mx-auto bg-destructive-foreground py-8 rounded-lg'>
+        <div className='mx-auto flex w-full flex-col gap-8 rounded-lg bg-destructive-foreground px-4 py-8 lg:max-w-lg lg:px-10'>
           <div className='flex items-center justify-center gap-6'>
             <PairsDropdown
               title={texts.calculator.basePairTitle}
@@ -167,7 +165,7 @@ export default function Calculator({ content, faqs }: PropsT) {
               handleChange={handleFirstPairChange}
             />
             <div>
-              <ChangeIcon className='w-6 h-6' />
+              <ChangeIcon className='size-6' />
             </div>
             <PairsDropdown
               title={texts.calculator.targetPairTitle}
@@ -176,7 +174,7 @@ export default function Calculator({ content, faqs }: PropsT) {
               handleChange={handleSecondPairChange}
             />
           </div>
-          <div className='flex justify-center items-center gap-6'>
+          <div className='flex items-center justify-center gap-6'>
             <Input
               className='text-center'
               onChange={handleFirstSymbolCountChange}
@@ -194,17 +192,19 @@ export default function Calculator({ content, faqs }: PropsT) {
           {firstSymbolCount &&
             firstPair?.bid_price &&
             secondPair?.bid_price && (
-              <div className='flex items-center text-muted-foreground mx-auto gap-2 dir-rtl'>
+              <div className='dir-rtl mx-auto flex items-center gap-2 text-muted-foreground'>
                 {texts.calculator.each}
                 <span className='text-black'>{firstSymbolCount}</span>
                 <span className='text-black'>{firstPair.symbol}</span>
                 {texts.calculator.equalsTo}
                 <span className='text-black'>
-                  {roundDecimalDigits(
-                    +firstSymbolCount *
-                      (firstPair?.bid_price / secondPair?.bid_price),
-                    4
-                  ).toLocaleString()}
+                  {firstPair?.bid_price && secondPair?.bid_price
+                    ? roundDecimalDigits(
+                        +firstSymbolCount *
+                          (firstPair.bid_price / secondPair.bid_price),
+                        4,
+                      ).toLocaleString()
+                    : 'N/A'}
                 </span>
                 <span className='text-black'>
                   {secondPair.name ? secondPair.name : secondPair.symbol}
@@ -214,7 +214,7 @@ export default function Calculator({ content, faqs }: PropsT) {
           {firstPair && (
             <Link
               href={`/coins/${firstPair?.symbol}`}
-              className='flex gap-2 px-3 py-2 rounded-lg bg-popover items-center justify-between'
+              className='flex items-center justify-between gap-2 rounded-lg bg-popover px-3 py-2'
             >
               <div className='flex items-center gap-2'>
                 <Image
@@ -228,14 +228,14 @@ export default function Calculator({ content, faqs }: PropsT) {
               </div>
               <div className='flex items-center gap-2'>
                 {texts.calculator.ViewCoin}
-                <ArrowLeft2 className='w-4 h-4' />
+                <ArrowLeft2 className='size-4' />
               </div>
             </Link>
           )}
           {secondPair && secondPair.symbol !== 'IRT' && (
             <Link
               href={`/coins/${secondPair?.symbol}`}
-              className='flex gap-2 px-3 py-2 rounded-lg bg-popover items-center justify-between'
+              className='flex items-center justify-between gap-2 rounded-lg bg-popover px-3 py-2'
             >
               <div className='flex items-center gap-2'>
                 <Image
@@ -249,18 +249,19 @@ export default function Calculator({ content, faqs }: PropsT) {
               </div>
               <div className='flex items-center gap-2'>
                 {texts.calculator.ViewCoin}
-                <ArrowLeft2 className='w-4 h-4' />
+                <ArrowLeft2 className='size-4' />
               </div>
             </Link>
           )}
         </div>
         <div className='flex flex-col gap-6'>
           <h3>{texts.calculator.commonConverts}</h3>
-          <div className='flex items-center gap-4 text-foreground w-full overflow-x-auto pb-2 custom-scroll'>
+          <div className='custom-scroll flex w-full items-center gap-4 overflow-x-auto pb-2 text-foreground'>
             {exchangeData?.data?.map((el) => (
               <button
+                type='button'
                 key={el.symbol}
-                className='flex flex-col items-center gap-2 bg-destructive-foreground py-3 px-2 rounded-lg '
+                className='flex flex-col items-center gap-2 rounded-lg bg-destructive-foreground px-2 py-3 '
                 onClick={() => handleClickCommon(el)}
               >
                 <div className='flex items-center text-primary'>
@@ -269,7 +270,7 @@ export default function Calculator({ content, faqs }: PropsT) {
                     width={24}
                     height={24}
                     alt={`${el.symbol} icon`}
-                    className='-me-2 rounded-full z-[1]'
+                    className='z-[1] -me-2 rounded-full'
                   />
                   <Image
                     src={el?.icon ?? ''}
@@ -279,7 +280,10 @@ export default function Calculator({ content, faqs }: PropsT) {
                     className='rounded-full'
                   />
                 </div>
-                <span className='text-sm font-medium'>{el.symbol}/IRT ‌</span>
+                <span className='text-sm font-medium'>
+                  {el.symbol}
+                  /IRT
+                </span>
               </button>
             ))}
           </div>
@@ -287,6 +291,7 @@ export default function Calculator({ content, faqs }: PropsT) {
         {content && (
           <div
             className='prose max-w-none'
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: content }}
           />
         )}
@@ -298,7 +303,7 @@ export default function Calculator({ content, faqs }: PropsT) {
 
 export async function getStaticProps() {
   const calcData = await fetchJson(
-    'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-calculator'
+    'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-calculator',
   );
   const content = calcData?.[0]?.content.rendered;
   const faqs = calcData?.[0]?.faqs;

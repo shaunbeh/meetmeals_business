@@ -8,7 +8,6 @@ const WithdrawalTable = () => {
       header: "Withdrawal Method",
       accessorKey: "depositMethod",
       cell: (row) => {
-        console.log("row.getValue()", row.getValue());
         return (
           <div className="w-full h-full flex items-center justify-center mx-2">
             <Image

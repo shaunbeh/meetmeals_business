@@ -1,12 +1,13 @@
-import { Getter, Row, createColumnHelper } from '@tanstack/react-table';
-import Image from 'next/image';
+import { createColumnHelper } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { TableRowT } from './types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
 
+import type { TableRowT } from './types';
+
 const columnHelper = createColumnHelper<TableRowT>();
-const MemoizedCell = memo(function MC({
+const MemoizedCellComponent = ({
   value,
   icon,
   symbol,
@@ -14,24 +15,24 @@ const MemoizedCell = memo(function MC({
   value: string;
   icon: string;
   symbol: string;
-}) {
-  return (
-    <Link
-      href={`/coins/${symbol}`}
-      className='flex justify-end gap-2 items-center'
-    >
-      <span>
-        {icon ? (
-          <Image src={icon} width={24} height={24} alt={`${symbol} icon`} />
-        ) : null}
-      </span>
-      <div className='flex flex-col items-start grow'>
-        <span className='font-bold'>{value}</span>
-        <span className='text-gray-500'>{symbol}</span>
-      </div>
-    </Link>
-  );
-});
+}) => (
+  <Link
+    href={`/coins/${symbol}`}
+    className='flex items-center justify-end gap-2'
+  >
+    <span>
+      {icon ? (
+        <Image src={icon} width={24} height={24} alt={`${symbol} icon`} />
+      ) : null}
+    </span>
+    <div className='flex grow flex-col items-start'>
+      <span className='font-bold'>{value}</span>
+      <span className='text-gray-500'>{symbol}</span>
+    </div>
+  </Link>
+);
+const MemoizedCell = memo(MemoizedCellComponent);
+
 export const pairsColumns = [
   columnHelper.display({
     header: '#',
@@ -50,7 +51,7 @@ export const pairsColumns = [
   columnHelper.accessor('price', {
     header: 'قیمت روز',
     cell: ({ getValue }) => (
-      <div className='w-36 gap-1 text-bold flex items-center justify-center'>
+      <div className='flex w-36 items-center justify-center gap-1 font-bold'>
         <span>$</span>
         {getValue()}
       </div>
@@ -59,7 +60,7 @@ export const pairsColumns = [
   columnHelper.accessor('priceTmn', {
     header: 'قیمت تومانی',
     cell: ({ getValue }) => (
-      <div className='w-36 gap-1 text-bold flex items-center justify-center'>
+      <div className='flex w-36 items-center justify-center gap-1 font-bold'>
         <span>تومان</span>
         {getValue()}
       </div>
@@ -68,7 +69,7 @@ export const pairsColumns = [
   columnHelper.accessor('volume', {
     header: 'معاملات روزانه',
     cell: ({ getValue }) => (
-      <div className='w-36 gap-1 text-bold flex items-center justify-center'>
+      <div className='flex w-36 items-center justify-center gap-1 font-bold'>
         <span>$</span>
         {getValue()}
       </div>
@@ -77,7 +78,7 @@ export const pairsColumns = [
   columnHelper.accessor('marketCap', {
     header: 'حجم بازار',
     cell: ({ getValue }) => (
-      <div className='w-36 gap-1 flex items-center justify-center'>
+      <div className='flex w-36 items-center justify-center gap-1'>
         <span>$</span>
         {getValue()}
       </div>
@@ -88,8 +89,8 @@ export const pairsColumns = [
     cell: ({ getValue }) => (
       <div
         className={clsx(
-          'w-20 gap-1 flex items-center justify-center',
-          +getValue() > 0 ? 'text-green-500' : 'text-red-400'
+          'flex w-20 items-center justify-center gap-1',
+          +getValue() > 0 ? 'text-green-500' : 'text-red-400',
         )}
       >
         {getValue()}
@@ -103,8 +104,8 @@ export const pairsColumns = [
       <Link href={`/coins/${row.original.symbol.toLowerCase()}`}>
         <div
           className={clsx(
-            'w-20 gap-1 flex items-center justify-center',
-            +getValue() > 0 ? 'text-green-500' : 'text-red-400'
+            'flex w-20 items-center justify-center gap-1',
+            +getValue() > 0 ? 'text-green-500' : 'text-red-400',
           )}
         >
           {getValue()}

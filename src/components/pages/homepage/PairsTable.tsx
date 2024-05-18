@@ -1,10 +1,12 @@
-import BasicTable from '@/components/ui/Table';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { WsMsgT } from './services/types';
-import { WS_URL } from '@/lib/config';
 import { useEffect, useMemo } from 'react';
-import { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+
+import BasicTable from '@/components/ui/Table';
+import { WS_URL } from '@/lib/config';
+import type { SymbolsListResultApi } from '@/lib/schema/ApiTypes';
+
 import { pairsColumns } from './services/HomeColumns';
+import type { WsMsgT } from './services/types';
 
 type PropsT = { coinList: SymbolsListResultApi | undefined };
 export default function PairsTable({ coinList }: PropsT) {
@@ -35,13 +37,13 @@ export default function PairsTable({ coinList }: PropsT) {
             usdtIrt: coinList?.data?.usdt_irt,
             last7: row.weekly_price,
           },
-        ])
+        ]),
       ),
-    [coinList]
+    [coinList],
   );
 
   useEffect(() => {
-    if (readyState == ReadyState.OPEN && rows.size) {
+    if (readyState === ReadyState.OPEN && rows.size) {
       const pairs = Array.from(rows.keys()).join(',');
       const subDataFive = {
         method: 'RSUBSCRIPTION',
@@ -58,14 +60,14 @@ export default function PairsTable({ coinList }: PropsT) {
 
   useEffect(() => {
     const msg = lastJsonMessage?.d;
-    if (rows && msg) {
+    if (rows && msg && msg?.p) {
       const row = rows.get(msg?.id);
       if (row) {
         rows.set(msg?.id, {
           ...row,
           volume: msg?.v?.toLocaleString() ?? row.volume,
           price: msg?.p?.toLocaleString(),
-          priceTmn: ((msg?.p * (row?.usdtIrt ?? 1)) / 10).toLocaleString(),
+          priceTmn: ((msg.p * (row?.usdtIrt ?? 1)) / 10).toLocaleString(),
           priceChange24h: msg?.p24h?.toLocaleString(),
           priceChange7d: msg?.p7d?.toLocaleString(),
           marketCap: msg?.mc?.toLocaleString(),
@@ -74,9 +76,5 @@ export default function PairsTable({ coinList }: PropsT) {
     }
   }, [lastJsonMessage, rows]);
 
-  return (
-    <>
-      <BasicTable columns={pairsColumns} data={Array.from(rows.values())} />
-    </>
-  );
+  return <BasicTable columns={pairsColumns} data={Array.from(rows.values())} />;
 }

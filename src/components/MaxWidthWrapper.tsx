@@ -11,7 +11,7 @@ export default function MaxWidthWrapper({
     <div
       className={cn(
         ' flex flex-col w-full mx-auto justify-center px-4 md:px-8 py-10 gap-6 max-w-screen-2xl',
-        className
+        className,
       )}
     >
       {children}

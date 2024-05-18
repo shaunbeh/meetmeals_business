@@ -1,18 +1,19 @@
-import endpoints from '@/lib/endpoints';
-import { GetSymbolsExchangesResultApi } from '@/lib/schema/ApiTypes';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import texts from 'public/locales/fa/fa.json';
+import { useState } from 'react';
+
+import Layout from '@/components/Layout';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
 import CompareTableHeader from '@/components/pages/compare/CompareTableHeader';
 import { CompareColumns } from '@/components/pages/compare/services/CompareColumns';
-import { useState } from 'react';
-import Link from 'next/link';
-import { fetchJson } from '@/lib/utils';
-import Layout from '@/components/Layout';
-import { ServerSideProps } from '@/types/commonTypes';
-import BasicTable from '@/components/ui/Table';
 import Faqs from '@/components/ui/Faq';
+import BasicTable from '@/components/ui/Table';
+import LoadingSkeleton from '@/components/ui/Table/LoadingSkeleton';
+import endpoints from '@/lib/endpoints';
+import type { GetSymbolsExchangesResultApi } from '@/lib/schema/ApiTypes';
+import { fetchJson } from '@/lib/utils';
+import type { ServerSideProps } from '@/types/commonTypes';
 
 type PropsT = ServerSideProps;
 
@@ -31,7 +32,7 @@ export default function Comparison({ content, faqs }: PropsT) {
     ],
   });
 
-  const coin = coinList?.data?.find((el) => el.symbol == selectedCoin);
+  const coin = coinList?.data?.find((el) => el.symbol === selectedCoin);
 
   const handleCoinChange = (e: string) => {
     setSelectedCoin(e);
@@ -42,26 +43,26 @@ export default function Comparison({ content, faqs }: PropsT) {
   return (
     <Layout>
       <MaxWidthWrapper>
-        <div className='flex flex-col-reverse md:flex-row gap-6 justify-between items-center'>
-          <div className='flex justify-between items-center font-extrabold md:text-lg lg:text-2xl'>
+        <div className='flex flex-col-reverse items-center justify-between gap-6 md:flex-row'>
+          <div className='flex items-center justify-between font-extrabold md:text-lg lg:text-2xl'>
             {texts.comparison.title}
           </div>
           <div className='flex items-center gap-2'>
             <Link
-              className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+              className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
               href='/'
             >
               {texts.links.homepage}
             </Link>
             <Link
-              className='bg-primary/50 text-black/70 hover:bg-primary hover:text-white text-white leading-8 font-bold px-3 py-1 rounded-lg'
+              className='rounded-lg bg-primary/50 px-3 py-1 font-bold leading-8 text-black/70 hover:bg-primary hover:text-white'
               href='/calculator'
             >
               {texts.links.calculator}
             </Link>
           </div>
         </div>
-        <div className='p-2 md:p-6 bg-background rounded-lg'>
+        <div className='rounded-lg bg-background p-2 md:p-6'>
           <CompareTableHeader
             refetchList={refetchList}
             loading={isLoading}
@@ -72,16 +73,15 @@ export default function Comparison({ content, faqs }: PropsT) {
           {!coinList ? (
             <LoadingSkeleton />
           ) : (
-            <>
-              {coin?.exchanges && (
-                <BasicTable columns={CompareColumns} data={coin.exchanges} />
-              )}
-            </>
+            coin?.exchanges && (
+              <BasicTable columns={CompareColumns} data={coin.exchanges} />
+            )
           )}
           <div className='flex flex-col gap-2'>
             {content && (
               <div
                 className='prose max-w-none'
+                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             )}
@@ -95,7 +95,7 @@ export default function Comparison({ content, faqs }: PropsT) {
 
 export async function getStaticProps() {
   const compData = await fetchJson(
-    'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-compare'
+    'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-compare',
   );
 
   const content = compData?.[0]?.content.rendered;

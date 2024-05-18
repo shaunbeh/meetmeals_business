@@ -1,46 +1,44 @@
-import BrokerAcountTypeSection from "@/components/pages/brokers/brokerDetails/acountTypeSection/BrokerAcountTypeSection";
-import BrokerSummarySection from "@/components/pages/brokers/brokerDetails/summarySection/BrokerSummarySection";
-import StickySummarySection from "@/components/pages/brokers/brokerDetails/summarySection/StickySummarySection";
-import BrokerDepositAndWithdrawal from "@/components/pages/brokers/brokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal";
-import { getTextColorClass } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-const Broker = () => {
-  const brokerLevel = "1";
+import BrokerAcountTypeSection from '@/components/pages/brokers/brokerDetails/acountTypeSection/BrokerAcountTypeSection';
+import BrokerSummarySection from '@/components/pages/brokers/brokerDetails/summarySection/BrokerSummarySection';
+import StickySummarySection from '@/components/pages/brokers/brokerDetails/summarySection/StickySummarySection';
+import BrokerDepositAndWithdrawal from '@/components/pages/brokers/brokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal';
+import { getTextColorClass } from '@/lib/utils';
+
+const SingleBroker = () => {
+  const brokerLevel = '1';
   const colorClasses = getTextColorClass(brokerLevel);
-  const summaryRef = useRef(null);
-  const [currentSection, setCurrentSection] = useState("account");
+  const [currentSection, setCurrentSection] = useState('account');
   const [showStickySummary, setShowStickySummary] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const currentEntry = entries.find((entry) => entry.isIntersecting);
-        const brokerSummaryEntry = entries.find(
-          (entry) => entry.target === summaryRef.current
-        );
-        if (brokerSummaryEntry?.isIntersecting) {
+        if (currentEntry?.target.id==='summary' ) {
           setShowStickySummary(false);
         } else {
-          setShowStickySummary(true);
-        }
-        if (currentEntry?.target.id) {
-          setCurrentSection(currentEntry.target.id);
+          if(currentEntry?.target.id){
+            setShowStickySummary(true);
+            setCurrentSection(currentEntry?.target.id);
+          }
+          
         }
       },
       {
         root: null,
         threshold: 0.5,
-      }
+      },
     );
 
-    const sections = ["account", "deposit"];
+    const sections = ['summary','account', 'deposit'];
     sections.forEach((id) => {
       const element = document.getElementById(id);
       if (element) {
         observer.observe(element);
       }
     });
-    summaryRef.current && observer.observe(summaryRef.current);
+  
     return () => {
       sections.forEach((id) => {
         const element = document.getElementById(id);
@@ -48,7 +46,7 @@ const Broker = () => {
           observer.unobserve(element);
         }
       });
-      summaryRef.current && observer.unobserve(summaryRef.current);
+     
     };
   }, []);
 
@@ -59,30 +57,30 @@ const Broker = () => {
       window.scrollTo({
         left: position.left,
         top: position.top + window.scrollY - 190,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
   return (
-    <div className="min-w-[450px]  flex items-center justify-center flex-col gap-5 py-20 lg:p-20 bg-black">
-      <div className="w-full">
+    <div className='flex dir-rtl  min-w-[450px] flex-col items-center justify-center gap-5 bg-black py-20 lg:p-20'>
+      <div className='w-full'>
         <h1
-          className={`mr-10 lg:mr-[250px]  font-bold text-4xl ${colorClasses}`}
+          className={`mr-10 text-4xl  font-bold lg:mr-[250px] ${colorClasses}`}
         >
           wetrade
         </h1>
       </div>
-      <BrokerSummarySection brokerLevel={brokerLevel} ref={summaryRef} />
+      <BrokerSummarySection brokerLevel={brokerLevel}  />
       {showStickySummary && (
         <StickySummarySection
           scrollToSection={scrollToSection}
           currentSection={currentSection}
         />
       )}
-      <BrokerAcountTypeSection id="account" />
-      <BrokerDepositAndWithdrawal id="deposit" />
+      <BrokerAcountTypeSection id='account' />
+      <BrokerDepositAndWithdrawal id='deposit' />
     </div>
   );
 };
 
-export default Broker;
+export default SingleBroker;
