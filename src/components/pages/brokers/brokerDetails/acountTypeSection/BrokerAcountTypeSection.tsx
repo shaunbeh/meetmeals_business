@@ -67,12 +67,11 @@ const TabsCustomContent = ({ data }: { data: FakeData }) => (
             {key.replace(/_/g, ' ')}
           </span>
           <span className='text-sm font-bold capitalize'>
-            {!isBool && value}
-            {isBool && value ? (
+            {isBool ? value ? (
               <CheckIcon className='size-5 text-primary' />
             ) : (
               <CloseIcon className='size-5 text-error' />
-            )}
+            ):value}
           </span>
         </div>
       );
@@ -83,14 +82,14 @@ const TabsCustomContent = ({ data }: { data: FakeData }) => (
 const BrokerAcountTypeSection = ({ id }: { id: string }) => (
   <WhiteCard className='pt-10'>
     <div className='mb-2 flex items-center justify-between'>
-      <h2 className='text-2xl font-bold' id={id}>
+      <h2 className='text-2xl font-bold' >
         نوع اکانت
       </h2>
       <button className='w-[150px] border border-level1-foreground bg-level1-foreground p-2 text-sm font-bold text-black'>
         مقایسه
       </button>
     </div>
-    <div className='flex items-center gap-2'>
+    <div className='flex items-center gap-2' id={id}>
       <span className='text-4xl font-bold'>8</span>
       <span className='text-sm font-bold'>score</span>
     </div>

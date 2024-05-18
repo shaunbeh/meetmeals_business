@@ -6,27 +6,23 @@ import StickySummarySection from '@/components/pages/brokers/brokerDetails/summa
 import BrokerDepositAndWithdrawal from '@/components/pages/brokers/brokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal';
 import { getTextColorClass } from '@/lib/utils';
 
-const Broker = () => {
+const SingleBroker = () => {
   const brokerLevel = '1';
   const colorClasses = getTextColorClass(brokerLevel);
-  const summaryRef = useRef(null);
   const [currentSection, setCurrentSection] = useState('account');
   const [showStickySummary, setShowStickySummary] = useState(false);
   useEffect(() => {
-    const currentRef = summaryRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         const currentEntry = entries.find((entry) => entry.isIntersecting);
-        const brokerSummaryEntry = entries.find(
-          (entry) => entry.target === summaryRef.current,
-        );
-        if (brokerSummaryEntry?.isIntersecting) {
+        if (currentEntry?.target.id==='summary' ) {
           setShowStickySummary(false);
         } else {
-          setShowStickySummary(true);
-        }
-        if (currentEntry?.target.id) {
-          setCurrentSection(currentEntry.target.id);
+          if(currentEntry?.target.id){
+            setShowStickySummary(true);
+            setCurrentSection(currentEntry?.target.id);
+          }
+          
         }
       },
       {
@@ -35,16 +31,14 @@ const Broker = () => {
       },
     );
 
-    const sections = ['account', 'deposit'];
+    const sections = ['summary','account', 'deposit'];
     sections.forEach((id) => {
       const element = document.getElementById(id);
       if (element) {
         observer.observe(element);
       }
     });
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+  
     return () => {
       sections.forEach((id) => {
         const element = document.getElementById(id);
@@ -52,9 +46,7 @@ const Broker = () => {
           observer.unobserve(element);
         }
       });
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+     
     };
   }, []);
 
@@ -70,7 +62,7 @@ const Broker = () => {
     }
   };
   return (
-    <div className='flex  min-w-[450px] flex-col items-center justify-center gap-5 bg-black py-20 lg:p-20'>
+    <div className='flex dir-rtl  min-w-[450px] flex-col items-center justify-center gap-5 bg-black py-20 lg:p-20'>
       <div className='w-full'>
         <h1
           className={`mr-10 text-4xl  font-bold lg:mr-[250px] ${colorClasses}`}
@@ -78,7 +70,7 @@ const Broker = () => {
           wetrade
         </h1>
       </div>
-      <BrokerSummarySection brokerLevel={brokerLevel} ref={summaryRef} />
+      <BrokerSummarySection brokerLevel={brokerLevel}  />
       {showStickySummary && (
         <StickySummarySection
           scrollToSection={scrollToSection}
@@ -91,4 +83,4 @@ const Broker = () => {
   );
 };
 
-export default Broker;
+export default SingleBroker;
