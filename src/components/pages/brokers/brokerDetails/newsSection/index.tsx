@@ -3,11 +3,11 @@ import ClockIcon from 'public/images/svg/clock.svg'
 
 const BrokerNewsSection=({id}:{id:string})=>{
   return(
-    <WhiteCard className='pt-10 '>
-  <h2 className='text-2xl font-bold'>
+    <WhiteCard className='pt-10 min-h-[400px] flex flex-col justify-between'>
+  <h2 className='text-2xl font-bold' id={id}>
        Broker News
       </h2>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-2" id={id}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-2" >
         <NewsCard 
         title='Congratulations to the Excellent Brokers for Winning the Live Trading Assessment Awards at the 2024 Award for BrokersView with Outstanding Assessment Ceremony'
         date='2024-05-10'
