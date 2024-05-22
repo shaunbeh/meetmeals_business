@@ -17,7 +17,7 @@ const StickySummarySection = ({
   const TabsTriggerClasses =
     'data-[state=active]:border-b-4 border-level1-foreground h-full data-[state=active]:text-md data-[state=active]:font-bold data-[state=active]:transition-colors';
   return (
-    <WhiteCard className='fixed top-0 z-50 hidden px-5 !pb-0 shadow-xl xl:block'>
+    <WhiteCard className='fixed top-[64px] z-50 hidden px-5 !pb-0 shadow-xl xl:block'>
       <div className='flex items-center justify-between py-5'>
         <div className='flex items-center gap-2'>
           <Image
@@ -50,6 +50,27 @@ const StickySummarySection = ({
             onClick={() => scrollToSection('deposit')}
           >
             Deposit & Withdrawal
+          </TabsTrigger>
+          <TabsTrigger
+            className={TabsTriggerClasses}
+            value='company'
+            onClick={() => scrollToSection('company')}
+          >
+            Company & Service
+          </TabsTrigger>
+          <TabsTrigger
+            className={TabsTriggerClasses}
+            value='news'
+            onClick={() => scrollToSection('news')}
+          >
+            News
+          </TabsTrigger>
+          <TabsTrigger
+            className={TabsTriggerClasses}
+            value='Q&A'
+            onClick={() => scrollToSection('Q&A')}
+          >
+            Related Complaints
           </TabsTrigger>
         </TabsList>
       </Tabs>
