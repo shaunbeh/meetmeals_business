@@ -8,6 +8,7 @@ import { getTextColorClass } from '@/lib/utils';
 import BrokerCompanyAndServicesSection from '@/components/pages/brokers/brokerDetails/companyAndServicesSection';
 import BrokerNewsSection from '@/components/pages/brokers/brokerDetails/newsSection';
 import BrokerQuestionsAndAnswersSection from '@/components/pages/brokers/brokerDetails/questionsSection';
+import Header from '@/components/Header';
 
 const SingleBroker = () => {
   const brokerLevel = '1';
@@ -65,7 +66,9 @@ const SingleBroker = () => {
     }
   };
   return (
-    <div className='flex dir-rtl  min-w-[450px] flex-col items-center justify-center gap-5 bg-black py-20 lg:p-20'>
+    <>
+    <Header/>
+    <div className='flex dir-rtl  min-w-[450px] flex-col items-center justify-center gap-5 bg-black/90 py-20 lg:p-20'>
       <div className='w-full'>
         <h1
           className={`mr-10 text-4xl  font-bold lg:mr-[250px] ${colorClasses}`}
@@ -86,6 +89,8 @@ const SingleBroker = () => {
       <BrokerNewsSection id="news"/>
       <BrokerQuestionsAndAnswersSection id="Q&A"/>
     </div>
+    </>
+
   );
 };
 

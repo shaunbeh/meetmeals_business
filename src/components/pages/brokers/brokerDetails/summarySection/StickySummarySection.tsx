@@ -17,7 +17,7 @@ const StickySummarySection = ({
   const TabsTriggerClasses =
     'data-[state=active]:border-b-4 border-level1-foreground h-full data-[state=active]:text-md data-[state=active]:font-bold data-[state=active]:transition-colors';
   return (
-    <WhiteCard className='fixed top-0 z-50 hidden px-5 !pb-0 shadow-xl xl:block'>
+    <WhiteCard className='fixed top-[64px] z-50 hidden px-5 !pb-0 shadow-xl xl:block'>
       <div className='flex items-center justify-between py-5'>
         <div className='flex items-center gap-2'>
           <Image
