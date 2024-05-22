@@ -6,6 +6,7 @@ import StickySummarySection from '@/components/pages/brokers/brokerDetails/summa
 import BrokerDepositAndWithdrawal from '@/components/pages/brokers/brokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal';
 import { getTextColorClass } from '@/lib/utils';
 import BrokerCompanyAndServicesSection from '@/components/pages/brokers/brokerDetails/companyAndServicesSection';
+import BrokerNewsSection from '@/components/pages/brokers/brokerDetails/newsSection';
 
 const SingleBroker = () => {
   const brokerLevel = '1';
@@ -32,7 +33,7 @@ const SingleBroker = () => {
       },
     );
 
-    const sections = ['summary','account', 'deposit','company'];
+    const sections = ['summary','account', 'deposit','company','news'];
     sections.forEach((id) => {
       const element = document.getElementById(id);
       if (element) {
@@ -81,6 +82,7 @@ const SingleBroker = () => {
       <BrokerAcountTypeSection id='account' />
       <BrokerDepositAndWithdrawal id='deposit' />
       <BrokerCompanyAndServicesSection id="company"/>
+      <BrokerNewsSection id="news"/>
     </div>
   );
 };

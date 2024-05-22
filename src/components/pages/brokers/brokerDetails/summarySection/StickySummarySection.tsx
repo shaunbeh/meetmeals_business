@@ -58,6 +58,13 @@ const StickySummarySection = ({
           >
             Company & Service
           </TabsTrigger>
+          <TabsTrigger
+            className={TabsTriggerClasses}
+            value='news'
+            onClick={() => scrollToSection('news')}
+          >
+            News
+          </TabsTrigger>
         </TabsList>
       </Tabs>
     </WhiteCard>
