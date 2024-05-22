@@ -51,6 +51,13 @@ const StickySummarySection = ({
           >
             Deposit & Withdrawal
           </TabsTrigger>
+          <TabsTrigger
+            className={TabsTriggerClasses}
+            value='company'
+            onClick={() => scrollToSection('company')}
+          >
+            Company & Service
+          </TabsTrigger>
         </TabsList>
       </Tabs>
     </WhiteCard>
