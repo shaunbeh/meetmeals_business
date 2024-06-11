@@ -1,17 +1,17 @@
 {
-    "summarySection":{
-        "brokerLevel":"کارگزار با عملکرد عالی",
-        "founded":"تاسیس",
-        "headquarters":"مرکز کار",
-        "minDeposit":"حداقل سپرده",
-        "maxLev":"حداکثر leverage",
-        "reviews":"بازدید",
-        "score":"امتیاز",
-        "businessScope":"محدوده بیزنس",
-        "tradingCost":"هزینه معاملات",
-        "tradingPlatforms":"پلتفرم های معاملاتی",
-        "support":"پشتیبانی",
-        "licenceStatus":"وضعیت مجوز",
-        "contact":"تماس"
-    }
+  "summarySection": {
+    "brokerLevel": "کارگزار با عملکرد عالی",
+    "founded": "تاسیس",
+    "headquarters": "مرکز کار",
+    "minDeposit": "حداقل سپرده",
+    "maxLev": "حداکثر leverage",
+    "reviews": "بازدید",
+    "score": "امتیاز",
+    "businessScope": "محدوده بیزنس",
+    "tradingCost": "هزینه معاملات",
+    "tradingPlatforms": "پلتفرم های معاملاتی",
+    "support": "پشتیبانی",
+    "licenceStatus": "وضعیت مجوز",
+    "contact": "تماس"
+  }
 }
