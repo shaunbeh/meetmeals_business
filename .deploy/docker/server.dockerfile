@@ -1,8 +1,10 @@
-FROM node:20.14.0
+FROM node:20.14.0-buster
 
-WORKDIR /opt/web
+RUN mkdir /src
 
-COPY package*.json ./
+WORKDIR /src
+
+COPY package.json ./
 
 RUN yarn install
 
