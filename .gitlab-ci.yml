@@ -5,12 +5,7 @@ deploy-on-develop:
   stage: develop
   script:
     - pwd
-    - cd /srv/www/platformha-frontend-server
-    - git checkout develop
-    - git pull origin develop
-    - make build
-    - cd /srv/www/platformha-backend-server
-    - docker compose -p platformha-enigma -f ./.deploy/compose/docker-compose.yml up -d frontend
+    - echo "Hello $GITLAB_USER_LOGIN!"
   when: always
   only:
     - develop
