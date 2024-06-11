@@ -6,10 +6,9 @@ import LicenceCard from './LicenceCard';
 import ScoreCard from './ScoreCard';
 import SummaryInfo from './SummaryInfo';
 
-type PropsType = { brokerLevel: string };
-const BrokerSummarySectionComponent = (
+type PropsType = { brokerLevel: string};
+const BrokerSummarySection = (
   { brokerLevel }: PropsType,
-  ref: React.Ref<HTMLDivElement>,
 ) => {
   let colorClasses = '';
   if (brokerLevel === '1') {
@@ -18,9 +17,9 @@ const BrokerSummarySectionComponent = (
     colorClasses = '';
   }
   return (
-    <WhiteCard forwardedRef={ref}>
-      <SummaryInfo brokerLevel={brokerLevel} />
-      <div className='grid gap-4 2xl:grid-cols-3'>
+    <WhiteCard  >
+      <SummaryInfo brokerLevel={brokerLevel}  />
+      <div className='grid gap-4 2xl:grid-cols-3' >
         <ScoreCard />
         <LicenceCard bgColor={colorClasses} />
         <ContactCard />
@@ -29,5 +28,4 @@ const BrokerSummarySectionComponent = (
   );
 };
 
-const BrokerSummarySection = forwardRef(BrokerSummarySectionComponent);
 export default BrokerSummarySection;

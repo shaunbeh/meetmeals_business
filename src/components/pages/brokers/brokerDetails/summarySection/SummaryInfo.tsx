@@ -7,7 +7,7 @@ import RateBroker from './RateBroker';
 import SummaryGroupBtns from './SummaryGroupBtns';
 
 const SummaryInfo = ({ brokerLevel }: { brokerLevel: string }) => (
-  <div className='flex items-center gap-7 pb-10'>
+  <div className='flex items-center gap-7 pb-10' id='summary'>
     {/* img part */}
     <div
       className={`${
