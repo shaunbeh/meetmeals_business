@@ -1,10 +1,11 @@
-import { cn } from "@/lib/utils";
 import {
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-  type ColumnDef,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
+
+import { cn } from '@/lib/utils';
 
 export default function BasicTable<T>({
   data,
@@ -26,32 +27,32 @@ export default function BasicTable<T>({
   });
 
   return (
-    <div className="my-4 flex flex-col pb-10">
-      <div className="inline-block">
-        <div className="overflow-x-auto w-full custom-scroll-thin">
+    <div className='my-4 flex flex-col pb-10'>
+      <div className='inline-block'>
+        <div className='custom-scroll-thin w-full overflow-x-auto'>
           <table
             className={cn(
-              "min-w-full divide-y divide-gray-200 border-none outline-none",
-              TableClassName
+              'min-w-full divide-y divide-gray-200 border-none outline-none',
+              TableClassName,
             )}
           >
-            <thead className="rounded-lg overflow-hidden">
+            <thead className='overflow-hidden rounded-lg'>
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr className="overflow-hidden rounded-xl" key={headerGroup.id}>
+                <tr className='overflow-hidden rounded-xl' key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "px-4 border-none py-3 text-center text-xs font-medium text-black uppercase tracking-wider first:rounded-s-lg last:rounded-e-lg bg-popover ropunded-lg",
-                        headerClassName
+                        'px-4 border-none py-3 text-center text-xs font-medium text-black uppercase tracking-wider first:rounded-s-lg last:rounded-e-lg bg-popover ropunded-lg',
+                        headerClassName,
                       )}
                     >
                       <div
                         {...{
                           className: header.column.getCanSort()
-                            ? "cursor-pointer select-none"
-                            : "",
+                            ? 'cursor-pointer select-none'
+                            : '',
                           onClick: header.column.getToggleSortingHandler(),
                         }}
                       >
@@ -60,8 +61,8 @@ export default function BasicTable<T>({
                           header.getContext(),
                         )}
                         {{
-                          asc: " ▼",
-                          desc: " ▲",
+                          asc: ' ▼',
+                          desc: ' ▲',
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     </th>
@@ -69,7 +70,7 @@ export default function BasicTable<T>({
                 </tr>
               ))}
             </thead>
-            <tbody className="border-none">
+            <tbody className='border-none'>
               {table
                 .getRowModel()
                 .rows.slice(0, 50)
@@ -77,30 +78,29 @@ export default function BasicTable<T>({
                   <tr
                     key={row.id}
                     className={cn(
-                      "hover:bg-secondary",
+                      'hover:bg-secondary',
+                      // eslint-disable-next-line no-nested-ternary
                       rowClassName
                         ? rowIndex % 2 === 0
-                          ? ""
+                          ? ''
                           : rowClassName
-                        : ""
+                        : '',
                     )}
                   >
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <td
-                          key={cell.id}
-                          className="px-4 py-3 text-center whitespace-nowrap"
-                        >
-                          {cell.getContext().cell.getValue() !== "" &&
-                          cell.getContext().cell.getValue() !== null
-                            ? flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )
-                            : "-"}
-                        </td>
-                      );
-                    })}
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className='whitespace-nowrap px-4 py-3 text-center'
+                      >
+                        {cell.getContext().cell.getValue() !== '' &&
+                        cell.getContext().cell.getValue() !== null
+                          ? flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )
+                          : '-'}
+                      </td>
+                    ))}
                   </tr>
                 ))}
             </tbody>

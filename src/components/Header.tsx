@@ -1,64 +1,71 @@
-import SearchIcon from 'public/images/svg/search.svg'
-import NetIcon from 'public/images/svg/net.svg'
-import DownloadIcon from 'public/images/svg/download.svg'
-const menuItemsList=[
+import DownloadIcon from 'public/images/svg/download.svg';
+import NetIcon from 'public/images/svg/net.svg';
+import SearchIcon from 'public/images/svg/search.svg';
+
+const MenuItems = ({ title }: { title: string }) => (
+  <div
+    key={title}
+    className='flex h-10 cursor-pointer items-center justify-center whitespace-nowrap px-3 text-sm font-bold capitalize text-white hover:bg-secondary-foreground'
+  >
+    {title}
+  </div>
+);
+
+const menuItemsList = [
   {
-    title:'brokers'
+    title: 'brokers',
   },
   {
-    title:'scam'
+    title: 'scam',
   },
   {
-    title:'BV Assessment'
+    title: 'BV Assessment',
   },
   {
-    title:'rankings'
+    title: 'rankings',
   },
   {
-    title:'regulators'
+    title: 'regulators',
   },
   {
-    title:'news'
+    title: 'news',
   },
   {
-    title:'claims'
+    title: 'claims',
   },
   {
-    title:'expo'
+    title: 'expo',
   },
   {
-    title:'event'
+    title: 'event',
   },
   {
-    title:'awards'
-  }
-]
-const Header=()=>{
-  return(
-    <div className="flex items-center justify-between bg-black h-[64px] px-4 fixed top-0 w-full z-50">
-      <span className="h-7 w-[190px] text-primary text-xl">PLATFORMHA</span>
-      <div className="ml-[60px] hidden xl:flex items-center">
-        {menuItemsList.map(item=>(
-        <MenuItems title={item.title}/>
-        ))}
-      </div>
-      <div className='flex items-center gap-3'>
-        <div className="size-10 bg-secondary-foreground flex items-center justify-center text-white cursor-pointer"><SearchIcon className='size-6'/></div>
-        <div className="size-10 bg-secondary-foreground flex items-center justify-center text-white cursor-pointer"><DownloadIcon className='size-6'/></div>
-        <div className="size-10 bg-secondary-foreground flex items-center justify-center text-white cursor-pointer"><NetIcon className='size-6'/></div>
-        <button className="w-[90px] bg-primary text-white ml-3 flex justify-center items-center h-10 text-sm ">Sign In</button>
-      </div>
+    title: 'awards',
+  },
+];
+const Header = () => (
+  <div className='fixed top-0 z-50 flex h-[64px] w-full items-center justify-between bg-black px-4'>
+    <span className='h-7 w-[190px] text-xl text-primary'>PLATFORMHA</span>
+    <div className='ml-[60px] hidden items-center xl:flex'>
+      {menuItemsList.map((item) => (
+        <MenuItems key={item.title} title={item.title} />
+      ))}
     </div>
-  )
-}
-
-export default Header
-
-
-const MenuItems=({title}:{title:string})=>{
-  return(
-    <div key={title} className="hover:bg-secondary-foreground h-10 px-3 whitespace-nowrap capitalize text-white text-sm font-bold flex items-center justify-center cursor-pointer">
-      {title}
+    <div className='flex items-center gap-3'>
+      <div className='flex size-10 cursor-pointer items-center justify-center bg-secondary-foreground text-white'>
+        <SearchIcon className='size-6' />
+      </div>
+      <div className='flex size-10 cursor-pointer items-center justify-center bg-secondary-foreground text-white'>
+        <DownloadIcon className='size-6' />
+      </div>
+      <div className='flex size-10 cursor-pointer items-center justify-center bg-secondary-foreground text-white'>
+        <NetIcon className='size-6' />
+      </div>
+      <button className='ml-3 flex h-10 w-[90px] items-center justify-center bg-primary text-sm text-white '>
+        Sign In
+      </button>
     </div>
-  )
-}
+  </div>
+);
+
+export default Header;

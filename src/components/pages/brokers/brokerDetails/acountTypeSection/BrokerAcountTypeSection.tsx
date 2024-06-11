@@ -67,11 +67,16 @@ const TabsCustomContent = ({ data }: { data: FakeData }) => (
             {key.replace(/_/g, ' ')}
           </span>
           <span className='text-sm font-bold capitalize'>
-            {isBool ? value ? (
-              <CheckIcon className='size-5 text-primary' />
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {isBool ? (
+              value ? (
+                <CheckIcon className='size-5 text-primary' />
+              ) : (
+                <CloseIcon className='size-5 text-error' />
+              )
             ) : (
-              <CloseIcon className='size-5 text-error' />
-            ):value}
+              value
+            )}
           </span>
         </div>
       );
@@ -82,9 +87,7 @@ const TabsCustomContent = ({ data }: { data: FakeData }) => (
 const BrokerAcountTypeSection = ({ id }: { id: string }) => (
   <WhiteCard className='pt-10'>
     <div className='mb-2 flex items-center justify-between'>
-      <h2 className='text-2xl font-bold' >
-        نوع اکانت
-      </h2>
+      <h2 className='text-2xl font-bold'>نوع اکانت</h2>
       <button className='w-[150px] border border-level1-foreground bg-level1-foreground p-2 text-sm font-bold text-black'>
         مقایسه
       </button>
