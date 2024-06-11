@@ -4,8 +4,8 @@ stages:
 deploy-on-develop:
   stage: develop
   script:
-    - pwd
-    - echo "Hello $GITLAB_USER_LOGIN!"
+    - make build
+    - docker compose -p platformha-enigma -f /srv/www/platformha-backend-server/.deploy/compose/docker-compose.yml up -d frontend
   when: always
   only:
     - develop
