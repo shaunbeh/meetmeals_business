@@ -4,6 +4,7 @@ stages:
 deploy-on-develop:
   stage: develop
   script:
+    - pwd
     - cd /srv/www/platformha-frontend-server
     - git checkout develop
     - git pull origin develop
