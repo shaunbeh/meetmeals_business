@@ -10,6 +10,8 @@ import axios from 'axios';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 
+import AppWrapper from '@/components/AppWrapper';
+
 interface ParamsT {
   method?: 'get' | 'post';
   [key: string]: unknown;
@@ -48,7 +50,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
-        <Component {...pageProps} />
+        <AppWrapper>
+          <Component {...pageProps} />
+        </AppWrapper>
       </HydrationBoundary>
       <ReactQueryDevtools />
     </QueryClientProvider>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import Header from '@/components/Header';
-import BrokerAcountTypeSection from '@/components/pages/brokers/brokerDetails/acountTypeSection/BrokerAcountTypeSection';
-import BrokerCompanyAndServicesSection from '@/components/pages/brokers/brokerDetails/companyAndServicesSection';
-import BrokerNewsSection from '@/components/pages/brokers/brokerDetails/newsSection';
-import BrokerQuestionsAndAnswersSection from '@/components/pages/brokers/brokerDetails/questionsSection';
-import BrokerSummarySection from '@/components/pages/brokers/brokerDetails/summarySection/BrokerSummarySection';
-import StickySummarySection from '@/components/pages/brokers/brokerDetails/summarySection/StickySummarySection';
-import BrokerDepositAndWithdrawal from '@/components/pages/brokers/brokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal';
+import BrokerAcountTypeSection from '@/components/pages/brokers/BrokerDetails/acountTypeSection/BrokerAcountTypeSection';
+import BrokerCompanyAndServicesSection from '@/components/pages/brokers/BrokerDetails/companyAndServicesSection';
+import BrokerNewsSection from '@/components/pages/brokers/BrokerDetails/newsSection';
+import BrokerQuestionsAndAnswersSection from '@/components/pages/brokers/BrokerDetails/questionsSection';
+import BrokerSummarySection from '@/components/pages/brokers/BrokerDetails/summarySection/BrokerSummarySection';
+import StickySummarySection from '@/components/pages/brokers/BrokerDetails/summarySection/StickySummarySection';
+import BrokerDepositAndWithdrawal from '@/components/pages/brokers/BrokerDetails/withdrawalAndDepositSection/BrokerDepositAndWithdrawal';
 import { getTextColorClass } from '@/lib/utils';
 
 const SingleBroker = () => {

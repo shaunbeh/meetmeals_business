@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import CustomFont from 'next/font/local';
 import Head from 'next/head';
 
+import Header from './Header';
+
 const YekanBakh = CustomFont({
   src: [
     {
@@ -23,9 +25,10 @@ export default function Layout({ children }: { children: JSX.Element }) {
           {`:root { --font-sans: ${YekanBakh.style.fontFamily};}}`}
         </style>
       </Head>
+      <Header />
       <main
         className={clsx(
-          'relative flex min-h-screen flex-col',
+          'relative mt-20 flex min-h-screen flex-1 flex-col',
           YekanBakh.className,
         )}
       >

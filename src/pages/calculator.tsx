@@ -17,7 +17,7 @@ import type {
   GetCalculatorApi,
   GetExchangesSymbolItemResult,
 } from '@/lib/schema/ApiTypes';
-import { fetchJson, roundDecimalDigits } from '@/lib/utils';
+import { roundDecimalDigits } from '@/lib/utils';
 import type { ServerSideProps } from '@/types/commonTypes';
 
 type PropsT = ServerSideProps;
@@ -302,16 +302,16 @@ export default function Calculator({ content, faqs }: PropsT) {
 }
 
 export async function getStaticProps() {
-  const calcData = await fetchJson(
-    'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-calculator',
-  );
-  const content = calcData?.[0]?.content.rendered;
-  const faqs = calcData?.[0]?.faqs;
+  // const calcData = await fetchJson(
+  //   'https://clinicsarmayeh.com/wp-json/wp/v2/nodes?slug=node-calculator',
+  // );
+  // const content = calcData?.[0]?.content.rendered;
+  // const faqs = calcData?.[0]?.faqs;
 
   return {
     props: {
-      content,
-      faqs,
+      content: '',
+      faqs: {},
     },
     revalidate: 3600,
   };
