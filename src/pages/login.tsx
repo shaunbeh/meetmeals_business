@@ -4,10 +4,10 @@ import axios from 'axios';
 import { ArrowLeft, Global } from 'iconsax-react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LoginImage from 'public/images/png/login.png';
 import Logo from 'public/images/png/Logo.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -26,13 +26,17 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { appConfig } from '@/constants';
-import endpoints from '@/lib/endpoints';
+import { appConfig } from '@/lib/constants';
+import endpoints from '@/lib/constants/endpoints';
 import { useAppStore } from '@/store';
 
-export function LoginForm() {
-  const [phase, setPhase] = useState(1);
-
+export function LoginForm({
+  phase,
+  setPhase,
+}: {
+  phase: number;
+  setPhase: (phase: number) => void;
+}) {
   const formSchema = z.object(
     phase === 1
       ? { email: z.string().email() }
@@ -71,7 +75,6 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await getOtp({ username: values.email });
-
       // setIsOpen(false);
       // form.reset();
       // refetchOffers();
@@ -256,7 +259,23 @@ export function LoginForm() {
 }
 
 export default function Login() {
-  const { lang, toggleLang } = useAppStore();
+  const [phase, setPhase] = useState(1);
+
+  const { lang, user, toggleLang } = useAppStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user.token) router.push('/');
+  }, [user, router]);
+
+  const handleBack = () => {
+    if (phase === 1) {
+      router.push(process.env.NEXT_PUBLIC_APP_URL ?? 'http://meetmeals.nl');
+    } else {
+      setPhase(1);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -264,13 +283,16 @@ export default function Login() {
       </Head>
       <div className='relative flex h-screen min-w-[375px] justify-between p-6 text-text-primary'>
         <div className='mx-10 flex h-fit w-full min-w-[33%] flex-col gap-32 rounded-lg border p-6 lg:w-auto lg:border lg:border-none'>
-          <div className='flex items-center justify-between'>
-            <Link
-              href={process.env.NEXT_PUBLIC_APP_URL ?? 'http://meetmeals.nl'}
-              className='-m-2 flex items-center gap-2 rounded-lg p-2  font-bold text-black hover:bg-surface-background [&>svg]:hover:scale-110'
-            >
-              <ArrowLeft className='text-icon-primary' /> Back
-            </Link>
+          <div className='flex items-center'>
+            {phase === 2 && (
+              <Button
+                onClick={handleBack}
+                variant='ghost'
+                className='-m-2 flex items-center gap-2 rounded-lg p-2 font-bold text-black hover:bg-surface-background [&>svg]:hover:scale-110'
+              >
+                <ArrowLeft className='text-icon-primary' /> Back
+              </Button>
+            )}
             <Button onClick={toggleLang} variant='ghost' className='flex gap-2'>
               <Global />
               <span className='font-bold uppercase'>{lang}</span>
@@ -278,7 +300,7 @@ export default function Login() {
           </div>
           <div className='flex flex-col gap-8'>
             <Image src={Logo} alt='logo' width={100} height={100} />
-            <LoginForm />
+            <LoginForm phase={phase} setPhase={setPhase} />
           </div>
         </div>
         <div className='relative hidden grow lg:block'>

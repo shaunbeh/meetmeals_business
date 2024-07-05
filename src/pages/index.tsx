@@ -1,7 +1,10 @@
 import { Clock } from 'iconsax-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
+import { useAppStore } from '@/store';
 
 const OrderCard = () => (
   <div className='flex min-h-36 min-w-[640px] gap-4 rounded-lg bg-surface-secondary p-4'>
@@ -31,6 +34,12 @@ export default function Home() {
   // const { data: plansData } = useQuery({
   //   queryKey: [endpoints.getPlans.url, {}],
   // });
+  const router = useRouter();
+  const { user } = useAppStore();
+
+  useEffect(() => {
+    if (!user.token) router.push('/login');
+  }, [user, router]);
 
   return (
     <Layout>

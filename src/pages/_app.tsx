@@ -10,7 +10,8 @@ import axios from 'axios';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 
-import { appConfig } from '@/constants';
+import { Toaster } from '@/components/ui/sonner';
+import { appConfig } from '@/lib/constants';
 
 interface ParamsT {
   method?: 'get' | 'post';
@@ -59,6 +60,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <Component {...pageProps} />
+        <Toaster />
       </HydrationBoundary>
       <ReactQueryDevtools />
     </QueryClientProvider>

@@ -10,7 +10,7 @@ interface UserState {
   user: {
     username: string;
     email: string;
-    age: number;
+    token: string;
   };
   lang: string;
 }
@@ -24,7 +24,7 @@ export const initialFilterState = {
   user: {
     username: '',
     email: '',
-    age: 0,
+    token: '',
   },
   lang: LangOptions.en,
 };
@@ -37,7 +37,7 @@ export const useAppStore = create<UserState & UserActions>()(
         set((state) => ({ user: { ...state.user, ...newUser } }));
       },
       updateUserInfoAfterLogout: () => {
-        set({ user: { username: '', email: '', age: 0 } });
+        set({ user: initialFilterState.user });
       },
       toggleLang: () => {
         set((state) => ({

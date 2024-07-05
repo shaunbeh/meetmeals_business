@@ -1,26 +1,26 @@
 /* eslint-disable tailwindcss/no-custom-classname */
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import {
   Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  // PaginationContent,
+  // PaginationItem,
+  // PaginationLink,
+  // PaginationNext,
+  // PaginationPrevious,
 } from '@/components/ui/pagination';
-import BasicTable from '@/components/ui/Table';
+import BasicTable from '@/components/ui/Table/BasicTable';
 
 export default function Account() {
-  const [currPage, setCurrPage] = useState(1);
-  const handlePageChange = (page: number) => {
-    console.log(page);
-  };
+  // const [currPage, setCurrPage] = useState(1);
+  // const handlePageChange = (page: number) => {
+  // console.log(page);
+  // };
   return (
     <div>
-      <BasicTable className='reactTable' columns={columns} data={data?.data} />
+      <BasicTable className='reactTable' columns={[]} data={[]} />
       <Pagination>
-        <PaginationContent>
+        {/* <PaginationContent>
           {data?.prev_page_url ? (
             <PaginationItem>
               <PaginationPrevious
@@ -48,7 +48,7 @@ export default function Account() {
               />
             </PaginationItem>
           ) : null}
-        </PaginationContent>
+        </PaginationContent> */}
       </Pagination>
     </div>
   );
