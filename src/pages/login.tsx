@@ -5,7 +5,7 @@ import { ArrowLeft, Global } from 'iconsax-react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import LoginImage from 'public/images/png/login.png';
+import LoginImage from 'public/images/png/Login.png';
 import Logo from 'public/images/png/Logo.png';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
