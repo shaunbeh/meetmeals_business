@@ -5,7 +5,7 @@ deploy-on-develop:
   stage: develop
   script:
     - make build
-    - docker compose -p platformha-enigma -f /srv/www/platformha-backend-server/.deploy/compose/docker-compose.yml up -d frontend
+    - docker compose -p meetmeals-enigma -f /srv/www/meetmeals-backend-server/.deploy/compose/docker-compose.yml up -d frontend
   when: always
   only:
     - develop

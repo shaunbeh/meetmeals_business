@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 94%;
+    --popover-foreground: 203 14% 25%;
+    --primary: 177 100% 35%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 200, 4%, 53%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 177 100% 35%;
+    --radius: 0.5rem;
+    --progress: 0deg 0% 0% / 6%;
+    --blue-text: 221.54deg 61.9% 95.88%;
+    --blue-text-foreground: 222.82deg 88% 50.98%;
+    --level1: 24.11deg 74.67% 70.59% / 29.02%;
+    --level1-foreground: 15.32deg 73.44% 74.9%;
+    --level1-card: 25deg 100% 97.65%;
+    --error-color: 0deg 88.44% 66.08%;
+  }
+
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142.1 93% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 177.4 93.8% 29.2%;
+    --progress: 0deg 0% 0% / 6%;
+    --blue-text: 221.54deg 61.9% 95.88%;
+    --blue-text-foreground: 222.82deg 88% 50.98%;
+    --level1: 24.11deg 74.67% 70.59% / 29.02%;
+    --level1-foreground: 15.32deg 73.44% 74.9%;
+    --level1-card: 25deg 100% 97.65%;
+    --error-color: 0deg 88.44% 66.08%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+table {
+  border: 1px solid lightgray;
+}
+
+tbody {
+  border-bottom: 1px solid lightgray;
+}
+
+th {
+  border-bottom: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  padding: 2px 4px;
+}
+
+tfoot {
+  color: gray;
+}
+
+tfoot th {
+  font-weight: normal;
+}
+
+.dir-rtl {
+  direction: rtl;
+}
+
+.custom-scroll-thin {
+  /* width */
+  &::-webkit-scrollbar {
+    display: block !important;
+  }
+  -ms-overflow-style: auto !important;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary));
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    background: hsl(var(--popover));
+  }
+}
+
+.custom-scroll {
+  /* width */
+  &::-webkit-scrollbar {
+    display: block !important;
+  }
+  -ms-overflow-style: auto !important;
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground));
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: hsl(var(--popover));
+  }
+}
+
+::-moz-selection {
+  /* Code for Firefox */
+  color: hsl(var(--popover)) !important;
+  background: hsl(var(--primary)) !important;
+}
+
+::selection {
+  color: hsl(var(--popover)) !important;
+  background: hsl(var(--primary)) !important;
+}
+
+html {
+  &:not(.dark) .skeleton {
+    cursor: wait;
+    position: relative;
+    overflow: hidden;
+    background-color: #efefef !important;
+    color: #efefef !important;
+    border-radius: 0.25rem;
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 5%,
+        rgba(0, 0, 0, 0.05) 20%,
+        rgba(0, 0, 0, 0.1) 35%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.1) 65%,
+        rgba(0, 0, 0, 0.05) 80%,
+        rgba(0, 0, 0, 0) 95%
+      );
+      animation: shimmer 3s infinite;
+      content: '';
+    }
+    & > * {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+  &.dark .skeleton {
+    cursor: wait;
+    position: relative;
+    overflow: hidden;
+    background-color: #e7e7e7 !important;
+    color: #e7e7e7 !important;
+    border-radius: 0.25rem;
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 5%,
+        rgba(255, 255, 255, 0.05) 20%,
+        rgba(255, 255, 255, 0.1) 35%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.1) 65%,
+        rgba(255, 255, 255, 0.05) 80%,
+        rgba(255, 255, 255, 0) 95%
+      );
+      animation: shimmer 3s infinite;
+      content: '';
+    }
+    & > * {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}

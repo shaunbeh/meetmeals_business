@@ -1,4 +1,4 @@
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 
 import {
   HydrationBoundary,
@@ -10,10 +10,11 @@ import axios from 'axios';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 
-import AppWrapper from '@/components/AppWrapper';
+import { appConfig } from '@/constants';
 
 interface ParamsT {
   method?: 'get' | 'post';
+  token?: string;
   [key: string]: unknown;
 }
 
@@ -25,19 +26,26 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           queries: {
             refetchOnWindowFocus: false,
             queryFn: async ({ queryKey }) => {
-              const [url, { method = 'get', ...params }] = queryKey as [
+              const [url, { method = 'get', token, ...params }] = queryKey as [
                 string,
                 ParamsT,
               ];
 
-              const fullUrl = `/api${url.toLowerCase()}`;
+              const fullUrl = `${appConfig.apiUrl}/api${url.toLowerCase()}`;
               let response;
 
               if (method.toLowerCase() === 'post') {
-                response = await axios.post(fullUrl, params ?? {});
+                response = await axios.post(fullUrl, params ?? {}, {
+                  headers: {
+                    ...(token && { Authorization: `Bearer ${token}` }),
+                  },
+                });
               } else {
                 response = await axios.get(fullUrl, {
                   params,
+                  headers: {
+                    ...(token && { Authorization: `Bearer ${token}` }),
+                  },
                 });
               }
               return response.data;
@@ -50,9 +58,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
-        <AppWrapper>
-          <Component {...pageProps} />
-        </AppWrapper>
+        <Component {...pageProps} />
       </HydrationBoundary>
       <ReactQueryDevtools />
     </QueryClientProvider>

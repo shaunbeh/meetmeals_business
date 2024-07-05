@@ -23,29 +23,11 @@ const nextConfig = {
   },
   trailingSlash: true,
   async rewrites() {
-    return [
-      {
-        source: "/clinic/:path*",
-        destination: "https://clinicsarmayeh.com/wp-json/:path*",
-      },
-      {
-        source: "/api/:path*",
-        destination: "https://bprice.clinicsarmayeh.com/api/:path*",
-      },
-    ];
+    return [];
   },
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "bprice.clinicsarmayeh.com",
-      },
-      {
-        protocol: "https",
-        hostname: "*.brokersview.com",
-      },
-    ],
+    remotePatterns: [],
   },
 };
 module.exports = nextConfig;

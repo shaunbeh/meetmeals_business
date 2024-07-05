@@ -1,4 +1,4 @@
-NAME   := platformha/client
+NAME   := meetmeals/client
 TAG    := $$(git log -1 --pretty=%h)
 IMG    := ${NAME}:${TAG}
 LATEST := ${NAME}:latest

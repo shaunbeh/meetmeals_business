@@ -1,16 +1,11 @@
 const endpoints = {
-  exchanges: {
-    getExchangesWithSymbols: { url: '/v1/exchanges-symbols/', method: 'POST' },
+  getOTP: { url: '/api/v2/organization/login/code/get', method: 'POST' },
+  verifyOTP: {
+    url: '/api/v2/organization/login/code/verify',
+    method: 'POST',
   },
-  symbols: {
-    getTags: { url: '/v1/tags/', method: 'GET' },
-    getSymbols: { url: '/v1/get-symbols/', method: 'POST' },
-    getSymbolsWithExchanges: { url: '/v1/symbols-exchanges/', method: 'POST' },
-  },
-  calculator: { url: '/v1/calculator/', method: 'POST' },
-  content: {
-    calculator: { url: '/calculator-content/', method: 'GET' },
-  },
+  getUserProfile: { url: '/v2/organization/profile', method: 'GET' },
+  getPlans: { url: '/v2/organization/plan', method: 'GET' },
 };
 
 export default endpoints;
