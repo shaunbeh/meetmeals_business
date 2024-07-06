@@ -8,7 +8,7 @@ export default function Document() {
       className='h-full'
     >
       <Head />
-      <body className='relative h-full font-sans antialiased'>
+      <body className='relative font-sans antialiased'>
         <Main />
         <NextScript />
       </body>

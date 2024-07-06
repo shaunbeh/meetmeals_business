@@ -14,7 +14,9 @@ export default function Layout({ children }: { children: JSX.Element }) {
       </Head>
       <Header />
       <main
-        className={clsx('relative mt-20 flex min-h-screen flex-1 flex-col')}
+        className={clsx(
+          'relative mt-20 flex min-h-[calc(100vh-200px)] flex-1 flex-col px-4',
+        )}
       >
         <div className='flex flex-1 grow flex-col bg-white'>{children}</div>
       </main>

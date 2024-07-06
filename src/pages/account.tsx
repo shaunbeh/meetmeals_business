@@ -1,6 +1,7 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 // import { useState } from 'react';
 
+import Layout from '@/components/Layout';
 import {
   Pagination,
   // PaginationContent,
@@ -17,10 +18,11 @@ export default function Account() {
   // console.log(page);
   // };
   return (
-    <div>
-      <BasicTable className='reactTable' columns={[]} data={[]} />
-      <Pagination>
-        {/* <PaginationContent>
+    <Layout>
+      <div>
+        <BasicTable className='reactTable' columns={[]} data={[]} />
+        <Pagination>
+          {/* <PaginationContent>
           {data?.prev_page_url ? (
             <PaginationItem>
               <PaginationPrevious
@@ -49,7 +51,8 @@ export default function Account() {
             </PaginationItem>
           ) : null}
         </PaginationContent> */}
-      </Pagination>
-    </div>
+        </Pagination>
+      </div>
+    </Layout>
   );
 }

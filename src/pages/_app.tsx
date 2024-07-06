@@ -6,9 +6,11 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
 import type { AppProps } from 'next/app';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { Toaster } from '@/components/ui/sonner';
 import { appConfig } from '@/lib/constants';
@@ -20,6 +22,8 @@ interface ParamsT {
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -36,20 +40,43 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               let response;
 
               if (method.toLowerCase() === 'post') {
-                response = await axios.post(fullUrl, params ?? {}, {
-                  headers: {
-                    ...(token && { Authorization: `Bearer ${token}` }),
-                  },
-                });
+                try {
+                  response = await axios.post(fullUrl, params ?? {}, {
+                    headers: {
+                      ...(token && { Authorization: `Bearer ${token}` }),
+                    },
+                  });
+                } catch (error) {
+                  const e = error as AxiosError<{ message: string }>;
+                  if (e.response?.status === 403) {
+                    toast.error(e.response?.data?.message, {
+                      position: 'top-right',
+                      style: { color: 'red' },
+                    });
+                    router.push('/login');
+                  }
+                }
               } else {
-                response = await axios.get(fullUrl, {
-                  params,
-                  headers: {
-                    ...(token && { Authorization: `Bearer ${token}` }),
-                  },
-                });
+                try {
+                  response = await axios.get(fullUrl, {
+                    params,
+                    headers: {
+                      ...(token && { Authorization: `Bearer ${token}` }),
+                    },
+                  });
+                } catch (error) {
+                  const e = error as AxiosError<{ message: string }>;
+                  if (e.response?.status === 403) {
+                    toast.error(e.response?.data?.message, {
+                      position: 'top-right',
+                      style: { color: 'red' },
+                    });
+                    router.push('/login');
+                  }
+                }
               }
-              return response.data;
+
+              return response?.data;
             },
           },
         },
