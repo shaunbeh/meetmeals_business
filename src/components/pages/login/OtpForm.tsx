@@ -86,7 +86,7 @@ export default function OtpForm({ email }: { email: string }) {
     <div className='flex w-full flex-col gap-4'>
       <div className='flex flex-col gap-2'>
         <h2 className='text-h2-bold'>Verification</h2>
-        <p className='flex w-full max-w-[452px] flex-wrap gap-1 truncate text-par'>
+        <p className='flex w-full flex-wrap gap-1 truncate text-par lg:max-w-[352px] xl:max-w-[452px]'>
           Please enter the verification code sent to
           <span className='font-medium'>{email}</span>
         </p>

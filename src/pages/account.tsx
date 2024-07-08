@@ -18,7 +18,7 @@ export default function Account() {
   // console.log(page);
   // };
   return (
-    <Layout>
+    <Layout title='Account'>
       <div>
         <BasicTable className='reactTable' columns={[]} data={[]} />
         <Pagination>

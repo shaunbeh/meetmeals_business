@@ -3,7 +3,13 @@ import Head from 'next/head';
 
 import Header from './Header';
 
-export default function Layout({ children }: { children: JSX.Element }) {
+export default function Layout({
+  children,
+  title,
+}: {
+  children: JSX.Element;
+  title: string;
+}) {
   return (
     <>
       <Head>
@@ -11,6 +17,9 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <style jsx global>
           {`:root { --font-sans`}
         </style>
+        <title>{title}</title>
+        <meta charSet='utf-8' />
+        <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <Header />
       <main
