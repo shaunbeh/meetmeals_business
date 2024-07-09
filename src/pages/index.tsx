@@ -96,9 +96,7 @@ const OrderCard = ({
 );
 
 export default function Home() {
-  const {
-    auth: { token, isLoggedIn },
-  } = useAppStore();
+  const { token, isLoggedIn } = useAppStore((store) => store.auth);
 
   const { data, isLoading } = useQuery<GetPlansApiResponse>({
     queryKey: [endpoints.getPlans.url, { token }],
@@ -210,8 +208,6 @@ export default function Home() {
       locale: 'en',
     };
   }
-
-  console.log({ purchaseStep, stripeClientSecret, orderId, orderNumber });
 
   return (
     <>

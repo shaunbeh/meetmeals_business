@@ -13,7 +13,9 @@ export default function LoginMainFormsTopbar({
   setStep: (phase: LoginSteps) => void;
   step: LoginSteps;
 }) {
-  const { lang, toggleLang } = useAppStore();
+  const toggleLang = useAppStore((store) => store.toggleLang);
+  const lang = useAppStore((store) => store.lang);
+
   const router = useRouter();
 
   const handleBack = () => {

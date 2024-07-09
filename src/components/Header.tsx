@@ -1,27 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
 import { Global, Profile } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from 'public/images/png/Logo.png';
 
-import endpoints from '@/lib/constants/endpoints';
-import type { GetUserInfoApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
 
 import { Button } from './ui/button';
 
 const Header = () => {
-  const {
-    auth: { isLoggedIn, token },
-    toggleLang,
-    lang,
-  } = useAppStore();
-
-  const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
-    queryKey: [endpoints.getUserInfo.url, { token }],
-    enabled: isLoggedIn,
-  });
-  const user = userInfo?.data;
+  const user = useAppStore((store) => store.user);
+  const toggleLang = useAppStore((store) => store.toggleLang);
+  const lang = useAppStore((store) => store.lang);
 
   return (
     <div className='fixed top-0 z-50 flex h-[64px] w-full items-center justify-between bg-white px-8 text-par font-medium text-text-primary'>

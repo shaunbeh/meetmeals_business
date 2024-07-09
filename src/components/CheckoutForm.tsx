@@ -23,9 +23,7 @@ type CheckoutFormProps = {
 };
 
 function CheckoutForm(props: CheckoutFormProps) {
-  const {
-    auth: { token, isLoggedIn },
-  } = useAppStore();
+  const { token, isLoggedIn } = useAppStore((store) => store.auth);
   const stripe = useStripe();
   const elements = useElements();
 

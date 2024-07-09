@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, LogoutCurve } from 'iconsax-react';
 import { useRouter } from 'next/navigation';
 import type { ColumnsType } from 'rc-table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -71,11 +71,16 @@ const orderColumns: ColumnsType<OrderT> = [
 ];
 
 export default function Account() {
+  // STORE
+  const { isLoggedIn, token } = useAppStore((store) => store.auth);
+  const updateUserInfoAfterLogin = useAppStore(
+    (store) => store.updateUserInfoAfterLogin,
+  );
+  const updateUserInfoAfterLogout = useAppStore(
+    (store) => store.updateUserInfoAfterLogout,
+  );
+
   // HOOKS
-  const {
-    auth: { isLoggedIn, token },
-  } = useAppStore();
-  const { updateUserInfoAfterLogout } = useAppStore();
   const router = useRouter();
 
   // STATES
@@ -86,6 +91,12 @@ export default function Account() {
     queryKey: [endpoints.getUserInfo.url, { token }],
     enabled: isLoggedIn,
   });
+
+  useEffect(() => {
+    if (userInfo?.data) {
+      updateUserInfoAfterLogin(userInfo?.data);
+    }
+  }, [userInfo, updateUserInfoAfterLogin]);
 
   const { data } = useQuery<GetOrdersApiResponse>({
     queryKey: [endpoints.getOrders.url, { token }],

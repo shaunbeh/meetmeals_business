@@ -27,7 +27,11 @@ import type { VerifyOtpApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
 
 export default function OtpForm({ email }: { email: string }) {
-  const { updateAuthToken } = useAppStore();
+  const updateAuthToken = useAppStore((store) => store.updateAuthToken);
+  const updateUserInfoAfterLogin = useAppStore(
+    (store) => store.updateUserInfoAfterLogin,
+  );
+
   const router = useRouter();
 
   const formSchema = z.object({
@@ -49,8 +53,9 @@ export default function OtpForm({ email }: { email: string }) {
     mutationFn: (body) =>
       axios.post(`${appConfig.apiUrl}${endpoints.verifyOTP.url}`, body),
     onSuccess: (res) => {
-      const { token } = res.data.data;
+      const { token, user } = res.data.data;
       updateAuthToken(token);
+      updateUserInfoAfterLogin(user);
       toast.success(res.data.message, {
         position: 'top-right',
         style: { color: 'green' },

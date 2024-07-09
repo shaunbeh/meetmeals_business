@@ -12,6 +12,7 @@ export type UserInfoT = {
 };
 
 export type PlanT = {
+  order: null | OrderT;
   id: number;
   title: string;
   organization_id: null;
@@ -46,7 +47,7 @@ export type OrderT = {
 export type VerifyOtpApiResponse = {
   message: string;
   data: {
-    // user: any;
+    user: UserInfoT;
     token: string;
   };
 };

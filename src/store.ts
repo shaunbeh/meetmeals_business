@@ -45,7 +45,10 @@ export const useAppStore = create<UserState & UserActions>()(
         set((state) => ({ ...state, user: newUser }));
       },
       updateUserInfoAfterLogout: () => {
-        set({ user: initialFilterState.user });
+        set({
+          user: initialFilterState.user,
+          auth: { isLoggedIn: false, token: '' },
+        });
       },
       updateAuthToken: (token) => {
         set((state) => ({ ...state, auth: { isLoggedIn: true, token } }));
