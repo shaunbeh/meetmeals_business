@@ -4,10 +4,10 @@ const endpoints = {
     url: '/api/v2/organization/login/code/verify',
     method: 'POST',
   },
-  submitOrder: { url: '/v2/organization/order/submit', method: 'POST' },
+  submitOrder: { url: '/api/v2/organization/order/submit', method: 'POST' },
+  getOrders: { url: '/v2/organization/order/index', method: 'POST' },
   getPlans: { url: '/v2/organization/plan', method: 'GET' },
   getUserInfo: { url: '/v2/organization/profile', method: 'GET' },
-  getOrders: { url: '/v2/organization/order/submit', method: 'POST' },
 };
 
 export default endpoints;

@@ -1,10 +1,1 @@
-NAMES:
-shahin: SHB
-shiva: SHK
-
-TAGS:
-ADD
-REMOVE
-BUGFIX
-WIP
-CHANGE
+Order weekly corporational meals for you and your colleagues.

@@ -52,11 +52,6 @@ export default function LoginForm({
     }
   }
 
-  // const toggleSubmit = () =>
-  //   step === LoginSteps.email
-  //     ? setStep(LoginSteps.otp)
-  //     : setStep(LoginSteps.email);
-
   return (
     <div className='flex w-full flex-col gap-9'>
       <div className='flex flex-col gap-2'>

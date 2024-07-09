@@ -27,7 +27,7 @@ import type { VerifyOtpApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
 
 export default function OtpForm({ email }: { email: string }) {
-  const { updateUserInfoAfterLogin } = useAppStore();
+  const { updateAuthToken } = useAppStore();
   const router = useRouter();
 
   const formSchema = z.object({
@@ -49,22 +49,8 @@ export default function OtpForm({ email }: { email: string }) {
     mutationFn: (body) =>
       axios.post(`${appConfig.apiUrl}${endpoints.verifyOTP.url}`, body),
     onSuccess: (res) => {
-      const { user, token } = res.data.data;
-      updateUserInfoAfterLogin({
-        email: user.email,
-        fName: user.fName,
-        id: user.id,
-        lName: user.lName,
-        mobile: user.mobile,
-        organization_id: user.organization_id,
-        post_code: user.post_code,
-        privilege: user.privilege,
-        user_code: user.user_code,
-        userImage: user.userImage,
-        username: user.username,
-        verified: user.verified,
-        token,
-      });
+      const { token } = res.data.data;
+      updateAuthToken(token);
       toast.success(res.data.message, {
         position: 'top-right',
         style: { color: 'green' },
@@ -73,10 +59,10 @@ export default function OtpForm({ email }: { email: string }) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (values.pin && +values.pin)
-        await verifyOtp({ username: email, code: +values.pin });
+        verifyOtp({ username: email, code: +values.pin });
     } catch (error: any) {
       // toast.error(error?.response?.data?.message);
     }
@@ -102,7 +88,7 @@ export default function OtpForm({ email }: { email: string }) {
                   Verification code
                 </FormLabel>
                 <FormControl>
-                  <InputOTP maxLength={6} {...field}>
+                  <InputOTP autoFocus maxLength={6} {...field}>
                     <InputOTPGroup className='gap-1'>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
@@ -134,7 +120,7 @@ export default function OtpForm({ email }: { email: string }) {
             </Button>
           </div>
         </form>
-      </Form>
+      </Form>{' '}
     </div>
   );
 }

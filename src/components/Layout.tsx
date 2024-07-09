@@ -8,7 +8,7 @@ export default function Layout({
   title,
 }: {
   children: JSX.Element;
-  title: string;
+  title?: string;
 }) {
   return (
     <>

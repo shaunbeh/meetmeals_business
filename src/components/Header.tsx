@@ -1,14 +1,27 @@
+import { useQuery } from '@tanstack/react-query';
 import { Global, Profile } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from 'public/images/png/Logo.png';
 
+import endpoints from '@/lib/constants/endpoints';
+import type { GetUserInfoApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
 
 import { Button } from './ui/button';
 
 const Header = () => {
-  const { user, toggleLang, lang } = useAppStore();
+  const {
+    auth: { isLoggedIn, token },
+    toggleLang,
+    lang,
+  } = useAppStore();
+
+  const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
+    queryKey: [endpoints.getUserInfo.url, { token }],
+    enabled: isLoggedIn,
+  });
+  const user = userInfo?.data;
 
   return (
     <div className='fixed top-0 z-50 flex h-[64px] w-full items-center justify-between bg-white px-8 text-par font-medium text-text-primary'>
@@ -16,9 +29,9 @@ const Header = () => {
         <Link href='/' className=' text-xl text-primary'>
           <Image src={Logo} width={100} height={100} alt='logo' />
         </Link>
-        {user.fName && (
+        {user?.organization?.name && (
           <div className='rounded-lg bg-surface-secondary px-4 py-2 font-bold uppercase text-text-disabled'>
-            {user.fName.slice(0, 4)}
+            {user.organization.name.slice(0, 4)}
           </div>
         )}
       </div>
@@ -36,8 +49,8 @@ const Header = () => {
           className='flex h-10 cursor-pointer items-center justify-center gap-1 rounded-lg p-2 hover:bg-surface-secondary'
         >
           <Profile className='size-6' />
-          {user.fName && (
-            <span className='w-[15ch] truncate text-nowrap'>{`${user.fName} ${user.lName}`}</span>
+          {user?.first_name && user?.last_name && (
+            <span className='w-[15ch] truncate text-nowrap'>{`${user.first_name} ${user.last_name}`}</span>
           )}
         </Link>
       </div>

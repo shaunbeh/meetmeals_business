@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import type { UserType } from './lib/types/ApiTypes';
+import type { UserInfoT } from './lib/types/ApiTypes';
 
 export enum LangOptions {
   en = 'en',
@@ -9,31 +9,31 @@ export enum LangOptions {
 }
 
 export interface UserState {
-  user: UserType & { token: string };
+  user: UserInfoT;
+  auth: { token: string; isLoggedIn: boolean };
   lang: string;
 }
 interface UserActions {
   updateUserInfoAfterLogin: (newUser: UserState['user']) => void;
+  updateAuthToken: (token: string) => void;
   updateUserInfoAfterLogout: () => void;
   toggleLang: () => void;
 }
 
 export const initialFilterState = {
   user: {
-    id: 0,
-    username: '',
-    fName: '',
-    lName: '',
-    userImage: null,
-    privilege: '',
+    id: -1,
+    first_name: '',
+    last_name: '',
     email: '',
-    mobile: '',
-    user_code: 0,
-    post_code: null,
-    verified: '',
-    organization_id: 0,
-    token: '',
+    mobile: null,
+    organization: {
+      id: -1,
+      name: '',
+      address: '',
+    },
   },
+  auth: { token: '', isLoggedIn: false },
   lang: LangOptions.en,
 };
 
@@ -46,6 +46,9 @@ export const useAppStore = create<UserState & UserActions>()(
       },
       updateUserInfoAfterLogout: () => {
         set({ user: initialFilterState.user });
+      },
+      updateAuthToken: (token) => {
+        set((state) => ({ ...state, auth: { isLoggedIn: true, token } }));
       },
       toggleLang: () => {
         set((state) => ({
