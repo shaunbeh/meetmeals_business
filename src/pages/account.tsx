@@ -72,13 +72,11 @@ const orderColumns: ColumnsType<OrderT> = [
 
 export default function Account() {
   // STORE
-  const { isLoggedIn, token } = useAppStore((store) => store.auth);
+  const { isLoggedIn } = useAppStore((store) => store.auth);
   const updateUserInfoAfterLogin = useAppStore(
     (store) => store.updateUserInfoAfterLogin,
   );
-  const updateUserInfoAfterLogout = useAppStore(
-    (store) => store.updateUserInfoAfterLogout,
-  );
+  const removeCredentials = useAppStore((store) => store.removeCredentials);
 
   // HOOKS
   const router = useRouter();
@@ -88,7 +86,7 @@ export default function Account() {
 
   // API CALLS
   const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
-    queryKey: [endpoints.getUserInfo.url, { token }],
+    queryKey: [endpoints.getUserInfo.url],
     enabled: isLoggedIn,
   });
 
@@ -99,7 +97,7 @@ export default function Account() {
   }, [userInfo, updateUserInfoAfterLogin]);
 
   const { data } = useQuery<GetOrdersApiResponse>({
-    queryKey: [endpoints.getOrders.url, { token }],
+    queryKey: [endpoints.getOrders.url],
     enabled: isLoggedIn,
   });
 
@@ -109,7 +107,7 @@ export default function Account() {
   };
 
   const handleLogout = () => {
-    updateUserInfoAfterLogout();
+    removeCredentials();
     router.push('/login');
   };
 

@@ -7,24 +7,19 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import axios, { type AxiosError } from 'axios';
+import axios from 'axios';
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 import { Toaster } from '@/components/ui/sonner';
 import { appConfig } from '@/lib/constants';
 
 interface ParamsT {
   method?: 'get' | 'post';
-  token?: string;
   [key: string]: unknown;
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -32,51 +27,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           queries: {
             refetchOnWindowFocus: false,
             queryFn: async ({ queryKey }) => {
-              const [url, { method = 'get', token, ...params }] = queryKey as [
-                string,
-                ParamsT,
-              ];
+              const [url, params] = queryKey as [string, ParamsT];
+              const { method = 'get', ...otherParams } = params ?? {};
 
               const fullUrl = `${appConfig.apiUrl}/api${url.toLowerCase()}`;
               let response;
 
               if (method.toLowerCase() === 'post') {
-                try {
-                  response = await axios.post(fullUrl, params ?? {}, {
-                    headers: {
-                      ...(token && { Authorization: `Bearer ${token}` }),
-                    },
-                  });
-                } catch (error) {
-                  const e = error as AxiosError<{ message: string }>;
-                  if (e.response?.status === 403) {
-                    toast.error(e.response?.data?.message, {
-                      position: 'top-right',
-                      style: { color: 'red' },
-                    });
-                    router.push('/login');
-                  }
-                }
+                response = await axios.post(fullUrl, otherParams ?? {});
               } else {
-                try {
-                  response = await axios.get(fullUrl, {
-                    params,
-                    headers: {
-                      ...(token && { Authorization: `Bearer ${token}` }),
-                    },
-                  });
-                } catch (error) {
-                  const e = error as AxiosError<{ message: string }>;
-                  if (e.response?.status === 403) {
-                    toast.error(e.response?.data?.message, {
-                      position: 'top-right',
-                      style: { color: 'red' },
-                    });
-                    router.push('/login');
-                  }
-                }
+                response = await axios.get(fullUrl, {
+                  params: otherParams ?? {},
+                });
               }
-
               return response?.data;
             },
           },
@@ -88,7 +51,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <Component {...pageProps} />
-        <Toaster />
+        <Toaster
+          position='top-center'
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              error: 'text-red-500',
+              success: 'text-green-500',
+              info: 'text-blue-500',
+              warning: 'text-yellow-500',
+            },
+          }}
+        />
       </HydrationBoundary>
       <ReactQueryDevtools />
     </QueryClientProvider>

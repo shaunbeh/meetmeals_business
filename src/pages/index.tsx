@@ -15,8 +15,9 @@ import NonVegetarianIcon from 'public/images/svg/non-vegetarian.svg';
 import VegetarianIcon from 'public/images/svg/vegetarian.svg';
 import { useState } from 'react';
 
-import CheckoutForm from '@/components/CheckoutForm';
 import Layout from '@/components/Layout';
+import CheckoutForm from '@/components/pages/homepage/CheckoutForm';
+import { ProtectedRoute } from '@/components/protected-auth';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -38,7 +39,6 @@ import type {
 } from '@/lib/types/ApiTypes';
 import { PurchaseStepsEnum } from '@/lib/types/enums';
 import { cn } from '@/lib/utils';
-import { useAppStore } from '@/store';
 
 const OrderCard = ({
   plan,
@@ -96,11 +96,8 @@ const OrderCard = ({
 );
 
 export default function Home() {
-  const { token, isLoggedIn } = useAppStore((store) => store.auth);
-
   const { data, isLoading } = useQuery<GetPlansApiResponse>({
-    queryKey: [endpoints.getPlans.url, { token }],
-    enabled: isLoggedIn,
+    queryKey: [endpoints.getPlans.url],
   });
 
   // STATES
@@ -164,9 +161,7 @@ export default function Home() {
     }
   >({
     mutationFn: (body) =>
-      axios.post(`${appConfig.apiUrl}${endpoints.submitOrder.url}`, body, {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
+      axios.post(`${appConfig.apiUrl}${endpoints.submitOrder.url}`, body),
     onSuccess: (res) => {
       setStripeClientSecret(res?.data?.data?.payment?.client_secret);
       setOrderId(res?.data?.data?.order?.id);
@@ -210,7 +205,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <ProtectedRoute>
       <Layout title='Home'>
         <div className='mx-auto flex px-6 py-4'>
           <div className='hidden h-full w-1/3 flex-col lg:flex' />
@@ -294,6 +289,6 @@ export default function Home() {
           />
         </Elements>
       ) : null}
-    </>
+    </ProtectedRoute>
   );
 }

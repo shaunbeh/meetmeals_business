@@ -13,10 +13,11 @@ export interface UserState {
   auth: { token: string; isLoggedIn: boolean };
   lang: string;
 }
+
 interface UserActions {
   updateUserInfoAfterLogin: (newUser: UserState['user']) => void;
   updateAuthToken: (token: string) => void;
-  updateUserInfoAfterLogout: () => void;
+  removeCredentials: () => void;
   toggleLang: () => void;
 }
 
@@ -44,7 +45,7 @@ export const useAppStore = create<UserState & UserActions>()(
       updateUserInfoAfterLogin: (newUser) => {
         set((state) => ({ ...state, user: newUser }));
       },
-      updateUserInfoAfterLogout: () => {
+      removeCredentials: () => {
         set({
           user: initialFilterState.user,
           auth: { isLoggedIn: false, token: '' },
@@ -60,6 +61,8 @@ export const useAppStore = create<UserState & UserActions>()(
         }));
       },
     })),
-    { name: 'user' },
+    {
+      name: 'app',
+    },
   ),
 );

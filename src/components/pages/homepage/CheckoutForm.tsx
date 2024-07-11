@@ -7,13 +7,12 @@ import type { StripePaymentElementOptions } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import { type FormEvent, useEffect, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { appConfig } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
 import type { GetUserInfoApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
-
-import LoadingSpinner from './LoadingSpinner';
-import { Button } from './ui/button';
 
 type CheckoutFormProps = {
   clientSecret: string;
@@ -23,7 +22,7 @@ type CheckoutFormProps = {
 };
 
 function CheckoutForm(props: CheckoutFormProps) {
-  const { token, isLoggedIn } = useAppStore((store) => store.auth);
+  const { isLoggedIn } = useAppStore((store) => store.auth);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -31,7 +30,7 @@ function CheckoutForm(props: CheckoutFormProps) {
   const [isLoading, setLoading] = useState(false);
 
   const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
-    queryKey: [endpoints.getUserInfo.url, { token }],
+    queryKey: [endpoints.getUserInfo.url],
     enabled: isLoggedIn,
   });
 

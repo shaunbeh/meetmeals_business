@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import axios from 'axios';import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -56,10 +55,7 @@ export default function OtpForm({ email }: { email: string }) {
       const { token, user } = res.data.data;
       updateAuthToken(token);
       updateUserInfoAfterLogin(user);
-      toast.success(res.data.message, {
-        position: 'top-right',
-        style: { color: 'green' },
-      });
+      toast.success(res.data.message);
       router.push('/');
     },
   });
