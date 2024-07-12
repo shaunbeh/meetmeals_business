@@ -29,7 +29,7 @@ const OrderCard = ({
   return (
     <div
       className={clsx(
-        'flex h-36 gap-4 rounded-lg border border-line-primary p-4 md:min-w-[640px]',
+        'flex h-32 gap-4 rounded-lg border border-line-primary p-4 md:h-36 md:min-w-[640px] md:px-4',
         disabled
           ? 'bg-surface-secondary text-text-disabled'
           : 'text-text-primary ',
@@ -83,7 +83,7 @@ const OrderCard = ({
             </div>
             {!plan.order && (
               <Button
-                disabled={!plan.can_order}
+                disabled={!plan.can_order || disabled}
                 onClick={() => setDialogOpen(plan.id)}
                 variant='default'
                 className='!text-sub3-bold text-text-tertiary md:!text-sub2-bold'

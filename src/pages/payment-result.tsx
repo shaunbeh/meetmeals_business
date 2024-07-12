@@ -1,4 +1,5 @@
 import { Elements, useStripe } from '@stripe/react-stripe-js';
+import { DateTime } from 'luxon';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,7 @@ import getStripe from '@/lib/constants/getStripe';
 function PaymentResult() {
   const [isLoading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('');
-  // const [orderDate, setOrderDate] = useState('');
+  const [orderDate, setOrderDate] = useState('');
   const [orderNumber, setOrderNumber] = useState('');
 
   const stripe = useStripe();
@@ -23,7 +24,7 @@ function PaymentResult() {
     const paymentIntentClientSecret = searchParams.get(
       'payment_intent_client_secret',
     );
-    // setOrderDate(searchParams.get('order-date') ?? '');
+    setOrderDate(searchParams.get('order-date') ?? '');
     setOrderNumber(searchParams.get('order-number') ?? '');
 
     if (paymentIntentClientSecret) {
@@ -62,7 +63,7 @@ function PaymentResult() {
 
   return (
     <Dialog open onOpenChange={navigateToHome}>
-      <DialogContent className='mx-auto h-screen max-h-[690px] max-w-sm overflow-y-auto rounded-lg md:max-h-[730px] md:max-w-md [&>button>svg]:text-text-primary'>
+      <DialogContent className='mx-auto h-screen max-h-[660px] max-w-sm overflow-y-auto rounded-lg md:max-h-[700px] [&>button>svg]:text-text-primary'>
         {isLoading ? (
           <LoadingOverlay />
         ) : (
@@ -81,17 +82,28 @@ function PaymentResult() {
               />
               <div>
                 <p className='mb-2 text-center text-lg font-bold'>
-                  {/* {t(paymentStatus)} */}
+                  {isSuccessful ? 'Your order is confirmed!' : 'Payment Error'}
                 </p>
                 <div className='mx-auto w-fit rounded-lg border border-dotted p-2 font-medium'>
-                  {`Order number: ${orderNumber}`}
+                  {`Invoice number: ${orderNumber}`}
                 </div>
               </div>
-              {/* <p className='mb-2 px-8 py-6 text-center font-medium'>
-                {isSuccessful
-                  ? t('payment.successDesc')
-                  : t('payment.failureDesc')}
-              </p> */}
+              <p className='mb-2 px-4 py-3 text-center font-medium md:px-8 md:py-6'>
+                {isSuccessful ? (
+                  <div>
+                    Your order for{' '}
+                    <span className='font-bold'>
+                      {
+                        DateTime.fromFormat(orderDate, 'yyyy-MM-dd hh:mm:ss')
+                          .weekdayLong
+                      }
+                    </span>{' '}
+                    has been placed and will be delivered to the office.
+                  </div>
+                ) : (
+                  'The transaction could not be completed. Please try again in a few minutes.'
+                )}
+              </p>
             </div>
             <div className='mb-2 flex justify-center gap-4'>
               <Button

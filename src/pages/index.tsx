@@ -110,10 +110,8 @@ export default function Home() {
     <ProtectedRoute>
       <Layout title='Home'>
         <>
-          <div className='mx-auto flex px-2 py-4 md:px-6'>
-            <div className='hidden h-full w-1/3 flex-col lg:flex' />
-            <div className='flex flex-col items-center justify-center gap-5' />
-            <div className='flex flex-col gap-4'>
+          <div className='mx-auto flex w-full max-w-screen-sm px-2 py-4'>
+            <div className='flex w-full flex-col gap-4'>
               {isLoading ? (
                 <>
                   <Skeleton className='h-36 w-[640px]' />
@@ -158,9 +156,9 @@ export default function Home() {
                       handleBackClick={() =>
                         setPurchaseStep(PurchaseStepsEnum.Details)
                       }
-                      orderId={orderId.toString()}
+                      // orderId={orderId.toString()}
                       orderDate={orderDate}
-                      // orderNumber={orderNumber.toString()}
+                      orderNumber={orderNumber.toString()}
                     />
                   </Elements>
                 )}
