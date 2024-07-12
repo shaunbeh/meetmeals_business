@@ -75,7 +75,7 @@ function CheckoutForm(props: CheckoutFormProps) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${appConfig.baseUrl}/?order-id=${props.orderId}&order-date=${props.orderDate}`,
+        return_url: `${appConfig.baseUrl}/payment-result?order-id=${props.orderId}&order-date=${props.orderDate}`,
       },
     });
 
