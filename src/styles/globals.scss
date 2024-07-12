@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
+    --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -68,65 +68,9 @@
     @apply border-border;
   }
   body {
+    min-width: 375px;
     @apply bg-background text-foreground;
   }
-}
-
-
-
-.dir-rtl {
-  direction: rtl;
-}
-
-.custom-scroll-thin {
-  /* width */
-  &::-webkit-scrollbar {
-    display: block !important;
-  }
-  -ms-overflow-style: auto !important;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary));
-    &:hover {
-      cursor: pointer !important;
-    }
-  }
-  &::-webkit-scrollbar {
-    width: 2px;
-    height: 2px;
-    background: hsl(var(--popover));
-  }
-}
-
-.custom-scroll {
-  /* width */
-  &::-webkit-scrollbar {
-    display: block !important;
-  }
-  -ms-overflow-style: auto !important;
-  &::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground));
-    &:hover {
-      cursor: pointer !important;
-    }
-  }
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    background: hsl(var(--popover));
-  }
-}
-
-::-moz-selection {
-  /* Code for Firefox */
-  color: hsl(var(--popover)) !important;
-  background: hsl(var(--primary)) !important;
-}
-
-::selection {
-  color: hsl(var(--popover)) !important;
-  background: hsl(var(--primary)) !important;
 }
 
 html {
@@ -195,3 +139,60 @@ html {
     }
   }
 }
+
+
+.dir-rtl {
+  direction: rtl;
+}
+
+.custom-scroll-thin {
+  /* width */
+  &::-webkit-scrollbar {
+    display: block !important;
+  }
+  -ms-overflow-style: auto !important;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary));
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    background: hsl(var(--popover));
+  }
+}
+
+.custom-scroll {
+  /* width */
+  &::-webkit-scrollbar {
+    display: block !important;
+  }
+  -ms-overflow-style: auto !important;
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground));
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: hsl(var(--popover));
+  }
+}
+
+::-moz-selection {
+  /* Code for Firefox */
+  color: hsl(var(--popover)) !important;
+  background: hsl(var(--primary)) !important;
+}
+
+::selection {
+  color: hsl(var(--popover)) !important;
+  background: hsl(var(--primary)) !important;
+}
+

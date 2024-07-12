@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -15,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { apiClient } from '@/lib/axios';
 import { appConfig } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
 import { LoginSteps } from '@/lib/constants/enums';
@@ -37,7 +37,7 @@ export default function LoginForm({
 
   const { mutate: getOtp, isPending: isPendingGetOtp } = useMutation({
     mutationFn: (body: { username: string }) =>
-      axios.post(`${appConfig.apiUrl}${endpoints.getOTP.url}`, body),
+      apiClient.post(`${appConfig.apiUrl}${endpoints.getOTP.url}`, body),
     onSuccess: () => {
       setEmail(form.getValues('email'));
       setStep(LoginSteps.otp);

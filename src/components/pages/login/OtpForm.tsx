@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -20,6 +20,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { apiClient } from '@/lib/axios';
 import { appConfig } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
 import type { VerifyOtpApiResponse } from '@/lib/types/ApiTypes';
@@ -50,7 +51,7 @@ export default function OtpForm({ email }: { email: string }) {
     { username: string; code: number }
   >({
     mutationFn: (body) =>
-      axios.post(`${appConfig.apiUrl}${endpoints.verifyOTP.url}`, body),
+      apiClient.post(`${appConfig.apiUrl}${endpoints.verifyOTP.url}`, body),
     onSuccess: (res) => {
       const { token, user } = res.data.data;
       updateAuthToken(token);
@@ -89,7 +90,7 @@ export default function OtpForm({ email }: { email: string }) {
                   Verification code
                 </FormLabel>
                 <FormControl>
-                  <InputOTP autoFocus maxLength={6} {...field}>
+                  <InputOTP autoFocus maxLength={5} {...field}>
                     <InputOTPGroup className='gap-1'>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />

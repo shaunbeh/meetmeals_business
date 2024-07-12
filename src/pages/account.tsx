@@ -2,13 +2,15 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, LogoutCurve } from 'iconsax-react';
+import { ArrowLeft, LogoutCurve, SearchNormal } from 'iconsax-react';
 import { useRouter } from 'next/navigation';
 import type { ColumnsType } from 'rc-table';
 import { useEffect, useState } from 'react';
 
 import Layout from '@/components/Layout';
+import { ProtectedRoute } from '@/components/protected-auth';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Pagination,
   PaginationContent,
@@ -19,6 +21,7 @@ import {
 } from '@/components/ui/pagination';
 import BasicTable from '@/components/ui/Table/BasicTable';
 import endpoints from '@/lib/constants/endpoints';
+import useDebounce from '@/lib/hooks/useDebounce';
 import type {
   GetOrdersApiResponse,
   GetUserInfoApiResponse,
@@ -83,6 +86,7 @@ export default function Account() {
 
   // STATES
   const [currPage, setCurrPage] = useState(1);
+  const { debouncedText, searchText, setSearchText } = useDebounce('');
 
   // API CALLS
   const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
@@ -97,7 +101,7 @@ export default function Account() {
   }, [userInfo, updateUserInfoAfterLogin]);
 
   const { data } = useQuery<GetOrdersApiResponse>({
-    queryKey: [endpoints.getOrders.url],
+    queryKey: [endpoints.getOrders.url, { order_number: debouncedText }],
     enabled: isLoggedIn,
   });
 
@@ -123,103 +127,114 @@ export default function Account() {
   }
 
   return (
-    <Layout title='Account'>
-      <div className='mx-auto flex w-full max-w-7xl flex-col gap-6 py-6 lg:px-4 xl:px-14'>
-        <div className='flex items-center justify-between'>
-          <Button
-            onClick={handleBack}
-            variant='ghost'
-            className='relative -m-2 flex items-center gap-2 rounded-lg p-2 ps-10 font-bold text-black transition-all hover:bg-surface-background [&>#arrow]:hover:opacity-100 [&>#chevron]:hover:translate-x-0 [&>#chevron]:hover:scale-150 [&>#chevron]:hover:opacity-0 [&>svg]:hover:scale-110'
-          >
-            <ChevronLeftIcon
-              id='chevron'
-              className='absolute start-1 w-6 translate-x-3 scale-125 text-icon-primary transition-all'
+    <ProtectedRoute>
+      <Layout title='Account'>
+        <div className='mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 xl:px-14'>
+          <div className='flex items-center justify-between'>
+            <Button
+              onClick={handleBack}
+              variant='ghost'
+              className='relative -m-2 flex items-center gap-2 rounded-lg p-2 ps-10 font-bold text-black transition-all [&>#arrow]:hover:opacity-100 [&>#chevron]:hover:translate-x-0 [&>#chevron]:hover:scale-150 [&>#chevron]:hover:opacity-0 [&>svg]:hover:scale-110'
+            >
+              <ChevronLeftIcon
+                id='chevron'
+                className='absolute start-1 w-6 translate-x-3 scale-125 text-icon-primary transition-all'
+              />
+              <ArrowLeft
+                id='arrow'
+                className='absolute start-2 w-6 text-icon-primary opacity-0 transition-all'
+              />{' '}
+              Back
+            </Button>
+            <Button
+              onClick={handleLogout}
+              variant='outline'
+              className='flex gap-2 border-red text-red hover:text-red'
+            >
+              <LogoutCurve size={24} />
+              <span className='text-sub2-bold'>Logout</span>
+            </Button>
+          </div>
+          <div className='flex flex-col gap-4 rounded-lg border border-line-primary p-4'>
+            <h2 className='text-sub2-bold text-text-primary'>
+              Personal Information
+            </h2>
+            <div className='flex flex-wrap gap-x-2 gap-y-6'>
+              <InfoItem label='First name' value={user?.first_name ?? ''} />
+              <InfoItem label='Last name' value={user?.last_name ?? ''} />
+              <InfoItem label='Work email' value={user?.email ?? ''} />
+              <InfoItem
+                label='Phone number'
+                value={user?.mobile?.toString() ?? ''}
+              />
+              <InfoItem
+                label='Company name'
+                value={user?.organization?.name ?? ''}
+              />
+              <InfoItem
+                label='Address'
+                value={user?.organization?.address ?? ''}
+              />
+            </div>
+          </div>
+          <div className='rounded-lg border border-line-primary py-6 md:px-4'>
+            <div className='relative'>
+              <Input
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className='ps-10'
+                placeholder='Order number ...'
+              />
+              <SearchNormal className='absolute start-2 top-1.5 size-6 text-icon-disabled' />
+            </div>
+            <BasicTable
+              className='reactTable'
+              columns={orderColumns}
+              data={d?.data ?? []}
             />
-            <ArrowLeft
-              id='arrow'
-              className='absolute start-2 w-6 text-icon-primary opacity-0 transition-all'
-            />{' '}
-            Back
-          </Button>
-          <Button
-            onClick={handleLogout}
-            variant='outline'
-            className='flex gap-2 border-red text-red hover:text-red'
-          >
-            <LogoutCurve size={24} />
-            <span className='text-sub2-bold'>Logout</span>
-          </Button>
-        </div>
-        <div className='flex flex-col gap-4 rounded-lg border border-line-primary p-4'>
-          <h2 className='text-sub2-bold text-text-primary'>
-            Personal Information
-          </h2>
-          <div className='flex flex-wrap gap-x-2 gap-y-6'>
-            <InfoItem label='First name' value={user?.first_name ?? ''} />
-            <InfoItem label='Last name' value={user?.last_name ?? ''} />
-            <InfoItem label='Work email' value={user?.email ?? ''} />
-            <InfoItem
-              label='Phone number'
-              value={user?.mobile?.toString() ?? ''}
-            />
-            <InfoItem
-              label='Company name'
-              value={user?.organization?.name ?? ''}
-            />
-            <InfoItem
-              label='Address'
-              value={user?.organization?.address ?? ''}
-            />
+            {d?.data.length ? (
+              <Pagination>
+                <PaginationContent>
+                  {d?.prev_page_url ? (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => handlePageChange(currPage - 1)}
+                        href='#'
+                      />
+                    </PaginationItem>
+                  ) : (
+                    ''
+                  )}
+                  {new Array(pageCount).fill(0).map((_, i) => (
+                    <PaginationItem key={i}>
+                      <PaginationLink
+                        href='#'
+                        onClick={() => handlePageChange(i + 1)}
+                        isActive={i + 1 === currPage}
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  {d?.next_page_url ? (
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => handlePageChange(currPage + 1)}
+                        href='#'
+                      />
+                    </PaginationItem>
+                  ) : (
+                    ''
+                  )}
+                </PaginationContent>
+              </Pagination>
+            ) : (
+              ''
+            )}
           </div>
         </div>
-        <div className='rounded-lg border border-line-primary p-4'>
-          <BasicTable
-            className='reactTable'
-            columns={orderColumns}
-            data={d?.data ?? []}
-          />
-          {d?.data.length ? (
-            <Pagination>
-              <PaginationContent>
-                {d?.prev_page_url ? (
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange(currPage - 1)}
-                      href='#'
-                    />
-                  </PaginationItem>
-                ) : (
-                  ''
-                )}
-                {new Array(pageCount).fill(0).map((_, i) => (
-                  <PaginationItem key={i}>
-                    <PaginationLink
-                      href='#'
-                      onClick={() => handlePageChange(i + 1)}
-                      isActive={i + 1 === currPage}
-                    >
-                      {i + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-                {d?.next_page_url ? (
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => handlePageChange(currPage + 1)}
-                      href='#'
-                    />
-                  </PaginationItem>
-                ) : (
-                  ''
-                )}
-              </PaginationContent>
-            </Pagination>
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 }
 

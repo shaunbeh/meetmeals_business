@@ -1,20 +1,20 @@
 import Axios from 'axios';
-import Router from 'next/router';
+import { toast } from 'sonner';
 
 import { appConfig } from './constants';
 
-export const axios = Axios.create({
+export const apiClient = Axios.create({
   baseURL: appConfig.apiUrl,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-axios.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
-      Router.push('/login');
+    if (error.response) {
+      toast.error(error.response.data.message);
     }
     return Promise.reject(error);
   },

@@ -7,17 +7,23 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import axios from 'axios';
 import type { AppProps } from 'next/app';
+import { Roboto } from 'next/font/google';
 import { useState } from 'react';
 
 import { Toaster } from '@/components/ui/sonner';
+import { apiClient } from '@/lib/axios';
 import { appConfig } from '@/lib/constants';
 
 interface ParamsT {
   method?: 'get' | 'post';
   [key: string]: unknown;
 }
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -34,9 +40,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               let response;
 
               if (method.toLowerCase() === 'post') {
-                response = await axios.post(fullUrl, otherParams ?? {});
+                response = await apiClient.post(fullUrl, otherParams ?? {});
               } else {
-                response = await axios.get(fullUrl, {
+                response = await apiClient.get(fullUrl, {
                   params: otherParams ?? {},
                 });
               }
@@ -50,16 +56,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
-        <Component {...pageProps} />
+        <main className={roboto.className}>
+          <Component {...pageProps} />
+        </main>
         <Toaster
           position='top-center'
           toastOptions={{
-            unstyled: true,
+            className:
+              'bg-surface-secondary border-line-primary text-text-primary',
+            duration: 1500,
             classNames: {
-              error: 'text-red-500',
-              success: 'text-green-500',
-              info: 'text-blue-500',
-              warning: 'text-yellow-500',
+              error: '!text-red',
+              success: '!text-primary',
+              info: '!text-blue-500',
+              warning: '!text-yellow-500',
             },
           }}
         />

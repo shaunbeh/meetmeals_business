@@ -34,10 +34,10 @@ module.exports = {
         line: {
           primary: '#ddd',
         },
-        icon: { primary: '#292D32' },
+        icon: { primary: '#292D32', disabled: '#757575' },
         surface: {
           secondary: '#f7f7f7',
-          background: '#f0f0f0',
+          background: '#fff',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { Loader } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useIsClient } from 'usehooks-ts';
 
+import { apiClient } from '@/lib/axios';
 import { useAppStore } from '@/store';
 
 interface ProtectedRouteProps {
@@ -13,31 +13,40 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const router = useRouter();
   const isClient = useIsClient();
-  const accessToken = useAppStore((store) => store.auth.token);
+  const { token } = useAppStore((store) => store.auth);
+  const hasHydrated = useAppStore.persist?.hasHydrated();
 
-  // if no auth token, redirect to login page
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (!accessToken) {
+    if (hasHydrated) {
+      setIsLoading(false);
+    }
+  }, [hasHydrated]);
+
+  useEffect(() => {
+    if (!isLoading && !token) {
       router.replace('/login');
     }
-  }, [accessToken, router]);
-
-  // if auth token, set axios auth header
+  }, [token, router, isLoading]);
   useEffect(() => {
-    if (accessToken) {
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    if (hasHydrated) {
+      if (token) {
+        apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      if (!token) {
+        apiClient.defaults.headers.common.Authorization = undefined;
+      }
+
+      return () => {
+        apiClient.defaults.headers.common.Authorization = undefined;
+      };
     }
+    return () => {};
+  }, [token, hasHydrated]);
 
-    if (!accessToken) {
-      axios.defaults.headers.common.Authorization = undefined;
-    }
-
-    return () => {
-      axios.defaults.headers.common.Authorization = undefined;
-    };
-  }, [accessToken]);
-
-  if (!isClient || !accessToken)
+  if (!isClient || !token || isLoading)
     return (
       <div className='flex h-screen items-center justify-center'>
         <Loader className='animate-spin' />

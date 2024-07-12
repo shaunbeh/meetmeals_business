@@ -1,28 +1,30 @@
-import { useStripe } from '@stripe/react-stripe-js';
+import { Elements, useStripe } from '@stripe/react-stripe-js';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { ProtectedRoute } from '@/components/protected-auth';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
+import getStripe from '@/lib/constants/getStripe';
 
 function PaymentResult() {
   const [isLoading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('');
-  const [orderId, setOrderId] = useState('');
+  // const [orderDate, setOrderDate] = useState('');
   const [orderNumber, setOrderNumber] = useState('');
 
   const stripe = useStripe();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const params = useSearchParams();
 
   useEffect(() => {
-    const paymentIntentClientSecret = params.get(
+    const paymentIntentClientSecret = searchParams.get(
       'payment_intent_client_secret',
     );
-    setOrderId(params.get('order-id') ?? '');
-    setOrderNumber(params.get('order-number') ?? '');
+    // setOrderDate(searchParams.get('order-date') ?? '');
+    setOrderNumber(searchParams.get('order-number') ?? '');
 
     if (paymentIntentClientSecret) {
       if (!stripe) {
@@ -51,24 +53,15 @@ function PaymentResult() {
       setPaymentStatus('payment.unknownStatus');
       setLoading(false);
     }
-  }, [params, stripe]);
+  }, [searchParams, stripe]);
 
-  const isSuccessful = paymentStatus === 'payment.succeeded';
-
-  const navigateToExplore = () => {
+  const navigateToHome = () => {
     router.push('/');
   };
-
-  const handleViewOrder = () => {
-    if (isSuccessful) {
-      router.push(`/?order-id=${orderId}`);
-    } else {
-      navigateToExplore();
-    }
-  };
+  const isSuccessful = paymentStatus === 'payment.succeeded';
 
   return (
-    <Dialog open onOpenChange={navigateToExplore}>
+    <Dialog open onOpenChange={navigateToHome}>
       <DialogContent className='mx-auto h-screen max-h-[690px] max-w-sm overflow-y-auto rounded-lg md:max-h-[730px] md:max-w-md [&>button>svg]:text-text-primary'>
         {isLoading ? (
           <LoadingOverlay />
@@ -78,6 +71,8 @@ function PaymentResult() {
               <Image
                 className='size-full object-cover'
                 alt='Follow your order'
+                width={200}
+                height={200}
                 src={
                   isSuccessful
                     ? '/images/success-payment.png'
@@ -86,23 +81,23 @@ function PaymentResult() {
               />
               <div>
                 <p className='mb-2 text-center text-lg font-bold'>
-                  Your order is confirmed!
+                  {/* {t(paymentStatus)} */}
                 </p>
                 <div className='mx-auto w-fit rounded-lg border border-dotted p-2 font-medium'>
-                  {`Invoice number: ${orderNumber}`}
+                  {`Order number: ${orderNumber}`}
                 </div>
               </div>
-              <p className='mb-2 px-8 py-6 text-center font-medium'>
+              {/* <p className='mb-2 px-8 py-6 text-center font-medium'>
                 {isSuccessful
-                  ? 'Your order for Tuesday has been placed and will be delivered to the office between 12:00-13:00.'
-                  : 'The transaction could not be completed. Please try again in a few minutes.'}
-              </p>
+                  ? t('payment.successDesc')
+                  : t('payment.failureDesc')}
+              </p> */}
             </div>
             <div className='mb-2 flex justify-center gap-4'>
               <Button
                 type='button'
                 className='h-12 w-full !pe-4'
-                onClick={handleViewOrder}
+                onClick={navigateToHome}
                 disabled={isLoading}
               >
                 Back to home
@@ -115,4 +110,13 @@ function PaymentResult() {
   );
 }
 
-export default PaymentResult;
+export default function PaymentResultPage() {
+  const stripe = getStripe();
+  return (
+    <ProtectedRoute>
+      <Elements stripe={stripe}>
+        <PaymentResult />
+      </Elements>
+    </ProtectedRoute>
+  );
+}

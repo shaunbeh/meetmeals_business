@@ -18,7 +18,8 @@ type CheckoutFormProps = {
   clientSecret: string;
   handleBackClick: () => void;
   orderId: string;
-  orderNumber: string;
+  // orderNumber: string;
+  orderDate?: string;
 };
 
 function CheckoutForm(props: CheckoutFormProps) {
@@ -74,7 +75,7 @@ function CheckoutForm(props: CheckoutFormProps) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${appConfig.baseUrl}/?order-id=${props.orderId}&order-number=${props.orderNumber}`,
+        return_url: `${appConfig.baseUrl}/?order-id=${props.orderId}&order-date=${props.orderDate}`,
       },
     });
 
@@ -96,16 +97,14 @@ function CheckoutForm(props: CheckoutFormProps) {
     },
   };
 
-  const btnClasses =
-    'w-32 h-10 leading-10 border-none rounded-md text-mainWhite font-bold text-sm';
   return (
     <div>
-      <form id='payment-form' className='p-5' onSubmit={handleSubmit}>
+      <form id='payment-form' className='gap-4' onSubmit={handleSubmit}>
         <PaymentElement id='payment-element' options={paymentElementOptions} />
-        <div className='flex items-center justify-center gap-5'>
+        <div className='mt-6 flex items-center justify-center gap-5'>
           <Button
-            variant='secondary'
-            className={btnClasses}
+            variant='outline'
+            className='grow'
             id='back'
             onClick={props.handleBackClick}
           >
@@ -114,8 +113,8 @@ function CheckoutForm(props: CheckoutFormProps) {
             </span>
           </Button>
           <Button
-            variant='secondary'
-            className={btnClasses}
+            variant='default'
+            className='grow'
             disabled={isLoading || !stripe || !elements}
             id='submit'
           >

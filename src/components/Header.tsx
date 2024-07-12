@@ -13,21 +13,21 @@ const Header = () => {
   const lang = useAppStore((store) => store.lang);
 
   return (
-    <div className='fixed top-0 z-50 flex h-[64px] w-full items-center justify-between bg-white px-8 text-par font-medium text-text-primary'>
-      <div className='flex items-center gap-12'>
+    <div className='fixed top-0 z-50 flex h-[64px] w-full items-center justify-between bg-white px-2 text-par font-medium text-text-primary lg:px-8'>
+      <div className='flex items-center gap-4 md:gap-8 lg:gap-12'>
         <Link href='/' className=' text-xl text-primary'>
           <Image src={Logo} width={100} height={100} alt='logo' />
         </Link>
         {user?.organization?.name && (
-          <div className='rounded-lg bg-surface-secondary px-4 py-2 font-bold uppercase text-text-disabled'>
+          <div className='rounded-lg bg-surface-secondary px-2 py-1 text-sub3-bold font-bold uppercase text-text-disabled md:px-4 md:py-2 md:text-sub2-bold'>
             {user.organization.name.slice(0, 4)}
           </div>
         )}
       </div>
-      <div className='flex items-center gap-3'>
+      <div className='flex items-center gap-1 md:gap-3'>
         <Button
           variant='ghost'
-          className='flex h-10 w-16 items-center justify-between gap-2 p-2 py-0 uppercase'
+          className='flex h-10 w-12 items-center justify-between gap-1 p-1 py-0 uppercase md:w-16 md:gap-2 md:p-2'
           onClick={toggleLang}
         >
           <Global className='size-6' />
@@ -39,7 +39,7 @@ const Header = () => {
         >
           <Profile className='size-6' />
           {user?.first_name && user?.last_name && (
-            <span className='w-[15ch] truncate text-nowrap'>{`${user.first_name} ${user.last_name}`}</span>
+            <span className='hidden truncate text-nowrap md:block'>{`${user.first_name} ${user.last_name}`}</span>
           )}
         </Link>
       </div>

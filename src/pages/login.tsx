@@ -30,7 +30,9 @@ export default function Login() {
           <Image
             src={LoginImage}
             className='rounded-xl object-cover'
-            layout='fill'
+            fill
+            sizes='1000px'
+            priority
             alt='login image'
           />
         </div>
