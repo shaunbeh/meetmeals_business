@@ -28,6 +28,6 @@ jobs:
       - run: npm run build --if-present
       - run: rm -rf /var/www/business.meetmeals.nl/.next
       - run: rm -rf /var/www/business.meetmeals.nl/public
-      - run: cp ./public /var/www/business.meetmeals.nl
+      - run: cp -r ./public /var/www/business.meetmeals.nl
       - run: mv ./.next /var/www/business.meetmeals.nl
       - run: pm2 restart prod-biz-meetmeals
