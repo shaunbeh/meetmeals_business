@@ -2,19 +2,24 @@ import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { DateTime } from 'luxon';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import FailureImage from 'public/images/failure-payment.svg';
 import { useEffect, useState } from 'react';
 
 import { ProtectedRoute } from '@/components/protected-auth';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
+import {
+  PaymentCallbackParams,
+  PaymentStatusEnum,
+} from '@/lib/constants/enums';
 import getStripe from '@/lib/constants/getStripe';
+
+import SuccessImage from '../../public/images/success-payment.png';
 
 function PaymentResult() {
   const [isLoading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('');
-  const [orderDate, setOrderDate] = useState('');
-  const [orderNumber, setOrderNumber] = useState('');
 
   const stripe = useStripe();
   const searchParams = useSearchParams();
@@ -24,8 +29,6 @@ function PaymentResult() {
     const paymentIntentClientSecret = searchParams.get(
       'payment_intent_client_secret',
     );
-    setOrderDate(searchParams.get('order-date') ?? '');
-    setOrderNumber(searchParams.get('order-number') ?? '');
 
     if (paymentIntentClientSecret) {
       if (!stripe) {
@@ -36,22 +39,22 @@ function PaymentResult() {
         .then(({ paymentIntent }) => {
           switch (paymentIntent?.status) {
             case 'succeeded':
-              setPaymentStatus('payment.succeeded');
+              setPaymentStatus(PaymentStatusEnum.Succeeded);
               break;
             case 'processing':
-              setPaymentStatus('payment.processing');
+              setPaymentStatus(PaymentStatusEnum.Processing);
               break;
             case 'requires_payment_method':
-              setPaymentStatus('payment.requiresPaymentMethod');
+              setPaymentStatus(PaymentStatusEnum.RequiresPaymentMethod);
               break;
             default:
-              setPaymentStatus('payment.Failed');
+              setPaymentStatus(PaymentStatusEnum.Failed);
               break;
           }
           setLoading(false);
         });
     } else {
-      setPaymentStatus('payment.unknownStatus');
+      setPaymentStatus(PaymentStatusEnum.Unknown);
       setLoading(false);
     }
   }, [searchParams, stripe]);
@@ -59,27 +62,43 @@ function PaymentResult() {
   const navigateToHome = () => {
     router.push('/');
   };
-  const isSuccessful = paymentStatus === 'payment.succeeded';
+
+  // CONSTANTS
+  const isSuccessful = paymentStatus === PaymentStatusEnum.Succeeded;
+
+  const orderNumber = searchParams.get(PaymentCallbackParams.orderNumber);
+  const paramsDeliveryDate = searchParams.get(
+    PaymentCallbackParams.deliveryDate,
+  );
+  const paramsDeliveryStart = searchParams.get(
+    PaymentCallbackParams.deliveryStart,
+  );
+  const paramsDeliveryEnd = searchParams.get(PaymentCallbackParams.deliveryEnd);
+
+  const deliveryDate = DateTime.fromFormat(
+    paramsDeliveryDate ?? '',
+    'yyyy-MM-dd',
+  );
 
   return (
     <Dialog open onOpenChange={navigateToHome}>
-      <DialogContent className='mx-auto h-screen max-h-[660px] max-w-sm overflow-y-auto rounded-lg md:max-h-[700px] [&>button>svg]:text-text-primary'>
-        {isLoading ? (
+      <DialogContent className='mx-auto h-screen max-h-[665px] max-w-sm overflow-y-auto rounded-lg md:max-h-[700px] [&>button>svg]:text-text-primary'>
+        {isLoading || paymentStatus === PaymentStatusEnum.Unknown ? (
           <LoadingOverlay />
         ) : (
           <div className='flex flex-col justify-between gap-2 rounded-lg border border-line-primary bg-surface-secondary px-10 py-6'>
             <div className='flex flex-col gap-4 text-text-primary'>
-              <Image
-                className='size-full object-cover'
-                alt='Follow your order'
-                width={200}
-                height={200}
-                src={
-                  isSuccessful
-                    ? '/images/success-payment.png'
-                    : '/images/failure-payment.svg'
-                }
-              />
+              {isSuccessful ? (
+                <Image
+                  className='size-full object-cover'
+                  alt='Follow your order'
+                  width={200}
+                  height={200}
+                  src={SuccessImage}
+                />
+              ) : (
+                <FailureImage />
+              )}
               <div>
                 <p className='mb-2 text-center text-lg font-bold'>
                   {isSuccessful ? 'Your order is confirmed!' : 'Payment Error'}
@@ -91,14 +110,24 @@ function PaymentResult() {
               <p className='mb-2 px-4 py-3 text-center font-medium md:px-8 md:py-6'>
                 {isSuccessful ? (
                   <div>
-                    Your order for{' '}
-                    <span className='font-bold'>
-                      {
-                        DateTime.fromFormat(orderDate, 'yyyy-MM-dd hh:mm:ss')
-                          .weekdayLong
-                      }
-                    </span>{' '}
-                    has been placed and will be delivered to the office.
+                    Your order{' '}
+                    {deliveryDate.weekdayLong && (
+                      <>
+                        for{' '}
+                        <span className='font-bold'>
+                          {deliveryDate.weekdayLong}
+                        </span>
+                      </>
+                    )}{' '}
+                    has been placed and will be delivered to the office{' '}
+                    {paramsDeliveryStart && paramsDeliveryEnd ? (
+                      <>
+                        between{' '}
+                        <span>{`${paramsDeliveryStart} - ${paramsDeliveryEnd}`}</span>
+                      </>
+                    ) : (
+                      '.'
+                    )}{' '}
                   </div>
                 ) : (
                   'The transaction could not be completed. Please try again in a few minutes.'

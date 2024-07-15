@@ -85,17 +85,29 @@ export type GetUserInfoApiResponse = {
 
 export type SubmitOrderApiResponse = {
   data: {
+    // order: {
+    //   user_id: number;
+    //   organization_plan_option_id: number;
+    //   organization_plan_id: number;
+    //   discount_id: number;
+    //   total_price: number;
+    //   status: number;
+    //   updated_at: string;
+    //   created_at: string;
+    //   id: number;
+    //   authority: string;
+    // };
     order: {
-      user_id: number;
-      organization_plan_option_id: number;
-      organization_plan_id: number;
-      discount_id: number;
-      total_price: number;
-      status: number;
-      updated_at: string;
-      created_at: string;
-      id: number;
-      authority: string;
+      order_number: number;
+      dietary: string;
+      order_date: string;
+      delivery_date: string;
+      price: number;
+      discounted_price: number;
+      status: {
+        id: number;
+        name: string;
+      };
     };
     payment: {
       is_free: false;

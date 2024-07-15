@@ -11,7 +11,7 @@ import { ProtectedRoute } from '@/components/protected-auth';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { apiClient } from '@/lib/axios';
-import { appConfig } from '@/lib/constants';
+import { appConfig, stripeAppearance } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
 import getStripe from '@/lib/constants/getStripe';
 import type {
@@ -29,9 +29,9 @@ export default function Home() {
   const [purchaseStep, setPurchaseStep] = useState<
     PurchaseStepsEnum | undefined
   >(undefined);
-  const [orderId, setOrderId] = useState<number>();
+  // const [orderId, setOrderId] = useState<number>();
   const [orderNumber, setOrderNumber] = useState<number>();
-  const [orderDate, setOrderDate] = useState<string>();
+  const [deliveryDate, setDeliveryDate] = useState<string>();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMealOption, setSelectedMealOption] = useState<string>();
@@ -59,9 +59,8 @@ export default function Home() {
       apiClient.post(`${appConfig.apiUrl}${endpoints.submitOrder.url}`, body),
     onSuccess: (res) => {
       setStripeClientSecret(res?.data?.data?.payment?.client_secret);
-      setOrderId(res?.data?.data?.order?.id);
-      setOrderNumber(res?.data?.data.order.id);
-      setOrderDate(res?.data?.data.order.created_at);
+      setOrderNumber(res?.data?.data.order.order_number);
+      setDeliveryDate(res?.data?.data.order.delivery_date);
       setPurchaseStep(PurchaseStepsEnum.Checkout);
     },
     onError: () => setDialogOpen(false),
@@ -76,7 +75,7 @@ export default function Home() {
     });
   };
   const handlePurchaseStep = () => {
-    setPurchaseStep(PurchaseStepsEnum.Checkout);
+    setPurchaseStep(PurchaseStepsEnum.Details);
   };
 
   // STRIPE
@@ -84,21 +83,7 @@ export default function Home() {
   let options: StripeElementsOptions = {};
   let appearance: Appearance = {};
   if (stripeClientSecret) {
-    appearance = {
-      theme: 'flat',
-      variables: {
-        colorPrimary: '#ff0000',
-        colorText: '#333',
-      },
-      rules: {
-        '.Input': {
-          color: '#333',
-        },
-        '.RedirectText': {
-          padding: '1rem',
-        },
-      },
-    };
+    appearance = stripeAppearance;
     options = {
       clientSecret: stripeClientSecret,
       appearance,
@@ -145,23 +130,25 @@ export default function Home() {
             open={purchaseStep === PurchaseStepsEnum.Checkout}
             onOpenChange={handlePurchaseStep}
           >
-            <DialogContent>
+            <DialogContent className='min-h-20'>
               {stripeClientSecret &&
-                orderId &&
-                orderNumber &&
-                purchaseStep === PurchaseStepsEnum.Checkout && (
-                  <Elements options={options} stripe={stripe}>
-                    <CheckoutForm
-                      clientSecret={stripeClientSecret}
-                      handleBackClick={() =>
-                        setPurchaseStep(PurchaseStepsEnum.Details)
-                      }
-                      // orderId={orderId.toString()}
-                      orderDate={orderDate}
-                      orderNumber={orderNumber.toString()}
-                    />
-                  </Elements>
-                )}
+              orderNumber &&
+              purchaseStep === PurchaseStepsEnum.Checkout ? (
+                <Elements options={options} stripe={stripe}>
+                  <CheckoutForm
+                    clientSecret={stripeClientSecret}
+                    handleBackClick={() =>
+                      setPurchaseStep(PurchaseStepsEnum.Details)
+                    }
+                    deliveryDate={deliveryDate}
+                    orderNumber={orderNumber.toString()}
+                  />
+                </Elements>
+              ) : (
+                <div className='flex items-center justify-center'>
+                  Something went wrong
+                </div>
+              )}
             </DialogContent>
           </Dialog>
         </>

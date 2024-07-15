@@ -178,14 +178,14 @@ export default function Account() {
             </div>
           </div>
           <div className='rounded-lg border border-line-primary py-6 md:px-4'>
-            <div className='relative'>
+            <div className='relative px-2'>
               <Input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                className='ps-10'
+                className='ps-12'
                 placeholder='Order number ...'
               />
-              <SearchNormal className='absolute start-2 top-1.5 size-6 text-icon-disabled' />
+              <SearchNormal className='absolute start-4 top-1.5 size-6 text-icon-disabled' />
             </div>
             <BasicTable
               className='reactTable'

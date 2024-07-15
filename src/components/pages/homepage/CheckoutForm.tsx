@@ -8,9 +8,11 @@ import { useQuery } from '@tanstack/react-query';
 import { type FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { appConfig } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
+import { PaymentCallbackParams } from '@/lib/constants/enums';
 import type { GetUserInfoApiResponse } from '@/lib/types/ApiTypes';
 import { useAppStore } from '@/store';
 
@@ -19,7 +21,7 @@ type CheckoutFormProps = {
   handleBackClick: () => void;
   // orderId: string;
   orderNumber: string;
-  orderDate?: string;
+  deliveryDate?: string;
 };
 
 function CheckoutForm(props: CheckoutFormProps) {
@@ -29,6 +31,7 @@ function CheckoutForm(props: CheckoutFormProps) {
 
   const [, setMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingStripe, setIsLoadingStripe] = useState(true);
 
   const { data: userInfo } = useQuery<GetUserInfoApiResponse>({
     queryKey: [endpoints.getUserInfo.url],
@@ -72,10 +75,12 @@ function CheckoutForm(props: CheckoutFormProps) {
 
     setLoading(true);
 
+    const deliveryDate = props?.deliveryDate?.split(' ');
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${appConfig.baseUrl}/payment-result?order-number=${props.orderNumber}&order-date=${props.orderDate}`,
+        return_url: `${appConfig.baseUrl}/payment-result?${PaymentCallbackParams.orderNumber}=${props.orderNumber}&${PaymentCallbackParams.deliveryDate}=${deliveryDate?.[0]}&${PaymentCallbackParams.deliveryStart}=${deliveryDate?.[1]}&${PaymentCallbackParams.deliveryEnd}=${deliveryDate?.[3]}`,
       },
     });
 
@@ -84,7 +89,6 @@ function CheckoutForm(props: CheckoutFormProps) {
     } else {
       setMessage('An unexpected error occurred.');
     }
-
     setLoading(false);
   }
 
@@ -98,9 +102,15 @@ function CheckoutForm(props: CheckoutFormProps) {
   };
 
   return (
-    <div>
-      <form id='payment-form' className='gap-4' onSubmit={handleSubmit}>
-        <PaymentElement id='payment-element' options={paymentElementOptions} />
+    <div className='flex min-h-80 flex-col justify-end'>
+      <form id='payment-form' className='gap-4 p-4' onSubmit={handleSubmit}>
+        {userInfo && (
+          <PaymentElement
+            onReady={() => setIsLoadingStripe(false)}
+            id='payment-element'
+            options={paymentElementOptions}
+          />
+        )}
         <div className='mt-6 flex items-center justify-center gap-5'>
           <Button
             variant='outline'
@@ -114,7 +124,7 @@ function CheckoutForm(props: CheckoutFormProps) {
           </Button>
           <Button
             variant='default'
-            className='grow'
+            className='w-1/2'
             disabled={isLoading || !stripe || !elements}
             id='submit'
           >
@@ -124,6 +134,9 @@ function CheckoutForm(props: CheckoutFormProps) {
           </Button>
         </div>
       </form>
+      {isLoadingStripe && (
+        <LoadingOverlay className='bg-surface-secondary/90' />
+      )}
     </div>
   );
 }

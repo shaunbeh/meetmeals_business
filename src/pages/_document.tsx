@@ -5,11 +5,7 @@ import { appConfig } from '@/lib/constants';
 
 export default function Document() {
   return (
-    <Html
-      lang='fa'
-      // dir='rtl'
-      className='h-full'
-    >
+    <Html lang='en' className='h-full'>
       <Head>
         <script
           dangerouslySetInnerHTML={{
@@ -21,6 +17,7 @@ export default function Document() {
             `,
           }}
         />
+        <link rel='shortcut icon' href='/favicon.ico' />
       </Head>
       <body className='relative font-sans antialiased'>
         <Main />
