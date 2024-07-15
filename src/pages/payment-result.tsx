@@ -97,7 +97,7 @@ function PaymentResult() {
                   src={SuccessImage}
                 />
               ) : (
-                <FailureImage />
+                <FailureImage className='w-full' />
               )}
               <div>
                 <p className='mb-2 text-center text-lg font-bold'>

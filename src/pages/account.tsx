@@ -64,7 +64,7 @@ const orderColumns: ColumnsType<OrderT> = [
         className={cn(
           'capitalize mx-4 ring-1 rounded-full',
           value.id === 3 && 'ring-red bg-red text-text-tertiary',
-          value.id === 1 && 'ring-secondary text-secondary',
+          value.id === 1 && 'ring-primary text-primary',
         )}
       >
         {value.name.split('-').join(' ')}
