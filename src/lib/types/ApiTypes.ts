@@ -31,6 +31,7 @@ export type OptionT = {
 };
 
 export type OrderT = {
+  can_cancel: boolean;
   order_number: number;
   dietary: string;
   order_date: string;
@@ -80,6 +81,11 @@ export type GetOrdersApiResponse = {
 
 export type GetUserInfoApiResponse = {
   data: UserInfoT;
+  message: string;
+};
+
+export type CancelOrderApiResponse = {
+  data: [];
   message: string;
 };
 

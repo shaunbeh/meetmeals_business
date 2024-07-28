@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { ChevronLeftIcon } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { ArrowLeft, LogoutCurve, SearchNormal } from 'iconsax-react';
 import { useRouter } from 'next/navigation';
 import type { ColumnsType } from 'rc-table';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import Layout from '@/components/Layout';
 import { ProtectedRoute } from '@/components/protected-auth';
@@ -20,9 +22,12 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import BasicTable from '@/components/ui/Table/BasicTable';
+import { apiClient } from '@/lib/axios';
+import { appConfig } from '@/lib/constants';
 import endpoints from '@/lib/constants/endpoints';
 import useDebounce from '@/lib/hooks/useDebounce';
 import type {
+  CancelOrderApiResponse,
   GetOrdersApiResponse,
   GetUserInfoApiResponse,
   OrderT,
@@ -71,7 +76,58 @@ const orderColumns: ColumnsType<OrderT> = [
       </div>
     ),
   },
+  {
+    title: 'Cancel',
+    dataIndex: 'can_cancel',
+    key: 'action',
+    width: '150px',
+    render: (canCancel, row) => (
+      <CancelButton disabled={!canCancel} orderNumber={row.order_number} />
+    ),
+  },
 ];
+export const CancelButton = ({
+  orderNumber,
+  disabled,
+}: {
+  orderNumber: number;
+  disabled: boolean;
+}) => {
+  const { mutate: cancelOrder, isPending } = useMutation<
+    { data: CancelOrderApiResponse },
+    any,
+    number
+  >({
+    mutationFn: (id) =>
+      apiClient.post(`${appConfig.apiUrl}${endpoints.cancelOrder.url}/${id}`),
+    onSuccess: (res) => {
+      toast.success(res.data.message);
+    },
+  });
+
+  const handleCancel = () => {
+    cancelOrder(orderNumber);
+  };
+
+  return (
+    <div className='flex'>
+      <Button
+        disabled={disabled}
+        isLoading={isPending}
+        variant='outline'
+        className={clsx(
+          disabled
+            ? '!cursor-not-allowed'
+            : 'text-red ring-2 ring-red hover:bg-red/10 hover:text-red',
+          'mx-4 h-7 min-w-28 rounded-full !text-sub2-bold capitalize ',
+        )}
+        onClick={handleCancel}
+      >
+        Cancel
+      </Button>
+    </div>
+  );
+};
 
 export default function Account() {
   // STORE
@@ -125,6 +181,8 @@ export default function Account() {
   if (d?.total && d?.per_page) {
     pageCount = Math.ceil(d.total / d.per_page);
   }
+
+  // const orderColumns = createOrderColumns(handleCancel, isPending);
 
   return (
     <ProtectedRoute>

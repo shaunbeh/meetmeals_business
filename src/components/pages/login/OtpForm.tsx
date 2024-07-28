@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ReloadIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -106,19 +105,13 @@ export default function OtpForm({ email }: { email: string }) {
           />
           <div className='flex w-full gap-2'>
             <Button
-              disabled={
-                !!Object.keys(form.formState.errors).length ||
-                isPendingVerifyOtp
-              }
+              disabled={!!Object.keys(form.formState.errors).length}
+              isLoading={isPendingVerifyOtp}
               size='lg'
               className='w-32 grow font-bold'
               type='submit'
             >
-              {isPendingVerifyOtp ? (
-                <ReloadIcon className='animate-spin' />
-              ) : (
-                'Continue'
-              )}
+              Continue
             </Button>
           </div>
         </form>
