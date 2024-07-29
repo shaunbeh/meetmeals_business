@@ -29,6 +29,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       router.replace('/login');
     }
   }, [token, router, isLoading]);
+
   useEffect(() => {
     if (hasHydrated) {
       if (token) {
